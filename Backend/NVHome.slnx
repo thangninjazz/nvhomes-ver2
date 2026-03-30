@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="NVHome.API/NVHome.API.csproj" />
+  <Project Path="NVHome.Application/NVHome.Application.csproj" />
+  <Project Path="NVHome.Domain/NVHome.Domain.csproj" />
+  <Project Path="NVHome.Infrastructure/NVHome.Infrastructure.csproj" />
+</Solution>

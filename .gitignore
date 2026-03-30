@@ -1,0 +1,38 @@
+# .NET
+bin/
+obj/
+[Ee]bug/
+[Rr]elease/
+*.user
+*.userosscache
+*.sln.doccache
+
+# Node.js
+node_modules/
+.next/
+dist/
+out/
+build/
+.env*
+!.env.example
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vs/
+.vscode/
+*.swp
+*.swo
+
+# Backups & Private Data
+backups/
+*.sql
+*.tar.gz
+*.db
+*.bak
+tmp/
+*.tmp
+logs/
+rclone.conf
