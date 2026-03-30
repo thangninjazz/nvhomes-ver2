@@ -59,7 +59,8 @@ jobs:
           command_timeout: 15m
           script_stop: true
           script: |
-            cd ~/nvhome || (mkdir -p ~/nvhome && cd ~/nvhome && git clone https://github.com/thangninjazz/nvhomes-ver2.git .)
+            cd ~/nvhome || (mkdir -p ~/nvhome && cd ~/nvhome && git clone https://${{ github.actor }}:${{ secrets.GH_PAT }}@github.com/thangninjazz/nvhomes-ver2.git .)
+            git remote set-url origin https://${{ github.actor }}:${{ secrets.GH_PAT }}@github.com/thangninjazz/nvhomes-ver2.git
             git fetch origin main
             git reset --hard origin/main
             # Đăng nhập GHCR trên VPS để kéo image Private
