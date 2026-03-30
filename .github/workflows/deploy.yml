@@ -84,6 +84,9 @@ jobs:
             
             # 4. Hệ thống Backup & Giám sát (Monitoring)
             /bin/bash ~/nvhome/scripts/setup_backup.sh
+            
+            # 5. Tự động cập nhật hệ thống (Unattended Upgrades)
+            sudo /bin/bash ~/nvhome/scripts/setup_auto_updates.sh
 
       - name: Admin Cleanup (One-time or Periodic)
         uses: appleboy/ssh-action@v1.2.3
