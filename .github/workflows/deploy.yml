@@ -57,7 +57,6 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           command_timeout: 15m
-          script_stop: true
           script: |
             cd ~/nvhome || (mkdir -p ~/nvhome && cd ~/nvhome && git clone https://${{ github.actor }}:${{ secrets.GH_PAT }}@github.com/thangninjazz/nvhomes-ver2.git .)
             git remote set-url origin https://${{ github.actor }}:${{ secrets.GH_PAT }}@github.com/thangninjazz/nvhomes-ver2.git
