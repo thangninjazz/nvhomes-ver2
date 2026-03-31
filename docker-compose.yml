@@ -18,6 +18,7 @@ services:
     restart: always
 
   backend:
+    image: ghcr.io/thangninjazz/nvhomes-ver2/backend:latest
     build:
       context: ./Backend
       dockerfile: Dockerfile
@@ -48,6 +49,7 @@ services:
     restart: always
 
   frontend:
+    image: ghcr.io/thangninjazz/nvhomes-ver2/frontend:latest
     build:
       context: ./frontend
       dockerfile: Dockerfile

@@ -1,4 +1,4 @@
-name: Deploy NVHome (v2.24.4) - Backend HealthCheck Fix
+name: Deploy NVHome (v2.24.5) - GHCR Sync & HealthCheck Fix
 
 on:
   push:
