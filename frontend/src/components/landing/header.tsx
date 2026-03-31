@@ -48,6 +48,11 @@ export function Header() {
       router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`)
       setIsOpen(false)
       setSearchQuery("")
+      
+      // Auto-hide mobile keyboard
+      if (typeof document !== 'undefined') {
+        (document.activeElement as HTMLElement)?.blur()
+      }
     }
   }
 
@@ -125,9 +130,16 @@ export function Header() {
                   placeholder="Tìm sản phẩm..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-secondary/50 border-none rounded-full h-10 pl-10 pr-4 text-xs font-bold focus:ring-2 focus:ring-primary transition-all placeholder:text-muted-foreground/50 text-foreground"
+                  className="w-full bg-secondary/50 border-none rounded-full h-10 pl-10 pr-10 text-xs font-bold focus:ring-2 focus:ring-primary transition-all placeholder:text-muted-foreground/50 text-foreground"
                 />
-                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/50 group-hover:text-primary transition-colors" />
+                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/50" />
+                <button 
+                  type="submit"
+                  className="absolute right-1 top-1/2 -translate-y-1/2 w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-sm"
+                  aria-label="Tìm kiếm"
+                >
+                  <Search className="w-3.5 h-3.5" />
+                </button>
               </form>
 
               <button
@@ -175,9 +187,16 @@ export function Header() {
                 placeholder="Tìm sản phẩm..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-gray-50 border border-gray-100 rounded-xl h-12 pl-12 pr-4 text-sm font-bold focus:ring-2 focus:ring-primary transition-all text-gray-900"
+                className="w-full bg-gray-50 border border-gray-100 rounded-xl h-12 pl-12 pr-12 text-sm font-bold focus:ring-2 focus:ring-primary transition-all text-gray-900"
               />
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <button 
+                type="submit"
+                className="absolute right-1.5 top-1/2 -translate-y-1/2 w-9 h-9 bg-primary text-white rounded-lg flex items-center justify-center hover:bg-primary/90 transition-colors shadow-sm"
+                aria-label="Tìm kiếm"
+              >
+                <Search className="w-4 h-4" />
+              </button>
             </form>
           </div>
 
