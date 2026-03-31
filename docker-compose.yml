@@ -10,7 +10,12 @@ services:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - nvhome_net
-    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d nvhomedb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: always
 
   backend:
     build:
@@ -32,10 +37,14 @@ services:
     volumes:
       - backend_uploads:/app/wwwroot/uploads
     depends_on:
-      - db
-    networks:
-      - nvhome_net
-    restart: unless-stopped
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:5232/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: always
 
   frontend:
     build:
@@ -45,10 +54,11 @@ services:
     ports:
       - "127.0.0.1:3000:3000"
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
     networks:
       - nvhome_net
-    restart: unless-stopped
+    restart: always
 
 networks:
   nvhome_net:

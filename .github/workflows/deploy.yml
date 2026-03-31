@@ -62,38 +62,46 @@ jobs:
             git remote set-url origin https://${{ github.actor }}:${{ secrets.GH_PAT }}@github.com/thangninjazz/nvhomes-ver2.git
             git fetch origin main
             git reset --hard origin/main
+            # 0. Dọn dẹp conatiner cũ và ma (Ghost containers)
+            sudo docker compose -p nvhome down || true
+            sudo docker rm nvhome_backend_secured nvhome_frontend 33a8c011aa7f_nvhome_db || true
+            
             # Đăng nhập GHCR trên VPS để kéo image Private
             echo "${{ secrets.GH_PAT }}" | sudo docker login ghcr.io -u ${{ github.actor }} --password-stdin
-            sudo docker-compose -p nvhome pull
-            sudo docker-compose -p nvhome up -d
+            sudo docker compose -p nvhome pull
+            sudo docker compose -p nvhome up -d
             sudo docker image prune -f
+            
+            # Kiểm tra trạng thái cuối (Healthcheck)
+            sudo docker compose -p nvhome ps
             
             # Cài đặt và phân quyền cho các script
             chmod +x ~/nvhome/scripts/*.sh
             
-            # 0. Giải phóng IP (Nếu lỡ bị chặn)
+            # 1. Giải phóng IP (Nếu lỡ bị chặn)
             sudo fail2ban-client set sshd unbanip --all || true
             
-            # 1. Cấu hình Nginx (HSTS Preload)
+            # 2. Cấu hình Nginx (HSTS Preload)
             sudo cp ~/nvhome/nginx_vps_final.conf /etc/nginx/sites-available/nvhome.conf
             sudo ln -sf /etc/nginx/sites-available/nvhome.conf /etc/nginx/sites-enabled/
             sudo nginx -t && sudo systemctl reload nginx
             
-            # 2. Cấu hình Fail2Ban (SSH & Nginx)
+            # 3. Cấu hình Fail2Ban (SSH & Nginx)
             sudo /bin/bash ~/nvhome/scripts/setup_fail2ban_web.sh
             
-            # 3. Hardening SSH (Disable Password Auth - SAFE)
+            # 4. Hardening SSH (Disable Password Auth - SAFE)
             sudo /bin/bash ~/nvhome/scripts/harden_ssh.sh
             
-            # 4. Hệ thống Backup & Giám sát (Monitoring)
+            # 5. Hệ thống Backup & Giám sát (Monitoring)
             chmod +x ~/nvhome/scripts/*.sh
             cp ~/nvhome/scripts/backup_vps.sh ~/backup_vps.sh # Copy ra ngoài để an toàn
             /bin/bash ~/nvhome/scripts/setup_backup.sh
             
-            # 5. Tự động cập nhật hệ thống (Unattended Upgrades)
+            # 6. Tự động cập nhật hệ thống (Unattended Upgrades)
             sudo /bin/bash ~/nvhome/scripts/setup_auto_updates.sh
 
       - name: Admin Cleanup (One-time or Periodic)
+        if: success()
         uses: appleboy/ssh-action@v1.2.3
         with:
           host: ${{ secrets.VPS_IP }}
@@ -102,3 +110,17 @@ jobs:
           script: |
             # Xóa Admin cũ nếu tồn tại
             sudo docker exec nvhome_db psql -U postgres -d nvhomedb -c "DELETE FROM \"Users\" WHERE \"Email\" = 'nv_super_admin@nvhome.vn';" || true
+
+      - name: Notify Deployment Status
+        if: always()
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_CHAT_ID }}
+          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          message: |
+            ${{ job.status == 'success' && '✅' || '❌' }} **DEPLOY STATUS: NVHome (v2.24.2)**
+            
+            Trạng thái: ${{ job.status == 'success' && 'THÀNH CÔNG' || 'THẤT BẠI' }}
+            Khu vực: ${{ github.job }}
+            Repository: ${{ github.repository }}
+            Xem chi tiết: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
