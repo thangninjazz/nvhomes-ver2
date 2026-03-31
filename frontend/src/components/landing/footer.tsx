@@ -183,7 +183,7 @@ export function Footer() {
 
       {/* Copyright */}
       <div className="border-t border-primary-foreground/10">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-6">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-6 pb-32">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-primary-foreground/60">
             <p>© 2026 NV Homes. Tất cả quyền được bảo lưu.</p>
             <p>Xưởng: Thanh Đa - Phúc Thọ - Hà Nội</p>

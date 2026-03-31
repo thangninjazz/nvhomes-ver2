@@ -33,7 +33,7 @@ export function HeroSection() {
             Thiết kế sáng tạo — Thi công chuyên nghiệp — Chất lượng từ tâm. Sở hữu không gian sống mơ ước với chi phí tối ưu.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4">
+          <div className="relative z-20 flex flex-col sm:flex-row gap-4">
             <Button 
               size="lg" 
               className="rounded-none px-8 py-6 text-base bg-background text-foreground hover:bg-background/90 group"

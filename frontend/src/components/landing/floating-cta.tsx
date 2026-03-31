@@ -47,10 +47,10 @@ export function FloatingCTA() {
   }
 
   return (
-    <div className="fixed bottom-8 right-8 z-50 flex flex-col gap-4 items-end">
+    <div className="fixed bottom-8 right-8 z-50 flex flex-col gap-4 items-end pointer-events-none">
       {/* Chat Window */}
       {isChatOpen && (
-        <div className="bg-background border border-border shadow-2xl rounded-2xl w-80 mb-4 overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-300">
+        <div className="bg-background border border-border shadow-2xl rounded-2xl w-80 mb-4 overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-300 pointer-events-auto">
           <div className="bg-primary p-4 flex items-center justify-between text-primary-foreground">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
@@ -118,7 +118,7 @@ export function FloatingCTA() {
         {/* Chat TVV */}
         <button
           onClick={() => { setIsChatOpen(true); setIsOpen(false); }}
-          className="group flex items-center gap-3"
+          className="group flex items-center gap-3 pointer-events-auto"
         >
           <span className="bg-stone-800 text-white text-[10px] font-bold px-3 py-1.5 rounded-lg shadow-xl uppercase tracking-wider">
             Chat với tư vấn viên
@@ -133,7 +133,7 @@ export function FloatingCTA() {
           href="https://zalo.me/0966245396"
           target="_blank"
           rel="noopener noreferrer"
-          className="group flex items-center gap-3"
+          className="group flex items-center gap-3 pointer-events-auto"
         >
           <span className="bg-[#0068ff] text-white text-[10px] font-bold px-3 py-1.5 rounded-lg shadow-xl uppercase tracking-wider">
             Zalo: 0966.245.396
@@ -150,7 +150,7 @@ export function FloatingCTA() {
         {/* Call */}
         <a
           href="tel:0966245396"
-          className="group flex items-center gap-3"
+          className="group flex items-center gap-3 pointer-events-auto"
         >
           <span className="bg-red-500 text-white text-[10px] font-bold px-3 py-1.5 rounded-lg shadow-xl uppercase tracking-wider">
             Gọi ngay: 0966.245.396
@@ -164,7 +164,7 @@ export function FloatingCTA() {
       {/* Main Trigger Button - Redesigned to Pill Shape */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`h-16 px-6 rounded-full flex items-center gap-3 shadow-2xl transition-all duration-500 group relative ${
+        className={`h-16 px-6 rounded-full flex items-center gap-3 shadow-2xl transition-all duration-500 group relative pointer-events-auto ${
           isOpen ? "bg-stone-800 scale-95" : "bg-primary hover:scale-105"
         }`}
       >

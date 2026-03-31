@@ -1,44 +1,20 @@
 import { Metadata } from 'next'
-import localFont from 'next/font/local'
+import { Playfair_Display, Be_Vietnam_Pro } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import Script from 'next/script'
 import './globals.css'
 
-const playfair = localFont({
-  src: [
-    {
-      path: '../../public/fonts/playfair-display-regular.woff2',
-      weight: '400',
-      style: 'normal',
-    },
-    {
-      path: '../../public/fonts/playfair-display-bold.woff2',
-      weight: '700',
-      style: 'normal',
-    },
-  ],
+const playfair = Playfair_Display({
+  subsets: ['vietnamese'],
   variable: '--font-serif',
+  display: 'swap',
 })
 
-const inter = localFont({
-  src: [
-    {
-      path: '../../public/fonts/inter-regular.woff2',
-      weight: '400',
-      style: 'normal',
-    },
-    {
-      path: '../../public/fonts/inter-semibold.woff2',
-      weight: '600',
-      style: 'normal',
-    },
-    {
-      path: '../../public/fonts/inter-bold.woff2',
-      weight: '700',
-      style: 'normal',
-    },
-  ],
+const beVietnamPro = Be_Vietnam_Pro({
+  subsets: ['vietnamese'],
+  weight: ['400', '500', '600', '700', '800'],
   variable: '--font-sans',
+  display: 'swap',
 })
 
 export const metadata: Metadata = {
@@ -63,7 +39,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="vi" className={`${playfair.variable} ${inter.variable}`} suppressHydrationWarning>
+    <html lang="vi" className={`${playfair.variable} ${beVietnamPro.variable}`} suppressHydrationWarning>
       <body className="font-sans antialiased">
         <ThemeProvider
           attribute="class"
