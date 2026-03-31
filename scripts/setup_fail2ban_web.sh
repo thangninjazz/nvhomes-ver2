@@ -16,7 +16,7 @@ enabled = true
 port    = ssh
 logpath = %(sshd_log)s
 backend = %(sshd_backend)s
-maxretry = 3
+maxretry = 10
 findtime = 600
 bantime  = 86400
 
@@ -25,7 +25,7 @@ enabled = true
 port    = http,https
 filter  = nginx-404
 logpath = /var/log/nginx/access.log
-maxretry = 20
+maxretry = 50
 findtime = 600
 bantime  = 3600
 

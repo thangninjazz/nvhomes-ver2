@@ -33,14 +33,16 @@ RCLONE_STATUS=0
 RCLONE_OUTPUT=""
 
 if command -v rclone &> /dev/null; then
+    # Check if gdrive is configured and alive
     if rclone listremotes | grep -q "gdrive:"; then
-        echo "Uploading to Google Drive..."
-        RCLONE_OUTPUT=$(rclone copy "$BACKUP_DIR/$BACKUP_NAME" gdrive:NVHome_Backups 2>&1)
-        RCLONE_STATUS=$?
-        if [ $RCLONE_STATUS -eq 0 ]; then
-            echo "Upload complete."
+        echo "Checking Google Drive connection..."
+        if rclone about gdrive: &> /dev/null; then
+            echo "Uploading to Google Drive..."
+            RCLONE_OUTPUT=$(rclone copy "$BACKUP_DIR/$BACKUP_NAME" gdrive:NVHome_Backups 2>&1)
+            RCLONE_STATUS=$?
         else
-            echo "Upload failed with status $RCLONE_STATUS: $RCLONE_OUTPUT"
+            RCLONE_OUTPUT="Gdrive remote exists but connection test failed (Check token/auth)."
+            RCLONE_STATUS=4
         fi
     else
         echo "Rclone 'gdrive:' remote not found. Skipping cloud upload."
@@ -51,7 +53,7 @@ else
     RCLONE_STATUS=3
 fi
 
-# 6. Save Status for later notification
+# 6. Save Status for notification
 STATUS_FILE="$BACKUP_DIR/last_backup_status.tmp"
 echo "BACKUP_NAME=$BACKUP_NAME" > "$STATUS_FILE"
 echo "FILE_SIZE=$(du -h "$BACKUP_DIR/$BACKUP_NAME" 2>/dev/null | cut -f 1)" >> "$STATUS_FILE"
@@ -65,13 +67,14 @@ find "$BACKUP_DIR" -type f -name "${PROJECT_NAME}_backup_*.tar.gz" -mtime +$RETE
 
 # 8. Telegram Notification (Function)
 send_notification() {
-    if [ -f "$HOME/nvhome/.env" ]; then
+    ENV_FILE="$HOME/nvhome/.env"
+    if [ -f "$ENV_FILE" ]; then
         source "$STATUS_FILE"
-        BOT_TOKEN=$(grep '^TELEGRAM_BOT_TOKEN=' "$HOME/nvhome/.env" | cut -d '=' -f 2 | tr -d '\r')
-        CHAT_ID=$(grep '^TELEGRAM_CHAT_ID=' "$HOME/nvhome/.env" | cut -d '=' -f 2 | tr -d '\r')
+        BOT_TOKEN=$(grep '^TELEGRAM_BOT_TOKEN=' "$ENV_FILE" | cut -d '=' -f 2 | tr -d '\r')
+        CHAT_ID=$(grep '^TELEGRAM_CHAT_ID=' "$ENV_FILE" | cut -d '=' -f 2 | tr -d '\r')
         
         if [ ! -z "$BOT_TOKEN" ] && [ ! -z "$CHAT_ID" ]; then
-            if [ -z "$FILE_SIZE" ]; then FILE_SIZE="Unknown"; fi
+            FILE_SIZE=${FILE_SIZE:-"Unknown"}
             
             if [ "$RCLONE_STATUS" -eq 0 ]; then
                 CLOUD_STATUS="Google Drive ✅"
@@ -79,11 +82,18 @@ send_notification() {
                 ICON="📦"
             else
                 CLOUD_STATUS="Lỗi Cloud ❌ (Code: $RCLONE_STATUS)"
-                STATUS_TITLE="CẢNH BÁO / LỖI"
+                [ "$RCLONE_STATUS" -eq 4 ] && CLOUD_STATUS="Lỗi Connect Gdrive ❌ (Check Token)"
+                STATUS_TITLE="CẢNH BÁO"
                 ICON="⚠️"
             fi
 
             MESSAGE="${ICON} <b>NVHome Backup - ${STATUS_TITLE}</b>%0A---------------------------%0A🕒 Thời gian: ${TIMESTAMP}%0A📄 File: <code>${BACKUP_NAME}</code>%0A⚖️ Dung lượng: <b>${FILE_SIZE}</b>%0A☁️ Cloud: ${CLOUD_STATUS}"
+
+            # If rclone failed, add error output to message (limit length)
+            if [ "$RCLONE_STATUS" -ne 0 ] && [ ! -z "$RCLONE_OUTPUT" ]; then
+                CLEAN_OUTPUT=$(echo "$RCLONE_OUTPUT" | head -c 100)
+                MESSAGE="${MESSAGE}%0A📝 Lỗi: <code>${CLEAN_OUTPUT}...</code>"
+            fi
 
             curl -s -X POST "https://api.telegram.org/bot${BOT_TOKEN}/sendMessage" \
                 -d "chat_id=${CHAT_ID}" \
@@ -94,15 +104,7 @@ send_notification() {
     fi
 }
 
-# Handle Arguments
-if [[ "$1" == "--notify" ]]; then
-    if [ -f "$STATUS_FILE" ]; then
-        send_notification
-    else
-        echo "No status file found to notify."
-    fi
-else
-    echo "--- Backup Completed: $(date) ---"
-    # Auto notify if not specifically splitting (optional, but requested to split via cron)
-    # send_notification 
-fi
+# Auto notify
+send_notification
+
+echo "--- Backup Completed: $(date) ---"

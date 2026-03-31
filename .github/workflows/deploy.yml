@@ -71,6 +71,9 @@ jobs:
             # Cài đặt và phân quyền cho các script
             chmod +x ~/nvhome/scripts/*.sh
             
+            # 0. Giải phóng IP (Nếu lỡ bị chặn)
+            sudo fail2ban-client set sshd unbanip --all || true
+            
             # 1. Cấu hình Nginx (HSTS Preload)
             sudo cp ~/nvhome/nginx_vps_final.conf /etc/nginx/sites-available/nvhome.conf
             sudo ln -sf /etc/nginx/sites-available/nvhome.conf /etc/nginx/sites-enabled/
@@ -83,6 +86,8 @@ jobs:
             sudo /bin/bash ~/nvhome/scripts/harden_ssh.sh
             
             # 4. Hệ thống Backup & Giám sát (Monitoring)
+            chmod +x ~/nvhome/scripts/*.sh
+            cp ~/nvhome/scripts/backup_vps.sh ~/backup_vps.sh # Copy ra ngoài để an toàn
             /bin/bash ~/nvhome/scripts/setup_backup.sh
             
             # 5. Tự động cập nhật hệ thống (Unattended Upgrades)

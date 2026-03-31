@@ -19,6 +19,15 @@ export function Header() {
   const [categories, setCategories] = useState<any[]>([])
   const [expandedParent, setExpandedParent] = useState<string | null>(null)
   const [searchQuery, setSearchQuery] = useState("")
+  const [isScrolled, setIsScrolled] = useState(false)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20)
+    }
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   useEffect(() => {
     const fetchTree = async () => {
@@ -56,9 +65,9 @@ export function Header() {
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border/50">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="flex items-center justify-between h-20 gap-4">
+      <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'glass-header h-16' : 'bg-transparent h-24 border-b-transparent'}`}>
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 h-full">
+          <div className="flex items-center justify-between h-full gap-4">
             {/* Logo */}
             <Link href="/" className="flex items-center gap-3 shrink-0 group">
               <div className="relative w-12 h-12 overflow-hidden rounded-xl border-2 border-primary/20 group-hover:border-primary transition-all duration-300">
