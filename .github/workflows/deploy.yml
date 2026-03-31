@@ -99,6 +99,13 @@ jobs:
             
             # 6. Tự động cập nhật hệ thống (Unattended Upgrades)
             sudo /bin/bash ~/nvhome/scripts/setup_auto_updates.sh
+            
+            # 7. Cloudflare UFW Protection (Chỉ cho phép IP Cloudflare truy cập 80/443)
+            sudo /bin/bash ~/nvhome/scripts/whitelist_cloudflare.sh
+            
+            # 8. Vô hiệu hóa Nginx Default Site để tránh xung đột
+            sudo rm -f /etc/nginx/sites-enabled/default
+            sudo nginx -s reload || true
 
       - name: Admin Cleanup (One-time or Periodic)
         if: success()
