@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useRef } from "react";
 import dynamic from "next/dynamic";
 import { api } from "@/services/api";
 import { Modal } from "@/components/common/Modal";
@@ -13,6 +13,7 @@ export default function ProductManager() {
   const [products, setProducts] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const quillRef = useRef<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<any>(null);
   const [isPreviewMode, setIsPreviewMode] = useState(false);
@@ -77,12 +78,29 @@ export default function ProductManager() {
   }, []);
   
   const filteredProducts = useMemo(() => {
+    // Nếu không có bộ lọc danh mục, chỉ lọc theo search
+    if (!filterCategoryId) {
+      return products.filter(p => p.name.toLowerCase().includes(searchTerm.toLowerCase()));
+    }
+
+    // Lấy tất cả ID của danh mục con (bao gồm cả chính nó)
+    const getDescendantIds = (catId: string): string[] => {
+      const ids = [catId];
+      const children = categories.filter(c => c.parentId === catId);
+      children.forEach(child => {
+        ids.push(...getDescendantIds(child.id));
+      });
+      return ids;
+    };
+
+    const allowedCategoryIds = getDescendantIds(filterCategoryId);
+
     return products.filter(p => {
       const matchSearch = p.name.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchCategory = !filterCategoryId || p.categoryId === filterCategoryId;
+      const matchCategory = allowedCategoryIds.includes(p.categoryId);
       return matchSearch && matchCategory;
     });
-  }, [products, searchTerm, filterCategoryId]);
+  }, [products, searchTerm, filterCategoryId, categories]);
 
   const openAddModal = () => {
     setEditingItem(null);
@@ -227,11 +245,25 @@ export default function ProductManager() {
           });
           const url = res.data.url;
           
-          // Chèn ảnh vào trình soạn thảo
-          const quill = (document.querySelector(".quill") as any)?.__quill;
+          // Chèn ảnh vào trình soạn thảo bằng cơ chế phối hợp Ref & Selector (độ ổn định cao)
+          let quill = quillRef.current?.getEditor ? quillRef.current.getEditor() : null;
+          
+          // Fallback: Tìm qua DOM nếu Ref không trả về instance (thường gặp khi dynamic import)
+          if (!quill) {
+            const container = document.querySelector('.ql-container');
+            if (container) {
+              // @ts-ignore
+              quill = (window as any).Quill ? (window as any).Quill.find(container) : null;
+            }
+          }
+
           if (quill) {
-            const range = quill.getSelection();
+            const range = quill.getSelection(true);
             quill.insertEmbed(range.index, "image", url);
+            quill.setSelection(range.index + 1);
+          } else {
+            console.error("Không tìm thấy instance của trình soạn thảo Quill.");
+            alert("Lỗi: Không tìm thấy trình soạn thảo để chèn ảnh.");
           }
         } catch (err) {
           console.error("Lỗi upload ảnh trong editor:", err);
@@ -559,7 +591,9 @@ export default function ProductManager() {
             <div className="space-y-4 pt-4 border-t border-stone-100">
               <label className="block text-xs font-black text-stone-400 uppercase tracking-widest mb-3">Mô tả chi tiết (Rich Text Editor)</label>
               <div className="rich-text-container bg-stone-50 rounded-2xl overflow-hidden border border-stone-200">
+                {/* @ts-ignore */}
                 <ReactQuill 
+                  ref={quillRef}
                   theme="snow"
                   value={formData.description}
                   onChange={(val) => setFormData({ ...formData, description: val })}
