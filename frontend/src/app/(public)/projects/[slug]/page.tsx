@@ -4,11 +4,14 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { api } from "@/services/api";
 import Link from "next/link";
+import { ImageLightbox } from "@/components/ui/image-lightbox";
 
 export default function ProjectDetailPage() {
   const { slug } = useParams();
   const [project, setProject] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
 
   useEffect(() => {
     const fetchProject = async () => {
@@ -72,7 +75,13 @@ export default function ProjectDetailPage() {
       </div>
 
       {/* Main Image / Hero */}
-      <div className="relative h-[85vh] w-full mb-24 overflow-hidden">
+      <div 
+        className="relative h-[85vh] w-full mb-24 overflow-hidden cursor-zoom-in"
+        onClick={() => {
+          setLightboxIndex(0);
+          setLightboxOpen(true);
+        }}
+      >
         <img 
           src={project.thumbnail || (project.gallery?.[0]) || "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=1600"} 
           alt={project.title} 
@@ -114,7 +123,14 @@ export default function ProjectDetailPage() {
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                {project.gallery.map((img: string, i: number) => (
-                 <div key={i} className={`rounded-3xl overflow-hidden shadow-lg ${i % 3 === 0 ? 'md:col-span-2 aspect-[21/9]' : 'aspect-square md:aspect-video'}`}>
+                 <div 
+                  key={i} 
+                  className={`rounded-3xl overflow-hidden shadow-lg cursor-zoom-in ${i % 3 === 0 ? 'md:col-span-2 aspect-[21/9]' : 'aspect-square md:aspect-video'}`}
+                  onClick={() => {
+                    setLightboxIndex(i);
+                    setLightboxOpen(true);
+                  }}
+                 >
                     <img src={img} alt={`Gallery ${i}`} className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
                  </div>
                ))}
@@ -160,6 +176,13 @@ export default function ProjectDetailPage() {
            </Link>
         </div>
       </div>
+
+      <ImageLightbox 
+        images={project.gallery && project.gallery.length > 0 ? project.gallery : [project.thumbnail || ""]}
+        initialIndex={lightboxIndex}
+        open={lightboxOpen}
+        onOpenChange={setLightboxOpen}
+      />
     </div>
   );
 }

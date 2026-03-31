@@ -30,10 +30,19 @@ check_alert() {
     return $?
 }
 
-# Check thresholds
-ALERT=""
+# CPU Check with 2-minute sustained threshold
+CPU_STATE_FILE="/tmp/vps_cpu_high"
 if check_alert "$CPU_USAGE" "$CPU_THRESHOLD"; then
-    ALERT="${ALERT}⚠️ <b>CPU Usage HIGH: $(printf \"%.1f\" $CPU_USAGE)%</b> (Threshold: ${CPU_THRESHOLD}%)%0A"
+    if [ -f "$CPU_STATE_FILE" ]; then
+        # Second time high - Send Alert
+        ALERT="${ALERT}🆘 <b>CPU Usage SUSTAINED HIGH: $(printf \"%.1f\" $CPU_USAGE)%</b> (Over ${CPU_THRESHOLD}% for 2+ mins)%0A"
+    else
+        # First time high - Create state file but no alert yet
+        touch "$CPU_STATE_FILE"
+    fi
+else
+    # CPU is normal - Reset state file
+    rm -f "$CPU_STATE_FILE"
 fi
 
 if check_alert "$RAM_USAGE" "$RAM_THRESHOLD"; then

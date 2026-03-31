@@ -5,6 +5,7 @@ import Link from 'next/link';
 import PhoneModal from '@/components/modals/PhoneModal';
 import { useRouter } from 'next/navigation';
 import { api } from '@/services/api';
+import { ImageLightbox } from '@/components/ui/image-lightbox';
 
 export default function ProductDetail({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params);
@@ -17,6 +18,8 @@ export default function ProductDetail({ params }: { params: Promise<{ slug: stri
     title: "",
     source: ""
   });
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -112,7 +115,13 @@ export default function ProductDetail({ params }: { params: Promise<{ slug: stri
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 xl:gap-24">
             {/* Left: Product Image Gallery */}
             <div className="space-y-6">
-                <div className="aspect-[4/5] md:aspect-square bg-stone-50 rounded-[2rem] overflow-hidden shadow-sm border border-stone-100 flex items-center justify-center relative group">
+                <div 
+                    className="aspect-[4/5] md:aspect-square bg-stone-50 rounded-[2rem] overflow-hidden shadow-sm border border-stone-100 flex items-center justify-center relative group cursor-zoom-in"
+                    onClick={() => {
+                        setLightboxIndex(activeImage);
+                        setLightboxOpen(true);
+                    }}
+                >
                     <img src={images[activeImage]} alt={product.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
                     {product.discountPrice > 0 && product.discountPrice < product.originalPrice && (
                         <div className="absolute top-6 left-6 z-10 bg-red-600 text-white text-[11px] font-black px-4 py-2 rounded-full tracking-widest uppercase shadow-lg">
@@ -207,6 +216,13 @@ export default function ProductDetail({ params }: { params: Promise<{ slug: stri
             router.push('/cart');
           }
         }}
+      />
+
+      <ImageLightbox 
+        images={images}
+        initialIndex={lightboxIndex}
+        open={lightboxOpen}
+        onOpenChange={setLightboxOpen}
       />
     </div>
   );
