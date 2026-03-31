@@ -1,4 +1,4 @@
-name: Deploy NVHome (v2.24.2) - Faster Build with GHCR
+name: Deploy NVHome (v2.24.3) - Fix Redirect Loop & Healthcheck
 
 on:
   push:

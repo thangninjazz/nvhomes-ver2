@@ -23,8 +23,11 @@ RUN dotnet publish "NVHome.API.csproj" -c Release -o /app/publish /p:UseAppHost=
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
 WORKDIR /app
 
-# Install fonts for ImageSharp.Drawing
-RUN apt-get update && apt-get install -y --no-install-recommends fonts-dejavu-core && rm -rf /var/lib/apt/lists/*
+# Install fonts for ImageSharp.Drawing and curl for healthchecks
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    fonts-dejavu-core \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
 
 COPY --from=publish /app/publish .
 
