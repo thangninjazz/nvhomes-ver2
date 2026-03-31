@@ -84,10 +84,12 @@ export function ProjectsSection() {
               Dấu Ấn Kiến Trúc
             </h2>
           </div>
-          <Button variant="outline" className="rounded-none self-start lg:self-auto group">
-            Xem tất cả dự án
-            <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-          </Button>
+          <Link href="/projects">
+            <Button variant="outline" className="rounded-none self-start lg:self-auto group">
+              Xem tất cả dự án
+              <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+            </Button>
+          </Link>
         </div>
 
         {/* Category Filter */}
