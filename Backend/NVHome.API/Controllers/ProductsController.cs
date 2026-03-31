@@ -185,6 +185,9 @@ public class ProductsController : ControllerBase
         if (request.DiscountPrice.HasValue && request.OriginalPrice > 0)
             calcDiscount = Math.Round((double)(1 - request.DiscountPrice.Value / request.OriginalPrice) * 100, 2);
 
+        // 1. Dọn dẹp ảnh cũ bị gỡ bỏ khỏi thư viện (Gallery)
+        _fileService.DeleteOrphanedImages(product.Images, request.Images);
+
         product.Name = request.Name; product.Slug = request.Slug;
         product.OriginalPrice = request.OriginalPrice; product.DiscountPrice = request.DiscountPrice;
         product.DiscountPercent = calcDiscount; 
@@ -205,15 +208,18 @@ public class ProductsController : ControllerBase
         var product = await _context.Products.FindAsync(id);
         if (product == null) return NotFound("Không tìm thấy sản phẩm.");
 
-        // Bước dọn dẹp: Xóa các tệp ảnh vật trị khỏi thư mục uploads
+        // 1. Dọn dẹp tệp ảnh vật lý trong thư viện (Gallery)
         if (!string.IsNullOrEmpty(product.Images))
         {
             var images = product.Images.Split(',', StringSplitOptions.RemoveEmptyEntries);
             _fileService.DeleteFiles(images);
         }
 
+        // 2. Dọn dẹp toàn bộ ảnh mồ côi trong phần Mô tả chi tiết (HTML Content)
+        _fileService.DeleteImagesInHtml(product.Description);
+
         _context.Products.Remove(product);
         await _context.SaveChangesAsync();
-        return Ok(new { Message = "Đã xóa sản phẩm thành công và dọn dẹp tệp tin ảnh." });
+        return Ok(new { Message = "Đã xóa sản phẩm thành công và dọn dẹp toàn bộ tệp tin ảnh liên quan." });
     }
 }

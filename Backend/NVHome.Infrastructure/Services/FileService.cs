@@ -22,6 +22,16 @@ namespace NVHome.Infrastructure.Services
         /// Xóa tệp tin dựa trên URL (tự động bóc tách tên tệp).
         /// </summary>
         void DeleteFileFromUrl(string? fileUrl);
+
+        /// <summary>
+        /// Quét nội dung HTML và xóa tất cả các tệp tin ảnh thuộc thư mục uploads.
+        /// </summary>
+        void DeleteImagesInHtml(string? htmlContent);
+
+        /// <summary>
+        /// So sánh 2 danh sách URL ảnh (cũ và mới) và xóa các tệp tin không còn sử dụng.
+        /// </summary>
+        void DeleteOrphanedImages(string? oldUrls, string? newUrls);
     }
 
     public class FileService : IFileService
@@ -81,6 +91,50 @@ namespace NVHome.Infrastructure.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Lỗi khi bóc tách tên tệp từ URL: {Url}", fileUrl);
+            }
+        }
+
+        public void DeleteImagesInHtml(string? htmlContent)
+        {
+            if (string.IsNullOrWhiteSpace(htmlContent)) return;
+
+            try
+            {
+                // Regex tìm các tệp tin trong thư mục uploads (ví dụ: /api/uploads/guid.webp)
+                var regex = new System.Text.RegularExpressions.Regex(@"/api/uploads/([a-zA-Z0-9\-\.]+)", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+                var matches = regex.Matches(htmlContent);
+
+                foreach (System.Text.RegularExpressions.Match match in matches)
+                {
+                    if (match.Groups.Count > 1)
+                    {
+                        var fileName = match.Groups[1].Value;
+                        DeleteFile(fileName);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Lỗi khi quét ảnh trong HTML để xóa.");
+            }
+        }
+
+        public void DeleteOrphanedImages(string? oldUrls, string? newUrls)
+        {
+            if (string.IsNullOrWhiteSpace(oldUrls)) return;
+
+            var oldList = oldUrls.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
+            var newList = string.IsNullOrWhiteSpace(newUrls) 
+                ? new List<string>() 
+                : new List<string>(newUrls.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries));
+
+            foreach (var oldUrl in oldList)
+            {
+                // Nếu URL cũ không còn nằm trong danh sách mới, xóa file vật lý
+                if (!newList.Contains(oldUrl))
+                {
+                    DeleteFileFromUrl(oldUrl.Trim());
+                }
             }
         }
     }

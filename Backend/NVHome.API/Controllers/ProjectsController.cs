@@ -136,6 +136,22 @@ public class ProjectsController : ControllerBase
             var project = await _context.Projects.FindAsync(id);
             if (project == null) return NotFound("Không tìm thấy dự án.");
 
+            // 1. Dọn dẹp ảnh cũ trong Thumbnail nếu bị thay đổi
+            if (project.Thumbnail != request.Thumbnail)
+            {
+                _fileService.DeleteFileFromUrl(project.Thumbnail);
+            }
+
+            // 2. Dọn dẹp ảnh cũ trong Gallery nếu bị gỡ bỏ
+            var oldGallery = await _context.ProjectImages
+                .Where(i => i.ProjectId == id)
+                .Select(i => i.ImageUrl)
+                .ToListAsync();
+            
+            var newGalleryStr = request.Gallery != null ? string.Join(',', request.Gallery) : "";
+            var oldGalleryStr = string.Join(',', oldGallery);
+            _fileService.DeleteOrphanedImages(oldGalleryStr, newGalleryStr);
+
             project.Title = request.Title; project.Slug = request.Slug;
             project.Description = request.Description; project.Content = request.Content;
             project.Tags = request.Tags; project.VideoUrl = request.VideoUrl;
@@ -189,7 +205,7 @@ public class ProjectsController : ControllerBase
 
         if (project == null) return NotFound("Không tìm thấy dự án.");
 
-        // 1. Dọn dẹp ảnh Gallery
+        // 1. Dọn dẹp ảnh vật lý trong Gallery
         if (project.ProjectImages != null && project.ProjectImages.Any())
         {
             var galleryUrls = project.ProjectImages.Select(i => i.ImageUrl).ToList();
@@ -199,11 +215,15 @@ public class ProjectsController : ControllerBase
             }
         }
 
-        // 2. Dọn dẹp ảnh Thumbnail
+        // 2. Dọn dẹp ảnh đại diện vật lý (Thumbnail)
         if (!string.IsNullOrEmpty(project.Thumbnail))
         {
             _fileService.DeleteFileFromUrl(project.Thumbnail);
         }
+
+        // 3. Dọn dẹp ảnh mồ côi trong HTML Content & Mô tả
+        _fileService.DeleteImagesInHtml(project.Content);
+        _fileService.DeleteImagesInHtml(project.Description);
 
         _context.Projects.Remove(project);
         await _context.SaveChangesAsync();

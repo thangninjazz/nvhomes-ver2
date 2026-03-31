@@ -79,18 +79,19 @@ public class BlogsController : ControllerBase
         var blog = await _context.BlogPosts.FindAsync(id);
         if (blog == null) return NotFound("Không tìm thấy bài viết.");
 
+        // 1. Dọn dẹp ảnh Thumbnail cũ nếu bị thay đổi
+        if (blog.Thumbnail != request.Thumbnail)
+        {
+            _fileService.DeleteFileFromUrl(blog.Thumbnail);
+        }
+
         // Cập nhật các trường
         blog.Title = request.Title;
         blog.Slug = request.Slug;
         blog.Content = request.Content;
-
-        // Nếu thumbnail thay đổi và Thumbnail cũ tồn tại, có thể xóa file cũ ở đây 
-        // nhưng thường Frontend sẽ quản lý việc upload mới/xóa cũ trong controller upload riêng.
-        // Ở đây chỉ cập nhật đường dẫn URL.
         blog.Thumbnail = request.Thumbnail;
 
         await _context.SaveChangesAsync();
-
         return Ok(new { Message = "Cập nhật bài viết thành công." });
     }
 
@@ -101,14 +102,17 @@ public class BlogsController : ControllerBase
         var blog = await _context.BlogPosts.FindAsync(id);
         if (blog == null) return NotFound("Không tìm thấy bài viết.");
 
-        // Dọn dẹp ảnh Thumbnail vật lý trên server
+        // 1. Dọn dẹp ảnh đại diện vật lý (Thumbnail)
         if (!string.IsNullOrEmpty(blog.Thumbnail))
         {
             _fileService.DeleteFileFromUrl(blog.Thumbnail);
         }
 
+        // 2. Dọn dẹp toàn bộ ảnh mồ côi trong nội dung HTML
+        _fileService.DeleteImagesInHtml(blog.Content);
+
         _context.BlogPosts.Remove(blog);
         await _context.SaveChangesAsync();
-        return Ok(new { Message = "Đã xóa bài viết thành công và dọn dẹp ảnh đại diện." });
+        return Ok(new { Message = "Đã xóa bài viết thành công và dọn dẹp các tệp tin ảnh liên quan." });
     }
 }
