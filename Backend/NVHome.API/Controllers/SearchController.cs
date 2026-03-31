@@ -26,13 +26,10 @@ public class SearchController : ControllerBase
 
         var keyword = q.ToLower();
 
-        // Tìm kiếm sản phẩm (Bao gồm cả theo tên Danh mục)
+        // Tìm kiếm sản phẩm (Chỉ theo tên sản phẩm)
         var products = await _context.Products
             .Include(p => p.Category)
-            .Where(p => p.Name.ToLower().Contains(keyword) 
-                || p.Slug.ToLower().Contains(keyword) 
-                || (p.Description != null && p.Description.ToLower().Contains(keyword))
-                || (p.Category != null && p.Category.Name.ToLower().Contains(keyword)))
+            .Where(p => p.Name.ToLower().Contains(keyword))
             .Select(p => new {
                 p.Id,
                 p.Name,
@@ -45,9 +42,9 @@ public class SearchController : ControllerBase
             .Take(10)
             .ToListAsync();
 
-        // Tìm kiếm dự án
+        // Tìm kiếm dự án (Chỉ theo tiêu đề)
         var projects = await _context.Projects
-            .Where(p => p.Title.ToLower().Contains(keyword) || p.Slug.ToLower().Contains(keyword) || (p.Description != null && p.Description.ToLower().Contains(keyword)))
+            .Where(p => p.Title.ToLower().Contains(keyword))
             .Select(p => new {
                 p.Id,
                 Title = p.Title,

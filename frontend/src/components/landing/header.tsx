@@ -47,6 +47,7 @@ export function Header() {
     if (searchQuery.trim()) {
       router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`)
       setIsOpen(false)
+      setSearchQuery("")
     }
   }
 
@@ -65,7 +66,7 @@ export function Header() {
 
   return (
     <>
-      <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'glass-header h-16' : 'bg-transparent h-24 border-b-transparent'}`}>
+      <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'glass-header h-16 shadow-lg' : 'bg-white/95 backdrop-blur-md h-24 border-b border-stone-100 shadow-sm'}`}>
         <div className="max-w-7xl mx-auto px-6 lg:px-8 h-full">
           <div className="flex items-center justify-between h-full gap-4">
             {/* Logo */}
@@ -188,7 +189,7 @@ export function Header() {
                   <div className={`flex items-center justify-between rounded-xl px-2 transition-all ${expandedParent === link.label ? 'bg-gray-50' : 'hover:bg-gray-50'}`}>
                     <Link
                       href={link.href}
-                      onClick={() => !link.children && setIsOpen(false)}
+                      onClick={() => setIsOpen(false)}
                       className="text-base py-4 px-2 text-gray-800 hover:text-primary transition-colors font-bold flex-1"
                     >
                       {link.label}

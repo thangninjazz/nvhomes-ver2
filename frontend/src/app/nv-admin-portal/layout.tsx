@@ -80,6 +80,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <Link href="/nv-admin-portal/customers" className={`px-5 py-3.5 rounded-xl hover:bg-stone-800 hover:text-white font-medium transition-colors ${pathname === '/nv-admin-portal/customers' ? 'bg-stone-800 text-white' : ''}`}>
               CRM Khách Hàng
             </Link>
+
+            <p className="text-xs font-bold tracking-widest uppercase text-stone-500 mb-2 mt-6 pl-2">Content CMS</p>
+            <Link href="/nv-admin-portal/blogs" className={`px-5 py-3.5 rounded-xl hover:bg-stone-800 hover:text-white font-medium transition-colors ${pathname === '/nv-admin-portal/blogs' ? 'bg-stone-800 text-white' : ''}`}>
+              Quản Lý Tin Tức
+            </Link>
           </nav>
           <div className="p-6 border-t border-stone-800 bg-stone-950/50 flex flex-col gap-3 min-w-[288px]">
             <button onClick={() => { logout(); router.push('/nv-admin-portal/login'); }} className="flex items-center justify-center gap-2 w-full py-3 bg-red-600/10 text-red-500 rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-red-600 hover:text-white transition-colors">

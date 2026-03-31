@@ -72,6 +72,28 @@ public class BlogsController : ControllerBase
         return Ok(new { Message = "Đăng bài viết thành công.", Id = blog.Id });
     }
 
+    [Authorize(Roles = "Admin,Editor")]
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateBlog(Guid id, [FromBody] UpdateBlogRequest request)
+    {
+        var blog = await _context.BlogPosts.FindAsync(id);
+        if (blog == null) return NotFound("Không tìm thấy bài viết.");
+
+        // Cập nhật các trường
+        blog.Title = request.Title;
+        blog.Slug = request.Slug;
+        blog.Content = request.Content;
+
+        // Nếu thumbnail thay đổi và Thumbnail cũ tồn tại, có thể xóa file cũ ở đây 
+        // nhưng thường Frontend sẽ quản lý việc upload mới/xóa cũ trong controller upload riêng.
+        // Ở đây chỉ cập nhật đường dẫn URL.
+        blog.Thumbnail = request.Thumbnail;
+
+        await _context.SaveChangesAsync();
+
+        return Ok(new { Message = "Cập nhật bài viết thành công." });
+    }
+
     [Authorize(Roles = "Admin")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteBlog(Guid id)

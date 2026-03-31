@@ -9,6 +9,15 @@ public class CreateBlogRequest
     public string? Thumbnail { get; set; }
 }
 
+// DTO yêu cầu cập nhật bài viết
+public class UpdateBlogRequest
+{
+    public string Title { get; set; } = string.Empty;
+    public string Slug { get; set; } = string.Empty;
+    public string Content { get; set; } = string.Empty;
+    public string? Thumbnail { get; set; }
+}
+
 // DTO trả về thông tin bài viết
 public class BlogResponse
 {
