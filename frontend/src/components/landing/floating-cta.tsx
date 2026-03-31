@@ -1,10 +1,11 @@
 "use client"
 
 import { useState } from "react"
-import { Phone, MessageSquare, User, X, Send, ChevronUp } from "lucide-react"
+import { Phone, MessageSquare, User, X, Send } from "lucide-react"
 import { api } from "@/services/api"
 import { Button } from "@/components/ui/button"
 import { toast } from "sonner"
+import { motion, AnimatePresence } from "framer-motion"
 
 export function FloatingCTA() {
   const [isOpen, setIsOpen] = useState(false)
@@ -47,124 +48,141 @@ export function FloatingCTA() {
   }
 
   return (
-    <div className="fixed bottom-8 right-8 z-50 flex flex-col gap-4 items-end pointer-events-none">
+    <div className="fixed bottom-8 right-8 z-[60] flex flex-col gap-4 items-end pointer-events-none">
       {/* Chat Window */}
-      {isChatOpen && (
-        <div className="bg-background border border-border shadow-2xl rounded-2xl w-80 mb-4 overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-300 pointer-events-auto">
-          <div className="bg-primary p-4 flex items-center justify-between text-primary-foreground">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
-                <User className="w-5 h-5" />
+      <AnimatePresence>
+        {isChatOpen && (
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+            className="bg-background border border-border shadow-2xl rounded-2xl w-80 mb-4 overflow-hidden pointer-events-auto"
+          >
+            <div className="bg-primary p-4 flex items-center justify-between text-primary-foreground">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
+                  <User className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="text-sm font-bold">Tư vấn viên NV Home</p>
+                  <p className="text-[10px] opacity-80">Đang trực tuyến</p>
+                </div>
               </div>
-              <div>
-                <p className="text-sm font-bold">Tư vấn viên NV Home</p>
-                <p className="text-[10px] opacity-80">Đang trực tuyến</p>
-              </div>
+              <button onClick={() => setIsChatOpen(false)} className="hover:bg-white/10 p-1 rounded-lg transition-colors">
+                <X className="w-5 h-5" />
+              </button>
             </div>
-            <button onClick={() => setIsChatOpen(false)} className="hover:bg-white/10 p-1 rounded-lg transition-colors">
-              <X className="w-5 h-5" />
-            </button>
-          </div>
-          
-          <div className="p-6">
-            {!isSubmitted ? (
-              <>
-                <div className="bg-muted p-4 rounded-2xl rounded-tl-none mb-6">
-                  <p className="text-sm leading-relaxed text-muted-foreground">
-                    Dạ vâng, để tiện xưng hô và hỗ trợ, anh/chị vui lòng nhập số điện thoại giúp em nhé!
+            
+            <div className="p-6">
+              {!isSubmitted ? (
+                <>
+                  <div className="bg-muted p-4 rounded-2xl rounded-tl-none mb-6">
+                    <p className="text-sm leading-relaxed text-muted-foreground">
+                      Dạ vâng, để tiện xưng hô và hỗ trợ, anh/chị vui lòng nhập số điện thoại giúp em nhé!
+                    </p>
+                  </div>
+                  
+                  <form onSubmit={handleSubmitPhone} className="space-y-3">
+                    <div className="relative">
+                      <input
+                        type="tel"
+                        placeholder="Số điện thoại của anh/chị..."
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        className="w-full bg-muted border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary transition-all outline-none"
+                        disabled={isSubmitting}
+                      />
+                    </div>
+                    <Button 
+                      type="submit" 
+                      className="w-full rounded-xl py-6 font-bold uppercase tracking-widest text-xs h-12"
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? "Đang gửi..." : "Gửi thông tin"}
+                      <Send className="w-4 h-4 ml-2" />
+                    </Button>
+                  </form>
+                </>
+              ) : (
+                <div className="text-center py-6">
+                  <div className="w-16 h-16 bg-green-100 dark:bg-green-900/30 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4 overflow-hidden">
+                    <Send className="w-8 h-8" />
+                  </div>
+                  <p className="font-bold text-foreground text-sm px-2">Cảm ơn anh/chị!</p>
+                  <p className="text-xs text-muted-foreground mt-3 leading-relaxed">
+                    Chuyên viên của NV Homes sẽ gọi lại ngay lập tức qua số <span className="text-primary font-bold">{phoneSubmitted}</span>
                   </p>
                 </div>
-                
-                <form onSubmit={handleSubmitPhone} className="space-y-3">
-                  <div className="relative">
-                    <input
-                      type="tel"
-                      placeholder="Số điện thoại của anh/chị..."
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
-                      className="w-full bg-muted border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary transition-all outline-none"
-                      disabled={isSubmitting}
-                    />
-                  </div>
-                  <Button 
-                    type="submit" 
-                    className="w-full rounded-xl py-6 font-bold uppercase tracking-widest text-xs h-12"
-                    disabled={isSubmitting}
-                  >
-                    {isSubmitting ? "Đang gửi..." : "Gửi thông tin"}
-                    <Send className="w-4 h-4 ml-2" />
-                  </Button>
-                </form>
-              </>
-            ) : (
-              <div className="text-center py-6">
-                <div className="w-16 h-16 bg-green-100 dark:bg-green-900/30 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4 overflow-hidden">
-                  <Send className="w-8 h-8" />
-                </div>
-                <p className="font-bold text-foreground text-sm px-2">Cảm ơn anh/chị!</p>
-                <p className="text-xs text-muted-foreground mt-3 leading-relaxed">
-                  Chuyên viên của NV Homes sẽ gọi lại ngay lập tức qua số <span className="text-primary font-bold">{phoneSubmitted}</span>
-                </p>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Sub-Buttons Menu */}
-      <div className={`flex flex-col gap-3 items-end transition-all duration-300 origin-bottom ${
-        isOpen ? "scale-100 opacity-100 translate-y-0" : "scale-50 opacity-0 translate-y-10 pointer-events-none"
-      }`}>
-        {/* Chat TVV */}
-        <button
-          onClick={() => { setIsChatOpen(true); setIsOpen(false); }}
-          className="group flex items-center gap-3 pointer-events-auto"
-        >
-          <span className="bg-stone-800 text-white text-[10px] font-bold px-3 py-1.5 rounded-lg shadow-xl uppercase tracking-wider">
-            Chat với tư vấn viên
-          </span>
-          <div className="w-12 h-12 bg-stone-800 text-white rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
-            <User className="w-6 h-6" />
-          </div>
-        </button>
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.5, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.5, y: 20 }}
+            className="flex flex-col gap-3 items-end pointer-events-none mb-2"
+          >
+            {/* Chat TVV */}
+            <button
+              onClick={() => { setIsChatOpen(true); setIsOpen(false); }}
+              className="group flex items-center gap-3 pointer-events-auto"
+            >
+              <span className="bg-stone-800 text-white text-[10px] font-bold px-3 py-1.5 rounded-lg shadow-xl uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity">
+                Chat với tư vấn viên
+              </span>
+              <div className="w-12 h-12 bg-stone-800 text-white rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
+                <User className="w-6 h-6" />
+              </div>
+            </button>
 
-        {/* Zalo */}
-        <a
-          href="https://zalo.me/0966245396"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="group flex items-center gap-3 pointer-events-auto"
-        >
-          <span className="bg-[#0068ff] text-white text-[10px] font-bold px-3 py-1.5 rounded-lg shadow-xl uppercase tracking-wider">
-            Zalo: 0966.245.396
-          </span>
-          <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform relative overflow-hidden border border-border">
-            <img 
-              src="https://congtyquatang.com.vn/wp-content/uploads/2026/03/logo-zalo-vector-thumbnail.jpg" 
-              alt="Zalo" 
-              className="w-full h-full object-cover"
-            />
-          </div>
-        </a>
+            {/* Zalo */}
+            <a
+              href="https://zalo.me/0966245396"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex items-center gap-3 pointer-events-auto"
+            >
+              <span className="bg-[#0068ff] text-white text-[10px] font-bold px-3 py-1.5 rounded-lg shadow-xl uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity">
+                Zalo: 0966.245.396
+              </span>
+              <div className="w-12 h-12 bg-[#0068ff] text-white rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform relative overflow-hidden border border-white/20">
+                <img 
+                  src="https://upload.wikimedia.org/wikipedia/commons/9/91/Icon_of_Zalo.svg" 
+                  alt="Zalo" 
+                  className="w-7 h-7 object-contain"
+                />
+              </div>
+            </a>
 
-        {/* Call */}
-        <a
-          href="tel:0966245396"
-          className="group flex items-center gap-3 pointer-events-auto"
-        >
-          <span className="bg-red-500 text-white text-[10px] font-bold px-3 py-1.5 rounded-lg shadow-xl uppercase tracking-wider">
-            Gọi ngay: 0966.245.396
-          </span>
-          <div className="w-12 h-12 bg-red-500 text-white rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
-            <Phone className="w-6 h-6" />
-          </div>
-        </a>
-      </div>
+            {/* Call */}
+            <a
+              href="tel:0966245396"
+              className="group flex items-center gap-3 pointer-events-auto"
+            >
+              <span className="bg-red-500 text-white text-[10px] font-bold px-3 py-1.5 rounded-lg shadow-xl uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity">
+                Gọi ngay: 0966.245.396
+              </span>
+              <div className="w-12 h-12 bg-red-500 text-white rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
+                <Phone className="w-6 h-6" />
+              </div>
+            </a>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-      {/* Main Trigger Button - Redesigned to Pill Shape */}
+      {/* Main Trigger Button */}
       <button
-        onClick={() => setIsOpen(!isOpen)}
-        className={`h-16 px-6 rounded-full flex items-center gap-3 shadow-2xl transition-all duration-500 group relative pointer-events-auto ${
+        onClick={(e) => {
+          e.stopPropagation();
+          setIsOpen(!isOpen);
+        }}
+        className={`h-16 px-6 rounded-full flex items-center gap-3 shadow-2xl transition-all duration-300 group relative pointer-events-auto ${
           isOpen ? "bg-stone-800 scale-95" : "bg-primary hover:scale-105"
         }`}
       >
