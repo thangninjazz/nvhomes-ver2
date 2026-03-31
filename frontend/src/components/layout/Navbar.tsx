@@ -59,50 +59,53 @@ export function Navbar() {
             NV HOMES<span className="text-red-500">.</span>
           </Link>
           
-          {/* Desktop Menu */}
-          <div className="hidden lg:flex items-center h-full ml-8">
-            <Link href="/" className="px-4 text-[13px] font-bold text-stone-600 hover:text-stone-900 uppercase tracking-widest transition-colors">Trang Chủ</Link>
-            <Link href="/about" className="px-4 text-[13px] font-bold text-stone-600 hover:text-stone-900 uppercase tracking-widest transition-colors">Giới Thiệu</Link>
-            
-            {/* Dynamic Categories */}
-            {menuTree.map(item => (
-              <div 
-                key={item.id} 
-                className="relative group h-full flex items-center px-4 cursor-pointer"
-                onMouseEnter={() => setActiveMenuId(item.id)}
-                onMouseLeave={() => setActiveMenuId(null)}
-              >
-                <Link 
-                  href={`/category/${item.slug}`} 
-                  className="text-[13px] font-bold text-stone-600 group-hover:text-stone-900 transition-colors flex items-center gap-1.5 uppercase tracking-widest"
+          {/* Desktop Menu - Centered */}
+          <div className="hidden lg:flex flex-1 justify-center items-center h-full px-8">
+            <div className="flex items-center h-full">
+              <Link href="/" className="px-4 text-[13px] font-bold text-stone-600 hover:text-stone-900 uppercase tracking-widest transition-colors">Trang Chủ</Link>
+              <Link href="/about" className="px-4 text-[13px] font-bold text-stone-600 hover:text-stone-900 uppercase tracking-widest transition-colors">Giới Thiệu</Link>
+              
+              {/* Dynamic Categories */}
+              {menuTree.map(item => (
+                <div 
+                  key={item.id} 
+                  className="relative group h-full flex items-center px-4 cursor-pointer"
+                  onMouseEnter={() => setActiveMenuId(item.id)}
+                  onMouseLeave={() => setActiveMenuId(null)}
                 >
-                  {item.name}
-                  {item.children.length > 0 && (
-                    <svg className="w-3 h-3 text-stone-400 group-hover:rotate-180 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M19 9l-7 7-7-7" /></svg>
+                  <Link 
+                    href={`/category/${item.slug}`} 
+                    className="text-[13px] font-bold text-stone-600 group-hover:text-stone-900 transition-colors flex items-center gap-1.5 uppercase tracking-widest"
+                  >
+                    {item.name}
+                    {item.children.length > 0 && (
+                      <svg className="w-3 h-3 text-stone-400 group-hover:rotate-180 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M19 9l-7 7-7-7" /></svg>
+                    )}
+                  </Link>
+                  
+                  {item.children.length > 0 && activeMenuId === item.id && (
+                    <div className="absolute top-[72px] left-0 min-w-[240px] bg-white border border-stone-100 shadow-2xl rounded-b-2xl overflow-hidden py-4 animate-in fade-in slide-in-from-top-2 duration-200">
+                      {item.children.map(child => (
+                        <Link 
+                          key={child.id} 
+                          href={`/category/${child.slug}`}
+                          className="block px-6 py-3 text-[14px] text-stone-600 hover:bg-stone-50 hover:text-stone-900 font-bold transition-colors border-l-2 border-transparent hover:border-red-500"
+                        >
+                          {child.name}
+                        </Link>
+                      ))}
+                    </div>
                   )}
-                </Link>
-                
-                {item.children.length > 0 && activeMenuId === item.id && (
-                  <div className="absolute top-[72px] left-0 min-w-[240px] bg-white border border-stone-100 shadow-2xl rounded-b-2xl overflow-hidden py-4 animate-in fade-in slide-in-from-top-2 duration-200">
-                    {item.children.map(child => (
-                      <Link 
-                        key={child.id} 
-                        href={`/category/${child.slug}`}
-                        className="block px-6 py-3 text-[14px] text-stone-600 hover:bg-stone-50 hover:text-stone-900 font-bold transition-colors border-l-2 border-transparent hover:border-red-500"
-                      >
-                        {child.name}
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ))}
+                </div>
+              ))}
 
-            <Link href="/projects" className="px-4 text-[13px] font-bold text-stone-600 hover:text-stone-900 uppercase tracking-widest transition-colors">Dự Án</Link>
-            <Link href="/contact" className="px-4 text-[13px] font-bold text-stone-600 hover:text-stone-900 uppercase tracking-widest transition-colors">Liên Hệ</Link>
+              <Link href="/projects" className="px-4 text-[13px] font-bold text-stone-600 hover:text-stone-900 uppercase tracking-widest transition-colors">Dự Án</Link>
+              <Link href="/contact" className="px-4 text-[13px] font-bold text-stone-600 hover:text-stone-900 uppercase tracking-widest transition-colors">Liên Hệ</Link>
+            </div>
           </div>
 
-          <div className="flex items-center gap-4">
+          {/* Right Actions */}
+          <div className="flex items-center gap-2 lg:gap-6 shrink-0">
             {/* Search Toggle */}
             <div className="relative">
               {!isSearchOpen ? (
@@ -130,7 +133,7 @@ export function Navbar() {
               )}
             </div>
 
-            <Link href="/contact" className="hidden lg:flex bg-stone-900 text-white px-6 py-2.5 rounded-full font-black text-xs tracking-widest uppercase shadow-lg hover:bg-stone-800 transition-all hover:-translate-y-0.5">
+            <Link href="/contact" className="hidden lg:flex bg-stone-900 text-white px-7 py-3 rounded-full font-black text-[11px] tracking-widest uppercase shadow-[0_10px_20px_rgba(0,0,0,0.1)] hover:bg-stone-800 transition-all hover:-translate-y-0.5">
               Nhận Báo Giá
             </Link>
             
