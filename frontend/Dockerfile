@@ -13,6 +13,8 @@ COPY . .
 # Pass environment variables for build time
 ARG NEXT_PUBLIC_API_URL
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+ARG BACKEND_URL
+ENV BACKEND_URL=$BACKEND_URL
 
 # Building for production
 RUN npm run build

@@ -1,4 +1,4 @@
-name: Deploy NVHome (v2.24.7) - Frontend API Proxy Fix 
+name: Deploy NVHome (v2.24.8) - Final Build-Time API Fix 
 
 on:
   push:
@@ -39,6 +39,9 @@ jobs:
           context: ./frontend
           file: ./frontend/Dockerfile
           push: true
+          build-args: |
+            NEXT_PUBLIC_API_URL=https://nvhomes.vn/api
+            BACKEND_URL=http://backend:5232
           tags: |
             ghcr.io/${{ github.repository }}/frontend:latest
             ghcr.io/${{ github.repository }}/frontend:${{ github.sha }}
