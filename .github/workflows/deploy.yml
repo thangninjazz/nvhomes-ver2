@@ -101,7 +101,6 @@ jobs:
             cp ~/nvhome/scripts/backup_vps.sh ~/backup_vps.sh # Copy ra ngoài để an toàn
             /bin/bash ~/nvhome/scripts/setup_backup.sh
             # 5.1 Run manual backup immediately as requested
-            /bin/bash ~/nvhome/scripts/setup_gdrive_vps.sh '{"access_token":"ya29.a0Aa7MYirVgImPjtwCa_qrTb3kvqWnr_Po5tuH4oFBsDYZnZAyD-ZvT4dFGMrI-S_xIksg-gUV_3Pd5cOcIHAGnwbk9zoSmH48mcirIgG2Jvz7X9nddHt2FxJKFF1ssz3UVZpQn_7i6iNn9Pk0F_geFV51kJZHxIkFtNORXY379WiyvckIHwurSI_ojv5rZiGy52TF4ssaCgYKAZsSARESFQHGX2MinU-won0r5DSOi94XO3Xh6A0206","token_type":"Bearer","refresh_token":"1//0eES6CzDA9cD4CgYIARAAGA4SNwF-L9IrBWDVCSK2Z-U4IsH6cVQrzklxb2-UkUpxRPlXvJ6PctiqbX4DyKcbt04APwC2QfvD2ZA","expiry":"2026-03-31T18:56:33.21053+07:00"}'
             /bin/bash ~/nvhome/scripts/backup_vps.sh
             
             # 6. Tự động cập nhật hệ thống (Unattended Upgrades)
