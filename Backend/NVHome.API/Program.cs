@@ -75,6 +75,7 @@ builder.Services.Configure<ForwardedHeadersOptions>(options =>
 });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddHealthChecks();
 
 // Lấy ConnectionString từ cấu hình (ưu tiên appsettings.Development.json khi chạy local)
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -155,6 +156,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHealthChecks("/health");
 
 // Tự động Apply Database Migrations khi start app
 using (var scope = app.Services.CreateScope())

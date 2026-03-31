@@ -1,4 +1,4 @@
-name: Deploy NVHome (v2.24.3) - Fix Redirect Loop & Healthcheck
+name: Deploy NVHome (v2.24.4) - Backend HealthCheck Fix
 
 on:
   push:
