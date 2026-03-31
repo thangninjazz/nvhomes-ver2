@@ -1,15 +1,21 @@
 #!/bin/bash
-# Adding Fail2Ban Jails for Nginx Protection
+# 🛡️ NVHome: Thiết lập Fail2Ban bảo vệ Nginx & SSH
+# 
+# Fail2Ban sẽ theo dõi log và tự động khóa IP nếu phát hiện hành vi:
+# 1. Quét tìm các tệp không tồn tại (Lỗi 404)
+# 2. Thử đăng nhập SSH sai quá nhiều lần
 
-# 1. Create Nginx-404 filter
-# This blocks IPs searching for non-existent files too many times
+# 1. Tạo bộ lọc theo dõi lỗi 404 cho Nginx
+# Giúp chặn các robot dò tìm lỗ hổng website
 cat <<EOF > /etc/fail2ban/filter.d/nginx-404.conf
 [Definition]
 failregex = ^<HOST> - .* \"GET .* HTTP/.*\" 404 .*
 ignoreregex =
 EOF
 
-# 2. Add Jail configuration
+# 2. Cấu hình các "nhà tù" (Jails) để thực thi việc khóa IP
+# SSH: Khóa 1 ngày nếu thử sai 10 lần
+# Nginx-404: Khóa 1 giờ nếu gặp 50 lỗi 404 trong 10 phút
 cat <<EOF > /etc/fail2ban/jail.d/custom.local
 [sshd]
 enabled = true
@@ -38,6 +44,6 @@ maxretry = 5
 bantime  = 86400
 EOF
 
-# Restart Fail2Ban
+# Khởi động lại dịch vụ Fail2Ban để áp dụng cấu hình
 systemctl restart fail2ban
-echo "Fail2Ban Custom Jails (SSH & Nginx) configured successfully."
+echo "--- ✅ Đã cấu hình Fail2Ban bảo vệ SSH & Nginx thành công! ---"
