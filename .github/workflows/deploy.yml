@@ -1,4 +1,4 @@
-name: Deploy NVHome (v2.24.5) - GHCR Sync & HealthCheck Fix
+name: Deploy NVHome (v2.24.6) - Network Isolation Fix
 
 on:
   push:
