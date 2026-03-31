@@ -37,9 +37,9 @@ export function Footer() {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await api.get('/categories')
-        const roots = res.data.filter((c: any) => c.parentId === null)
-        setCategories(roots)
+        const res = await api.get('/categories/tree')
+        // res.data from /tree already returns roots as top level array
+        setCategories(res.data || [])
       } catch (err) {
         console.error("Error fetching footer categories:", err)
       }
@@ -50,16 +50,16 @@ export function Footer() {
   const footerLinksData = {
     services: categories.map(c => ({ label: c.name, href: `/category/${c.slug}` })),
     company: [
-      { label: "Về chúng tôi", href: "#about" },
-      { label: "Dự án", href: "#projects" },
-      { label: "Tin tức", href: "#" },
-      { label: "Tuyển dụng", href: "#" }
+      { label: "Về chúng tôi", href: "/about-us" },
+      { label: "Dự án lưu tiêu biểu", href: "/projects" },
+      { label: "Tin tức & Sự kiện", href: "/news" },
+      { label: "Tuyển dụng", href: "/contact" }
     ],
     support: [
-      { label: "Liên hệ", href: "#contact" },
-      { label: "Chính sách bảo hành", href: "#" },
-      { label: "Điều khoản dịch vụ", href: "#" },
-      { label: "Câu hỏi thường gặp", href: "#" }
+      { label: "Liên hệ tư vấn", href: "/contact" },
+      { label: "Chính sách bảo hành", href: "/warranty-policy" },
+      { label: "Điều khoản dịch vụ", href: "/terms-of-service" },
+      { label: "Câu hỏi thường gặp", href: "/faq" }
     ]
   }
 
