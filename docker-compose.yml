@@ -56,6 +56,9 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     container_name: nvhome_frontend
+    environment:
+      - BACKEND_URL=http://backend:5232
+      - NEXT_PUBLIC_API_URL=http://backend:5232
     ports:
       - "127.0.0.1:3000:3000"
     depends_on:

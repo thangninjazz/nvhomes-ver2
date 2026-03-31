@@ -9,10 +9,11 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: true,
   },
   async rewrites() {
+    const backendUrl = process.env.BACKEND_URL || 'http://localhost:5232';
     return [
       {
         source: '/api/:path*',
-        destination: 'http://localhost:5232/api/:path*',
+        destination: `${backendUrl}/api/:path*`,
       },
     ];
   },

@@ -1,4 +1,4 @@
-name: Deploy NVHome (v2.24.6) - Network Isolation Fix
+name: Deploy NVHome (v2.24.7) - Frontend API Proxy Fix 
 
 on:
   push:
