@@ -32,6 +32,11 @@ namespace NVHome.Infrastructure.Services
         /// So sánh 2 danh sách URL ảnh (cũ và mới) và xóa các tệp tin không còn sử dụng.
         /// </summary>
         void DeleteOrphanedImages(string? oldUrls, string? newUrls);
+
+        /// <summary>
+        /// So sánh nội dung HTML cũ và mới, xóa các ảnh có trong nội dung cũ nhưng không còn trong nội dung mới.
+        /// </summary>
+        void DeleteOrphanedImagesInHtml(string? oldHtml, string? newHtml);
     }
 
     public class FileService : IFileService
@@ -134,6 +139,43 @@ namespace NVHome.Infrastructure.Services
                 if (!newList.Contains(oldUrl))
                 {
                     DeleteFileFromUrl(oldUrl.Trim());
+                }
+            }
+        }
+
+        public void DeleteOrphanedImagesInHtml(string? oldHtml, string? newHtml)
+        {
+            if (string.IsNullOrWhiteSpace(oldHtml)) return;
+
+            var regex = new System.Text.RegularExpressions.Regex(@"/api/uploads/([a-zA-Z0-9\-\.]+)", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            
+            // Lấy danh sách ảnh từ nội dung cũ
+            var oldMatches = regex.Matches(oldHtml);
+            var oldImages = new HashSet<string>();
+            foreach (System.Text.RegularExpressions.Match m in oldMatches)
+            {
+                if (m.Groups.Count > 1) oldImages.Add(m.Groups[1].Value);
+            }
+
+            if (oldImages.Count == 0) return;
+
+            // Lấy danh sách ảnh từ nội dung mới
+            var newImages = new HashSet<string>();
+            if (!string.IsNullOrWhiteSpace(newHtml))
+            {
+                var newMatches = regex.Matches(newHtml);
+                foreach (System.Text.RegularExpressions.Match m in newMatches)
+                {
+                    if (m.Groups.Count > 1) newImages.Add(m.Groups[1].Value);
+                }
+            }
+
+            // Xóa những ảnh có trong cũ nhưng không có trong mới
+            foreach (var img in oldImages)
+            {
+                if (!newImages.Contains(img))
+                {
+                    DeleteFile(img);
                 }
             }
         }

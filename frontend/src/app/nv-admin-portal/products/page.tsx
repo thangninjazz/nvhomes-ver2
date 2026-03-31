@@ -17,6 +17,9 @@ export default function ProductManager() {
   const [editingItem, setEditingItem] = useState<any>(null);
   const [isPreviewMode, setIsPreviewMode] = useState(false);
   
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterCategoryId, setFilterCategoryId] = useState("");
+  
   const [formData, setFormData] = useState({
     name: "",
     slug: "",
@@ -72,6 +75,14 @@ export default function ProductManager() {
     fetchProducts();
     fetchCategories();
   }, []);
+  
+  const filteredProducts = useMemo(() => {
+    return products.filter(p => {
+      const matchSearch = p.name.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchCategory = !filterCategoryId || p.categoryId === filterCategoryId;
+      return matchSearch && matchCategory;
+    });
+  }, [products, searchTerm, filterCategoryId]);
 
   const openAddModal = () => {
     setEditingItem(null);
@@ -198,14 +209,51 @@ export default function ProductManager() {
     }
   };
 
+  const imageHandler = () => {
+    const input = document.createElement("input");
+    input.setAttribute("type", "file");
+    input.setAttribute("accept", "image/*");
+    input.click();
+
+    input.onchange = async () => {
+      const file = input.files?.[0];
+      if (file) {
+        const formData = new FormData();
+        formData.append("file", file);
+
+        try {
+          const res = await api.post("/upload", formData, {
+            headers: { "Content-Type": "multipart/form-data" },
+          });
+          const url = res.data.url;
+          
+          // Chèn ảnh vào trình soạn thảo
+          const quill = (document.querySelector(".quill") as any)?.__quill;
+          if (quill) {
+            const range = quill.getSelection();
+            quill.insertEmbed(range.index, "image", url);
+          }
+        } catch (err) {
+          console.error("Lỗi upload ảnh trong editor:", err);
+          alert("Không thể upload ảnh. Vui lòng thử lại.");
+        }
+      }
+    };
+  };
+
   const quillModules = useMemo(() => ({
-    toolbar: [
-      [{ 'header': [1, 2, 3, false] }],
-      ['bold', 'italic', 'underline', 'strike'],
-      [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-      ['link', 'image'],
-      ['clean']
-    ],
+    toolbar: {
+      container: [
+        [{ 'header': [1, 2, 3, false] }],
+        ['bold', 'italic', 'underline', 'strike'],
+        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+        ['link', 'image'],
+        ['clean']
+      ],
+      handlers: {
+        image: imageHandler
+      }
+    },
   }), []);
 
   return (
@@ -224,8 +272,24 @@ export default function ProductManager() {
       </div>
 
       <div className="bg-white rounded-3xl border border-stone-200 shadow-sm overflow-hidden mb-12">
-        <div className="p-6 border-b border-stone-100 flex gap-4 bg-stone-50/30">
-            <input type="text" placeholder="Tìm kiếm tên sản phẩm..." className="flex-1 border border-stone-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-stone-900 transition-all font-medium text-stone-700 bg-white" />
+        <div className="p-6 border-b border-stone-100 flex flex-col md:flex-row gap-4 bg-stone-50/30">
+            <input 
+              type="text" 
+              placeholder="Tìm kiếm tên sản phẩm..." 
+              className="flex-1 border border-stone-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-stone-900 transition-all font-medium text-stone-700 bg-white" 
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <select 
+              className="w-full md:w-64 border border-stone-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-stone-900 transition-all font-bold text-stone-700 bg-white cursor-pointer"
+              value={filterCategoryId}
+              onChange={(e) => setFilterCategoryId(e.target.value)}
+            >
+              <option value="">Tất cả danh mục</option>
+              {categories.map(cat => (
+                <option key={cat.id} value={cat.id}>{cat.name}</option>
+              ))}
+            </select>
         </div>
         
         <table className="w-full text-left border-collapse">
@@ -242,11 +306,11 @@ export default function ProductManager() {
                     <tr>
                         <td colSpan={4} className="p-10 text-center text-stone-400 font-medium">Đang tải danh sách...</td>
                     </tr>
-                ) : products.length === 0 ? (
+                ) : filteredProducts.length === 0 ? (
                     <tr>
-                        <td colSpan={4} className="p-10 text-center text-stone-400 font-medium">Không có sản phẩm nào.</td>
+                        <td colSpan={4} className="p-10 text-center text-stone-400 font-medium">Không tìm thấy sản phẩm phù hợp.</td>
                     </tr>
-                ) : products.map(p => (
+                ) : filteredProducts.map(p => (
                     <tr key={p.id} className="hover:bg-stone-50/50 transition-colors group">
                         <td className="p-6">
                             <div className="flex items-center gap-4">

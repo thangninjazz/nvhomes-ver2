@@ -104,12 +104,28 @@ export default function ProductDetail({ params }: { params: Promise<{ slug: stri
     <div className="bg-white min-h-screen pt-28 pb-20">
       <div className="container mx-auto px-4 lg:px-8">
         {/* Breadcrumb Navigation */}
-        <nav className="flex text-xs text-stone-400 font-bold mb-10 uppercase tracking-widest">
+        <nav className="flex items-center gap-2 text-[10px] md:text-xs text-stone-400 font-bold mb-10 uppercase tracking-widest overflow-x-auto whitespace-nowrap pb-2 custom-scrollbar">
             <Link href="/" className="hover:text-stone-900 transition-colors">Trang Chủ</Link>
-            <span className="mx-3">/</span>
-            <span className="hover:text-stone-900 transition-colors">Sản Phẩm</span>
-            <span className="mx-3">/</span>
-            <span className="text-stone-900 truncate max-w-[200px]">{product.name}</span>
+            {product.parentCategoryName && (
+              <>
+                <span className="text-[10px] opacity-30">/</span>
+                <Link 
+                  href={`/category/${product.parentCategorySlug}`} 
+                  className="hover:text-stone-900 transition-colors"
+                >
+                  {product.parentCategoryName}
+                </Link>
+              </>
+            )}
+            <span className="text-[10px] opacity-30">/</span>
+            <Link 
+              href={`/category/${product.categorySlug}`} 
+              className="hover:text-stone-900 transition-colors"
+            >
+              {product.categoryName}
+            </Link>
+            <span className="text-[10px] opacity-30">/</span>
+            <span className="text-stone-900 truncate max-w-[150px] md:max-w-none">{product.name}</span>
         </nav>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 xl:gap-24">
@@ -154,12 +170,12 @@ export default function ProductDetail({ params }: { params: Promise<{ slug: stri
                     {product.name}
                 </h1>
                 
-                <div className="flex items-end gap-5 mb-10 pb-10 border-b border-stone-100">
-                    <span className="text-5xl font-black text-red-600 tracking-tighter">
+                <div className="flex flex-wrap items-baseline gap-x-6 gap-y-2 mb-10 pb-10 border-b border-stone-100">
+                    <span className="text-4xl md:text-5xl font-black text-red-600 tracking-tighter">
                       {(product.discountPrice || product.originalPrice).toLocaleString('vi-VN')} đ
                     </span>
                     {product.discountPrice > 0 && product.discountPrice < product.originalPrice && (
-                      <span className="text-xl font-bold text-stone-400 line-through mb-1">
+                      <span className="text-base md:text-xl font-bold text-stone-300 line-through decoration-stone-300">
                         {product.originalPrice.toLocaleString('vi-VN')} đ
                       </span>
                     )}

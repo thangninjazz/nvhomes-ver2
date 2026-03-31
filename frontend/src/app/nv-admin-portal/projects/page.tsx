@@ -134,8 +134,8 @@ export default function ProjectManager() {
         ) : projects.map(p => (
             <div key={p.id} className="bg-white border border-stone-200 rounded-[2rem] overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group flex flex-col">
                 <div className="aspect-video bg-stone-100 flex items-center justify-center relative overflow-hidden">
-                    {p.images ? (
-                      <img src={p.images} alt={p.title} className="absolute inset-0 w-full h-full object-cover" />
+                    {p.thumbnail ? (
+                      <img src={p.thumbnail} alt={p.title} className="absolute inset-0 w-full h-full object-cover" />
                     ) : (
                       <div className="absolute inset-0 pattern-dots pattern-stone-200 pattern-size-4" />
                     )}

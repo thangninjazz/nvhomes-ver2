@@ -29,7 +29,10 @@ public class ProductsController : ControllerBase
         [FromQuery] string? categorySlug,
         [FromQuery] string? sortOrder)
     {
-        var query = _context.Products.Include(p => p.Category).AsQueryable();
+        var query = _context.Products
+            .Include(p => p.Category)
+            .ThenInclude(c => c.Parent)
+            .AsQueryable();
 
         // 1. Lọc theo danh mục (Hỗ trợ đệ quy lấy cả con nếu là cha)
         if (categoryId.HasValue || !string.IsNullOrEmpty(categorySlug))
@@ -80,6 +83,9 @@ public class ProductsController : ControllerBase
             Description = p.Description,
             CategoryId = p.CategoryId,
             CategoryName = p.Category != null ? p.Category.Name : string.Empty,
+            CategorySlug = p.Category != null ? p.Category.Slug : string.Empty,
+            ParentCategoryName = p.Category?.Parent?.Name,
+            ParentCategorySlug = p.Category?.Parent?.Slug,
             Images = p.Images,
             Specifications = SafeDeserialize<List<ProductSpecificationDTO>>(p.Specifications),
             Features = SafeDeserialize<List<string>>(p.Features),
@@ -99,7 +105,10 @@ public class ProductsController : ControllerBase
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetProduct(Guid id)
     {
-        var p = await _context.Products.Include(x => x.Category).FirstOrDefaultAsync(x => x.Id == id);
+        var p = await _context.Products
+            .Include(x => x.Category)
+            .ThenInclude(c => c.Parent)
+            .FirstOrDefaultAsync(x => x.Id == id);
         if (p == null) return NotFound("Không tìm thấy sản phẩm.");
 
         return Ok(new ProductResponse
@@ -109,6 +118,9 @@ public class ProductsController : ControllerBase
             DiscountPercent = p.DiscountPercent, Description = p.Description,
             CategoryId = p.CategoryId,
             CategoryName = p.Category != null ? p.Category.Name : string.Empty,
+            CategorySlug = p.Category != null ? p.Category.Slug : string.Empty,
+            ParentCategoryName = p.Category?.Parent?.Name,
+            ParentCategorySlug = p.Category?.Parent?.Slug,
             Images = p.Images,
             Specifications = SafeDeserialize<List<ProductSpecificationDTO>>(p.Specifications),
             Features = SafeDeserialize<List<string>>(p.Features),
@@ -119,7 +131,10 @@ public class ProductsController : ControllerBase
     [HttpGet("{slug}")]
     public async Task<IActionResult> GetProductBySlug(string slug)
     {
-        var p = await _context.Products.Include(x => x.Category).FirstOrDefaultAsync(x => x.Slug == slug);
+        var p = await _context.Products
+            .Include(x => x.Category)
+            .ThenInclude(c => c.Parent)
+            .FirstOrDefaultAsync(x => x.Slug == slug);
         if (p == null) return NotFound("Không tìm thấy sản phẩm.");
 
         return Ok(new ProductResponse
@@ -129,6 +144,9 @@ public class ProductsController : ControllerBase
             DiscountPercent = p.DiscountPercent, Description = p.Description,
             CategoryId = p.CategoryId,
             CategoryName = p.Category != null ? p.Category.Name : string.Empty,
+            CategorySlug = p.Category != null ? p.Category.Slug : string.Empty,
+            ParentCategoryName = p.Category?.Parent?.Name,
+            ParentCategorySlug = p.Category?.Parent?.Slug,
             Images = p.Images,
             Specifications = SafeDeserialize<List<ProductSpecificationDTO>>(p.Specifications),
             Features = SafeDeserialize<List<string>>(p.Features),
@@ -187,6 +205,9 @@ public class ProductsController : ControllerBase
 
         // 1. Dọn dẹp ảnh cũ bị gỡ bỏ khỏi thư viện (Gallery)
         _fileService.DeleteOrphanedImages(product.Images, request.Images);
+
+        // 2. Dọn dẹp ảnh cũ bị gỡ bỏ khỏi mô tả chi tiết (HTML Content)
+        _fileService.DeleteOrphanedImagesInHtml(product.Description, request.Description);
 
         product.Name = request.Name; product.Slug = request.Slug;
         product.OriginalPrice = request.OriginalPrice; product.DiscountPrice = request.DiscountPrice;

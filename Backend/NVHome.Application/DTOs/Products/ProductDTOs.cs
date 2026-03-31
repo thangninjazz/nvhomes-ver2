@@ -31,6 +31,9 @@ public class ProductResponse
     public string? Description { get; set; }
     public Guid CategoryId { get; set; }
     public string CategoryName { get; set; } = string.Empty;
+    public string CategorySlug { get; set; } = string.Empty;
+    public string? ParentCategoryName { get; set; }
+    public string? ParentCategorySlug { get; set; }
     public string? Images { get; set; }
     public List<ProductSpecificationDTO>? Specifications { get; set; }
     public List<string>? Features { get; set; }
