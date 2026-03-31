@@ -10,8 +10,8 @@ if [ -z "$TOKEN" ]; then
     exit 1
 fi
 
-# Create or Update the remote
-rclone config create gdrive drive config_token="$TOKEN" scope=drive --non-interactive
+# Create or Update the remote (using 'token' instead of 'config_token' for latest rclone versions)
+rclone config create gdrive drive token="$TOKEN" scope=drive --non-interactive
 
 # Test connection
 echo "Testing connection to gdrive..."
