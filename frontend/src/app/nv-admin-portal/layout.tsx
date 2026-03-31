@@ -52,7 +52,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           isSidebarOpen ? "w-72" : "w-0"
         }`}
       >
-        <div className={`transition-opacity duration-300 ${isSidebarOpen ? "opacity-100" : "opacity-0 invisible pointer-events-none"}`}>
+        <div className={`h-full flex flex-col transition-opacity duration-300 ${isSidebarOpen ? "opacity-100" : "opacity-0 invisible pointer-events-none"}`}>
           <div className="h-[72px] flex items-center justify-center border-b border-stone-800 shrink-0">
             <Link href="/nv-admin-portal" className="text-2xl font-black text-white tracking-widest uppercase truncate px-4">NV.CMS</Link>
           </div>
