@@ -50,11 +50,8 @@ public class UploadController : ControllerBase
             // Xóa file tạm
             System.IO.File.Delete(tempPath);
 
-            // Trả về URL tương ứng (nguồn qua proxy Nginx)
-            var baseUrl = $"{Request.Scheme}://{Request.Host}{Request.PathBase}";
-            
-            // Vì Nginx proxy /api vào backend, và backend map UseStaticFiles vào /api/uploads
-            var fileUrl = $"{baseUrl}/api/uploads/{fileName}";
+            // Trả về URL tương ứng (Cấu hình Map trong Program.cs: /api/uploads)
+            var fileUrl = $"/api/uploads/{fileName}";
 
             return Ok(new { url = fileUrl, fileName = fileName });
         }

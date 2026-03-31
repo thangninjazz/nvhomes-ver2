@@ -100,8 +100,6 @@ jobs:
             chmod +x ~/nvhome/scripts/*.sh
             cp ~/nvhome/scripts/backup_vps.sh ~/backup_vps.sh # Copy ra ngoài để an toàn
             /bin/bash ~/nvhome/scripts/setup_backup.sh
-            # 5.1 Run manual backup immediately as requested
-            /bin/bash ~/nvhome/scripts/backup_vps.sh
             
             # 6. Tự động cập nhật hệ thống (Unattended Upgrades)
             sudo /bin/bash ~/nvhome/scripts/setup_auto_updates.sh
