@@ -272,14 +272,6 @@ export default function ProductDetail({ params }: { params: Promise<{ slug: stri
       <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-stone-100 sm:hidden shadow-[0_-5px_20px_rgba(0,0,0,0.05)] safe-area-pb">
         <div className="flex items-center h-14">
           <button 
-            onClick={handleConsult}
-            className="flex flex-col items-center justify-center bg-stone-50 text-stone-900 px-4 h-full border-r border-stone-200 hover:bg-stone-100 transition-colors"
-          >
-            <svg className="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
-            <span className="text-[9px] font-black uppercase tracking-widest text-stone-500">Tư vấn</span>
-          </button>
-          
-          <button 
             onClick={handleAddToCart}
             className="flex-1 bg-red-50 text-red-600 h-full font-black uppercase tracking-widest text-[11px] flex items-center justify-center gap-2 active:bg-red-100 transition-all border-r border-red-200"
           >

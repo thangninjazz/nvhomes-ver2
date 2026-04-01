@@ -47,14 +47,13 @@ export default function ProjectsPage() {
           </p>
         </div>
 
-        {/* Filter & Sort Bar */}
-        <div className="flex flex-col gap-6 mb-12 pb-8 border-b border-stone-100">
-          <div className="flex items-center justify-between">
-            <span className="text-[10px] font-black uppercase tracking-widest text-stone-400">Danh mục & Sắp xếp</span>
-            <div className="flex items-center gap-2 bg-stone-50 py-2 px-3 rounded-xl border border-stone-100 flex-shrink-0 shadow-sm">
-               <svg className="w-4 h-4 text-stone-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" /></svg>
+        {/* Filter Bar */}
+        <div className="mb-12">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-stone-400">Khám Phá Dự Án</h3>
+            <div className="flex items-center gap-2 bg-stone-50 py-1.5 px-3 rounded-lg border border-stone-100 shadow-sm">
                <select 
-                 className="bg-transparent text-[11px] font-black text-stone-900 focus:outline-none cursor-pointer uppercase tracking-wider w-full"
+                 className="bg-transparent text-[10px] font-black text-stone-900 focus:outline-none cursor-pointer uppercase tracking-widest"
                  onChange={(e) => {
                    const val = e.target.value;
                    const sorted = [...projects];
@@ -65,16 +64,15 @@ export default function ProjectsPage() {
                >
                  <option value="newest">Mới nhất</option>
                  <option value="oldest">Cũ nhất</option>
-                 <option value="name">Tên A-Z</option>
                </select>
             </div>
           </div>
 
-          <div className="flex gap-3 overflow-x-auto pb-4 custom-scrollbar w-full">
+          <div className="flex gap-2 overflow-x-auto pb-4 no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
               <button 
                 onClick={() => setSelectedCategory("all")}
-                className={`px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap flex-shrink-0 border border-stone-100 ${
-                  selectedCategory === "all" ? 'bg-stone-900 text-white shadow-lg border-stone-900' : 'bg-stone-50 text-stone-400 hover:bg-stone-100 hover:text-stone-900'
+                className={`px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap border ${
+                  selectedCategory === "all" ? 'bg-stone-900 text-white border-stone-900 shadow-md' : 'bg-white text-stone-500 border-stone-200 hover:border-stone-900 hover:text-stone-900'
                 }`}
               >
                 Tất cả
@@ -83,8 +81,8 @@ export default function ProjectsPage() {
                 <button 
                   key={cat.id}
                   onClick={() => setSelectedCategory(cat.id)}
-                  className={`px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap flex-shrink-0 border border-stone-100 ${
-                    selectedCategory === cat.id ? 'bg-stone-900 text-white shadow-lg border-stone-900' : 'bg-stone-50 text-stone-400 hover:bg-stone-100 hover:text-stone-900'
+                  className={`px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap border ${
+                    selectedCategory === cat.id ? 'bg-stone-900 text-white border-stone-900 shadow-md' : 'bg-white text-stone-500 border-stone-200 hover:border-stone-900 hover:text-stone-900'
                   }`}
                 >
                   {cat.name}

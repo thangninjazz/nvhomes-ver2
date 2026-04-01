@@ -283,19 +283,8 @@ export function Header() {
             </div>
           </nav>
           
-          {/* Drawer Footer */}
           <div className="p-7 border-t border-stone-100 bg-stone-50/50 flex-shrink-0">
-            <p className="text-[10px] font-black text-stone-400 uppercase tracking-widest mb-5">Liên hệ tư vấn viên</p>
-            <div className="flex flex-col gap-3">
-              <a href="tel:0966245396" className="w-full bg-stone-900 text-white py-4 px-6 flex items-center justify-center gap-3 rounded-2xl hover:bg-stone-800 transition-all shadow-lg shadow-stone-900/20 active:scale-95">
-                <span className="text-xl">📞</span>
-                <span className="text-sm font-bold uppercase tracking-wide">0966.245.396</span>
-              </a>
-              <a href="https://zalo.me/0966245396" className="w-full bg-[#0068ff] text-white py-4 px-6 flex items-center justify-center gap-3 rounded-2xl hover:opacity-90 transition-all shadow-lg shadow-blue-500/20 active:scale-95">
-                <span className="text-sm font-bold uppercase tracking-wider">Tư vấn qua Zalo</span>
-              </a>
-            </div>
-            <p className="mt-8 text-center text-[9px] text-stone-400 font-medium">© 2026 NV Homes. All rights reserved.</p>
+            <p className="text-center text-[9px] text-stone-400 font-medium tracking-tight">© 2026 NV Homes. Phục vụ tận tâm - Nâng tầm không gian sống.</p>
           </div>
         </div>
       </div>

@@ -59,8 +59,8 @@ export default function ProjectDetailPage() {
       </div>
 
       {/* Header Section */}
-      <div className="container mx-auto px-4 mb-20">
-        <div className="flex flex-col lg:flex-row gap-12 items-end justify-between border-b border-stone-100 pb-16">
+      <div className="container mx-auto px-4 mb-12">
+        <div className="flex flex-col lg:flex-row gap-8 items-end justify-between border-b border-stone-100 pb-12">
           <div className="max-w-4xl">
             <h1 className="text-5xl md:text-7xl font-black text-stone-900 mb-10 leading-[1.05] uppercase tracking-tighter">
               {project.title}
@@ -92,7 +92,7 @@ export default function ProjectDetailPage() {
 
       {/* Main Image / Hero */}
       <div 
-        className="relative min-h-[50vh] max-h-[85vh] w-full mb-24 overflow-hidden cursor-zoom-in bg-stone-50 flex items-center justify-center p-4 md:p-10"
+        className="relative min-h-[40vh] max-h-[75vh] w-full mb-16 overflow-hidden cursor-zoom-in bg-stone-50 flex items-center justify-center p-4 md:p-8"
         onClick={() => {
           setLightboxIndex(0);
           setLightboxOpen(true);
@@ -111,7 +111,7 @@ export default function ProjectDetailPage() {
       </div>
 
       {/* Content & Video Section */}
-      <div className="container mx-auto px-4 mb-32">
+      <div className="container mx-auto px-4 mb-20">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-20">
           <div className="lg:col-span-12 prose prose-stone prose-xl max-w-none prose-headings:font-black prose-headings:uppercase prose-p:text-stone-600 prose-p:font-medium prose-p:leading-relaxed">
              <div dangerouslySetInnerHTML={{ __html: project.content || "" }} />
@@ -119,7 +119,7 @@ export default function ProjectDetailPage() {
         </div>
 
         {project.videoUrl && (
-          <div className="mt-24 aspect-video rounded-[3rem] overflow-hidden shadow-2xl bg-stone-100">
+          <div className="mt-16 aspect-video rounded-[2.5rem] overflow-hidden shadow-2xl bg-stone-100">
              {project.videoUrl.includes('youtube.com') || project.videoUrl.includes('youtu.be') ? (
                <iframe 
                 className="w-full h-full"
@@ -137,10 +137,10 @@ export default function ProjectDetailPage() {
 
       {/* Gallery Section */}
       {project.gallery && project.gallery.length > 0 && (
-        <section className="bg-stone-50 py-32 mb-32">
+        <section className="bg-stone-50 py-16 md:py-24 mb-16 md:mb-24">
           <div className="container mx-auto px-4">
-            <h2 className="text-sm font-black text-red-500 uppercase tracking-[0.2em] mb-4 text-center">BỘ SƯU TẬP</h2>
-            <h3 className="text-4xl font-black text-stone-900 mb-20 text-center uppercase tracking-tighter">Hình Ảnh Thực Tế Công Trình</h3>
+            <h2 className="text-[10px] font-black text-red-500 uppercase tracking-[0.2em] mb-3 text-center">BỘ SƯU TẬP</h2>
+            <h3 className="text-3xl font-black text-stone-900 mb-12 text-center uppercase tracking-tighter">Hình Ảnh Thực Tế Công Trình</h3>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                {project.gallery.map((img: string, i: number) => (
@@ -166,7 +166,7 @@ export default function ProjectDetailPage() {
 
       {/* Related Products Section */}
       {project.relatedProducts && project.relatedProducts.length > 0 && (
-        <div className="container mx-auto px-4 mb-32">
+        <div className="container mx-auto px-4 mb-20">
            <h3 className="text-2xl font-black text-stone-900 mb-10 uppercase tracking-widest flex items-center gap-4">
              <span className="w-10 h-1 bg-red-500"></span> Sản Phẩm Sử Dụng
            </h3>
@@ -191,7 +191,7 @@ export default function ProjectDetailPage() {
       )}
 
       {/* CTA Section */}
-      <div className="container mx-auto px-4 pb-32">
+      <div className="container mx-auto px-4 pb-20">
         <div className="bg-stone-900 rounded-[3rem] p-16 text-center text-white relative overflow-hidden">
            <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/dark-matter.png')] opacity-30"></div>
            <h3 className="text-4xl font-black mb-8 relative z-10 uppercase tracking-tighter">Bạn Thích Không Gian Này?</h3>
