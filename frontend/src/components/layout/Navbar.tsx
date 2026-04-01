@@ -120,7 +120,28 @@ export function Navbar() {
 
           {/* Right Actions */}
           <div className="flex items-center flex-nowrap gap-1 sm:gap-2 lg:gap-5 shrink-0 ml-auto px-1">
-            {/* 1. Search Toggle */}
+            {/* 1. Shopee-style Cart Icon with Badge */}
+            <Link 
+              href="/cart" 
+              className={`flex items-center gap-2 px-2 py-2 text-stone-900 hover:bg-stone-100 rounded-2xl transition-all relative group z-[60] ${isCartBouncing ? 'nav-cart-pop' : ''}`}
+            >
+               <div className="relative">
+                  <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                  </svg>
+                  {cartCount > 0 && (
+                    <span className={`absolute -top-1.5 -right-1.5 bg-[#ee4d2d] text-white text-[10px] font-black min-w-[20px] h-[20px] px-1.5 flex items-center justify-center rounded-full shadow-lg border-2 border-white transition-all ${isCartBouncing ? 'scale-125' : 'scale-100'}`}>
+                      {cartCount}
+                    </span>
+                  )}
+               </div>
+               <div className="flex flex-col items-center leading-none gap-0.5">
+                  <span className="hidden xl:inline text-[11px] font-black uppercase tracking-widest text-stone-700 group-hover:text-red-600 transition-colors">Giỏ hàng</span>
+                  <span className="text-[7px] font-black text-stone-400 bg-stone-50 px-1 rounded xl:ml-0">v1.5.2-FINAL</span>
+               </div>
+            </Link>
+
+            {/* 2. Search Toggle */}
             <div className="relative z-[50]">
               {!isSearchOpen ? (
                 <button 
@@ -143,27 +164,6 @@ export function Navbar() {
                 </form>
               )}
             </div>
-
-            {/* 2. Shopee-style Cart Icon with Badge */}
-            <Link 
-              href="/cart" 
-              className={`flex items-center gap-2 px-2 py-2 text-stone-700 hover:bg-stone-100 rounded-2xl transition-all relative group z-[60] ${isCartBouncing ? 'nav-cart-pop' : ''}`}
-            >
-               <div className="relative">
-                  <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                  </svg>
-                  {cartCount > 0 && (
-                    <span className={`absolute -top-1.5 -right-1.5 bg-[#ee4d2d] text-white text-[10px] font-black min-w-[20px] h-[20px] px-1.5 flex items-center justify-center rounded-full shadow-lg border-2 border-white transition-all ${isCartBouncing ? 'scale-125' : 'scale-100'}`}>
-                      {cartCount}
-                    </span>
-                  )}
-               </div>
-               <div className="flex flex-col items-center leading-none gap-1">
-                  <span className="hidden xl:inline text-[11px] font-black uppercase tracking-widest text-stone-700 group-hover:text-red-600 transition-colors">Giỏ hàng</span>
-                  <span className="text-[9px] font-bold text-red-500 bg-red-50 px-1 rounded xl:ml-0">v1.5.2-FINAL</span>
-               </div>
-            </Link>
 
             {/* 3. CTA (Desktop only) */}
             <Link href="/contact" className="hidden lg:flex bg-stone-900 text-white px-7 py-3 rounded-full font-black text-[11px] tracking-widest uppercase shadow-[0_10px_20px_rgba(0,0,0,0.1)] hover:bg-stone-800 transition-all hover:-translate-y-0.5">
