@@ -105,54 +105,66 @@ export default function ProductDetail({ params }: { params: Promise<{ slug: stri
     <>
       <div className="bg-white min-h-screen pt-28 pb-20">
       <div className="container mx-auto px-4 lg:px-8">
-        {/* Breadcrumb Navigation */}
-        <nav className="flex items-center gap-2 text-[10px] md:text-xs text-stone-400 font-bold mb-6 uppercase tracking-widest overflow-x-auto whitespace-nowrap pb-2 custom-scrollbar">
-            <Link href="/" className="hover:text-stone-900 transition-colors">Trang Chủ</Link>
-            {product.parentCategoryName && (
-              <>
-                <span className="text-[10px] opacity-30">/</span>
-                <Link 
-                  href={`/category/${product.parentCategorySlug}`} 
-                  className="hover:text-stone-900 transition-colors"
-                >
-                  {product.parentCategoryName}
-                </Link>
-              </>
-            )}
-            <span className="text-[10px] opacity-30">/</span>
-            <Link 
-              href={`/category/${product.categorySlug}`} 
-              className="hover:text-stone-900 transition-colors"
-            >
-              {product.categoryName}
-            </Link>
-            <span className="text-[10px] opacity-30">/</span>
-            <span className="text-stone-900 truncate max-w-[150px] md:max-w-none">{product.name}</span>
-        </nav>
+        {/* Sticky Breadcrumb Bar */}
+        <div className="sticky top-[64px] md:top-[80px] z-30 bg-white/80 backdrop-blur-md border-b border-stone-100 -mx-4 px-4 mb-8 py-4">
+          <nav className="flex items-center gap-2 text-[10px] md:text-xs text-stone-400 font-bold uppercase tracking-widest overflow-x-auto whitespace-nowrap custom-scrollbar">
+              <Link href="/" className="hover:text-stone-900 transition-colors flex items-center gap-1">
+                <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+                Trang Chủ
+              </Link>
+              {product.parentCategoryName && (
+                <>
+                  <span className="text-[10px] opacity-30">/</span>
+                  <Link 
+                    href={`/category/${product.parentCategorySlug}`} 
+                    className="hover:text-stone-900 transition-colors"
+                  >
+                    {product.parentCategoryName}
+                  </Link>
+                </>
+              )}
+              <span className="text-[10px] opacity-30">/</span>
+              <Link 
+                href={`/category/${product.categorySlug}`} 
+                className="hover:text-stone-900 transition-colors"
+              >
+                {product.categoryName}
+              </Link>
+              <span className="text-[10px] opacity-30">/</span>
+              <span className="text-stone-900 truncate max-w-[150px] md:max-w-none">{product.name}</span>
+          </nav>
+        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 xl:gap-24">
             {/* Left: Product Image Gallery */}
             <div className="space-y-6">
                 <div 
-                    className="aspect-[4/5] md:aspect-square bg-stone-50 rounded-[2rem] overflow-hidden shadow-sm border border-stone-100 flex items-center justify-center relative group cursor-zoom-in"
+                    className="aspect-square bg-stone-50 rounded-[2rem] overflow-hidden shadow-inner border border-stone-100 flex items-center justify-center relative group cursor-zoom-in"
                     onClick={() => {
                         setLightboxIndex(activeImage);
                         setLightboxOpen(true);
                     }}
                 >
-                    <img src={images[activeImage]} alt={product.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                    <img 
+                      src={images[activeImage]} 
+                      alt={product.name} 
+                      className="w-full h-full object-contain p-4 transition-transform duration-700 group-hover:scale-105" 
+                    />
+                    <div className="absolute bottom-6 right-6 bg-white/90 backdrop-blur-md p-3 rounded-2xl shadow-xl opacity-0 group-hover:opacity-100 transition-opacity">
+                       <svg className="w-5 h-5 text-stone-900" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" /></svg>
+                    </div>
                 </div>
                 
                 {/* Thumbnails */}
                 {images.length > 1 && (
-                  <div className="grid grid-cols-4 gap-4 md:gap-6">
+                  <div className="flex gap-4 overflow-x-auto pb-4 px-1 custom-scrollbar">
                       {images.map((img: string, idx: number) => (
                           <button 
                                key={idx} 
                               onClick={() => setActiveImage(idx)}
-                              className={`aspect-square rounded-2xl overflow-hidden border-2 transition-all duration-300 relative ${activeImage === idx ? 'border-stone-900 shadow-md ring-4 ring-stone-900/10 scale-[1.02]' : 'border-transparent hover:border-stone-300 opacity-60 hover:opacity-100 bg-stone-50'}`}
+                              className={`flex-shrink-0 w-20 h-20 rounded-2xl overflow-hidden border-2 transition-all duration-300 relative ${activeImage === idx ? 'border-stone-900 shadow-md scale-[1.05]' : 'border-transparent hover:border-stone-200 bg-stone-50'}`}
                           >
-                              <img src={img} alt={`Thumbnail ${idx}`} className="w-full h-full object-cover" />
+                              <img src={img} alt={`Thumbnail ${idx}`} className="w-full h-full object-contain p-1" />
                           </button>
                       ))}
                   </div>
@@ -167,30 +179,35 @@ export default function ProductDetail({ params }: { params: Promise<{ slug: stri
                     {product.name}
                 </h1>
                 
-                <div className="flex flex-wrap items-baseline gap-x-6 gap-y-2 mb-8">
-                    <span className="text-4xl md:text-5xl font-black text-red-600 tracking-tighter">
-                      {(product.discountPrice || product.originalPrice).toLocaleString('vi-VN')} đ
-                    </span>
-                    {product.discountPrice > 0 && product.discountPrice < product.originalPrice && (
-                      <span className="text-base md:text-xl font-bold text-stone-300 line-through decoration-stone-300">
-                        {product.originalPrice.toLocaleString('vi-VN')} đ
-                      </span>
-                    )}
+                <div className="flex flex-col mb-8 p-6 bg-stone-50 rounded-3xl border border-stone-100">
+                    <div className="flex items-center gap-3 mb-2">
+                      <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                      <span className="text-[10px] font-black text-stone-500 uppercase tracking-widest">Sẵn hàng tại kho NVHome</span>
+                    </div>
+                    <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+                        <span className="text-4xl md:text-5xl font-black text-red-600 tracking-tighter">
+                          {(product.discountPrice || product.originalPrice).toLocaleString('vi-VN')} đ
+                        </span>
+                        {product.discountPrice > 0 && product.discountPrice < product.originalPrice && (
+                          <span className="text-lg md:text-xl font-bold text-stone-300 line-through decoration-stone-300">
+                            {product.originalPrice.toLocaleString('vi-VN')} đ
+                          </span>
+                        )}
+                    </div>
                 </div>
 
-                {/* Main Call to Actions - Moved Up for priority */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
+                {/* Main Call to Actions */}
+                <div className="flex flex-col sm:flex-row gap-4 mb-12">
                     <button 
                       onClick={handleAddToCart}
-                      className="bg-stone-900 text-white font-black uppercase tracking-widest py-5 rounded-2xl hover:bg-black transition-all hover:scale-[1.02] shadow-[0_10px_30px_rgba(0,0,0,0.1)] flex justify-center items-center gap-3 text-[11px]">
+                      className="flex-[2] bg-stone-900 text-white font-black uppercase tracking-widest py-6 rounded-2xl hover:bg-black transition-all hover:shadow-[0_20px_40px_rgba(0,0,0,0.2)] flex justify-center items-center gap-3 text-xs">
                         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
                         Thêm Vào Giỏ Hàng
                     </button>
                     <button 
                       onClick={handleConsult}
-                      className="bg-white text-stone-900 font-black border-2 border-stone-200 uppercase tracking-widest py-5 rounded-2xl hover:border-stone-900 hover:bg-stone-50 transition-colors flex justify-center items-center gap-3 shadow-sm text-[11px]">
-                        <svg className="w-5 h-5 text-stone-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
-                        Tư Vấn Thiết Kế
+                      className="flex-1 bg-white text-stone-900 font-black border-2 border-stone-100 uppercase tracking-widest py-6 rounded-2xl hover:border-stone-900 hover:bg-stone-50 transition-all flex justify-center items-center gap-3 text-xs">
+                        Tư Vấn
                     </button>
                 </div>
 

@@ -42,6 +42,22 @@ export default function ProjectDetailPage() {
 
   return (
     <div className="bg-white min-h-screen pt-24">
+      {/* Sticky Breadcrumb Bar */}
+      <div className="sticky top-[64px] md:top-[80px] z-30 bg-white/80 backdrop-blur-md border-b border-stone-100 px-4 md:px-8 py-4">
+        <div className="container mx-auto">
+          <nav className="flex items-center gap-2 text-[10px] md:text-xs text-stone-400 font-bold uppercase tracking-widest overflow-x-auto whitespace-nowrap custom-scrollbar">
+              <Link href="/" className="hover:text-stone-900 transition-colors flex items-center gap-1">
+                <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+                Trang Chủ
+              </Link>
+              <span className="text-[10px] opacity-30">/</span>
+              <Link href="/projects" className="hover:text-stone-900 transition-colors">Dự Án</Link>
+              <span className="text-[10px] opacity-30">/</span>
+              <span className="text-stone-900 truncate max-w-[200px] md:max-w-none">{project.title}</span>
+          </nav>
+        </div>
+      </div>
+
       {/* Header Section */}
       <div className="container mx-auto px-4 mb-20">
         <div className="flex flex-col lg:flex-row gap-12 items-end justify-between border-b border-stone-100 pb-16">
@@ -76,7 +92,7 @@ export default function ProjectDetailPage() {
 
       {/* Main Image / Hero */}
       <div 
-        className="relative h-[85vh] w-full mb-24 overflow-hidden cursor-zoom-in"
+        className="relative min-h-[50vh] max-h-[85vh] w-full mb-24 overflow-hidden cursor-zoom-in bg-stone-50 flex items-center justify-center p-4 md:p-10"
         onClick={() => {
           setLightboxIndex(0);
           setLightboxOpen(true);
@@ -85,8 +101,13 @@ export default function ProjectDetailPage() {
         <img 
           src={project.thumbnail || (project.gallery?.[0]) || "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=1600"} 
           alt={project.title} 
-          className="w-full h-full object-cover"
+          className="max-w-full max-h-full object-contain shadow-2xl rounded-2xl"
         />
+        <div className="absolute bottom-10 right-10 hidden md:block">
+           <div className="bg-white/90 backdrop-blur-md px-6 py-3 rounded-full text-[10px] font-black uppercase tracking-[0.2em] shadow-xl text-stone-900">
+             Phóng to hình ảnh
+           </div>
+        </div>
       </div>
 
       {/* Content & Video Section */}
@@ -121,17 +142,21 @@ export default function ProjectDetailPage() {
             <h2 className="text-sm font-black text-red-500 uppercase tracking-[0.2em] mb-4 text-center">BỘ SƯU TẬP</h2>
             <h3 className="text-4xl font-black text-stone-900 mb-20 text-center uppercase tracking-tighter">Hình Ảnh Thực Tế Công Trình</h3>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                {project.gallery.map((img: string, i: number) => (
                  <div 
                   key={i} 
-                  className={`rounded-3xl overflow-hidden shadow-lg cursor-zoom-in ${i % 3 === 0 ? 'md:col-span-2 aspect-[21/9]' : 'aspect-square md:aspect-video'}`}
+                  className={`rounded-3xl overflow-hidden shadow-lg cursor-zoom-in bg-stone-100 flex items-center justify-center p-4 md:p-8 ${i % 3 === 0 ? 'md:col-span-2' : ''}`}
                   onClick={() => {
                     setLightboxIndex(i);
                     setLightboxOpen(true);
                   }}
                  >
-                    <img src={img} alt={`Gallery ${i}`} className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
+                    <img 
+                      src={img} 
+                      alt={`Gallery ${i}`} 
+                      className="max-w-full max-h-[70vh] object-contain rounded-xl hover:scale-[1.02] transition-transform duration-700 shadow-md" 
+                    />
                  </div>
                ))}
             </div>

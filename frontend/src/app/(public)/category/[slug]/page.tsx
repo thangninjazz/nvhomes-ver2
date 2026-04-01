@@ -35,9 +35,9 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
   }, [sortOrder, slug]);
 
   return (
-    <div className="container mx-auto px-4 pt-32 pb-20 lg:px-8">
+    <div className="container mx-auto px-4 pt-10 md:pt-20 pb-20 lg:px-8">
       {/* HEADER GRID */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 pb-6 border-b border-stone-200">
+      <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 md:mb-12 pb-6 border-b border-stone-200">
         <div>
           <nav className="flex text-sm font-semibold text-stone-400 mb-3 tracking-wide items-center">
             <Link href="/" className="hover:text-stone-900 transition-colors">TRANG CHỦ</Link>
@@ -60,17 +60,17 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
         </div>
 
         {/* Dynamic Sorting Input */}
-        <div className="mt-6 md:mt-0 flex items-center gap-4 bg-stone-50 p-2 rounded-xl border border-stone-200">
-          <label className="text-sm font-bold text-stone-500 pl-3">SẮP XẾP</label>
+        <div className="mt-6 md:mt-0 flex items-center gap-4 bg-stone-50 p-2 rounded-xl border border-stone-100">
+          <label className="text-[10px] font-black text-stone-400 pl-3 uppercase tracking-widest">SẮP XẾP</label>
           <select 
-            className="border-none bg-transparent font-bold text-stone-900 focus:outline-none cursor-pointer pr-4"
+            className="border-none bg-transparent text-[11px] font-black text-stone-900 focus:outline-none cursor-pointer pr-4 uppercase tracking-wider"
             value={sortOrder}
             onChange={(e) => setSortOrder(e.target.value)}
           >
-            <option value="newest">Hàng Mới Nhất</option>
-            <option value="price_asc">Giá: Thấp đến Cao</option>
-            <option value="price_desc">Giá: Cao đến Thấp</option>
-            <option value="popular">Bán Chạy Nhất</option>
+            <option value="newest">MỚI NHẤT</option>
+            <option value="price_asc">GIÁ: THẤP ĐẾN CAO</option>
+            <option value="price_desc">GIÁ: CAO ĐẾN THẤP</option>
+            <option value="popular">BÁN CHẠY NHẤT</option>
           </select>
         </div>
       </div>

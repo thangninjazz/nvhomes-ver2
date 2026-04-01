@@ -34,40 +34,64 @@ export default function ProjectsPage() {
     : projects.filter(p => p.categoryId === selectedCategory);
 
   return (
-    <div className="bg-white min-h-screen py-24 mt-10">
+    <div className="bg-white min-h-screen py-12 md:py-24 mt-10">
       <div className="container mx-auto px-4">
-        <div className="max-w-3xl mb-20">
+        <div className="max-w-3xl mb-10 md:mb-20">
           <h1 className="text-sm font-black text-red-500 uppercase tracking-[0.2em] mb-4">Dự án tiêu biểu</h1>
-          <h2 className="text-5xl font-black text-stone-900 mb-8 leading-tight uppercase tracking-tighter">
-            Kiến Trúc <span className="text-stone-400">/</span> Nội Thất <br/>
+          <h2 className="text-3xl md:text-5xl font-black text-stone-900 mb-6 md:mb-8 leading-tight uppercase tracking-tight md:tracking-tighter">
+            Kiến Trúc <span className="text-stone-400">/</span> Nội Thất <br className="hidden md:block" />
             Đẳng Cấp <span className="text-stone-400">&</span> Tận Tâm
           </h2>
-          <p className="text-xl text-stone-500 font-medium leading-relaxed">
+          <p className="text-lg md:text-xl text-stone-500 font-medium leading-relaxed">
             Chúng tôi tự hào mang đến những giải pháp thiết kế sáng tạo, tối ưu công năng và thẩm mỹ cho hàng trăm gia đình Việt.
           </p>
         </div>
 
-        {/* Category Filter */}
-        <div className="flex flex-wrap gap-4 mb-16">
-          <button 
-            onClick={() => setSelectedCategory("all")}
-            className={`px-8 py-3 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${
-              selectedCategory === "all" ? 'bg-stone-900 text-white shadow-xl translate-y-[-2px]' : 'bg-stone-50 text-stone-400 hover:bg-stone-100'
-            }`}
-          >
-            Tất cả
-          </button>
-          {categories.map(cat => (
-            <button 
-              key={cat.id}
-              onClick={() => setSelectedCategory(cat.id)}
-              className={`px-8 py-3 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${
-                selectedCategory === cat.id ? 'bg-stone-900 text-white shadow-xl translate-y-[-2px]' : 'bg-stone-50 text-stone-400 hover:bg-stone-100'
-              }`}
-            >
-              {cat.name}
-            </button>
-          ))}
+        {/* Filter & Sort Bar */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12 pb-8 border-b border-stone-100">
+          <div className="flex flex-wrap items-center gap-3">
+             <span className="text-[10px] font-black uppercase tracking-widest text-stone-400 mr-2 hidden sm:block">Danh mục:</span>
+             <div className="flex flex-wrap gap-2">
+                <button 
+                  onClick={() => setSelectedCategory("all")}
+                  className={`px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${
+                    selectedCategory === "all" ? 'bg-stone-900 text-white shadow-lg' : 'bg-stone-50 text-stone-400 hover:bg-stone-100'
+                  }`}
+                >
+                  Tất cả
+                </button>
+                {categories.map(cat => (
+                  <button 
+                    key={cat.id}
+                    onClick={() => setSelectedCategory(cat.id)}
+                    className={`px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${
+                      selectedCategory === cat.id ? 'bg-stone-900 text-white shadow-lg' : 'bg-stone-50 text-stone-400 hover:bg-stone-100'
+                    }`}
+                  >
+                    {cat.name}
+                  </button>
+                ))}
+             </div>
+          </div>
+
+          <div className="flex items-center gap-4 bg-stone-50 p-2 rounded-xl border border-stone-100 self-start md:self-auto">
+             <label className="text-[10px] font-black text-stone-400 pl-3 uppercase tracking-widest">Sắp xếp</label>
+             <select 
+               className="bg-transparent text-[11px] font-black text-stone-900 focus:outline-none cursor-pointer pr-4 uppercase tracking-wider"
+               onChange={(e) => {
+                 // Logic for sorting can be added here if needed
+                 const val = e.target.value;
+                 const sorted = [...projects];
+                 if (val === 'newest') sorted.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+                 if (val === 'oldest') sorted.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+                 setProjects(sorted);
+               }}
+             >
+               <option value="newest">Mới nhất</option>
+               <option value="oldest">Cũ nhất</option>
+               <option value="name">Tên A-Z</option>
+             </select>
+          </div>
         </div>
 
         {loading ? (
@@ -81,7 +105,7 @@ export default function ProjectsPage() {
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-20">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-12 md:gap-y-20">
             {filteredProjects.map((p, idx) => (
               <Link key={p.id} href={`/projects/${p.slug}`} className="group block">
                 <div className="relative aspect-[16/9] rounded-[2.5rem] overflow-hidden mb-8 shadow-2xl shadow-stone-200/50">
