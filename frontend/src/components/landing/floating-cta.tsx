@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { Phone, MessageSquare, User, X, Send } from "lucide-react"
 import { api } from "@/services/api"
+import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { toast } from "sonner"
 import { motion, AnimatePresence } from "framer-motion"
@@ -14,6 +15,7 @@ export function FloatingCTA() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [phoneError, setPhoneError] = useState("")
+  const pathname = usePathname()
 
   const [phoneSubmitted, setPhoneSubmitted] = useState("")
 
@@ -62,8 +64,10 @@ export function FloatingCTA() {
     }
   }
 
+  const isProductPage = pathname?.startsWith('/product/');
+
   return (
-    <div className="fixed bottom-8 right-8 z-[60] flex flex-col gap-4 items-end pointer-events-none">
+    <div className={`fixed bottom-[110px] sm:bottom-8 right-6 sm:right-8 z-[60] flex-col gap-4 items-end pointer-events-none ${isProductPage ? 'hidden lg:flex' : 'flex'}`}>
       {/* Chat Window */}
       <AnimatePresence>
         {isChatOpen && (

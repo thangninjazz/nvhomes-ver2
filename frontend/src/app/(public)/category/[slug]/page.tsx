@@ -1,14 +1,16 @@
 "use client";
 
 import { useEffect, useState, use } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { api } from '@/services/api';
 
 export default function CategoryPage({ params }: { params: Promise<{ slug: string }> }) {
+  const router = useRouter();
   const { slug } = use(params);
   const [products, setProducts] = useState<any[]>([]);
   const [category, setCategory] = useState<any>(null);
-  const [subcategories, setSubcategories] = useState<any[]>([]);
+  const [allCategories, setAllCategories] = useState<any[]>([]);
   const [sortOrder, setSortOrder] = useState('newest');
   const [loading, setLoading] = useState(true);
 
@@ -17,28 +19,26 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
     const fetchData = async () => {
       try {
         setLoading(true);
-        // Fetch category details and all products categories for subcategories filter
-        const [catRes, allCatsRes] = await Promise.all([
-          api.get(`/categories/byslug/${slug}`),
-          api.get(`/categories?type=Product`)
-        ]);
-        
-        const catData = catRes.data;
-        setCategory(catData);
-        
-        // Find child categories of the current category
+        // Fetch all categories first
+        const allCatsRes = await api.get(`/categories?type=Product`);
         if (allCatsRes.data && Array.isArray(allCatsRes.data)) {
-           const children = allCatsRes.data.filter((c: any) => c.parentId === catData.id);
-           setSubcategories(children);
+           setAllCategories(allCatsRes.data);
         }
 
-        // Gửi slug để backend lọc đúng danh mục
-        const res = await api.get(`/products?categorySlug=${slug}&sortOrder=${sortOrder}`);
+        if (slug !== 'all') {
+          const catRes = await api.get(`/categories/byslug/${slug}`);
+          setCategory(catRes.data);
+        } else {
+          setCategory({ name: "Tất cả sản phẩm" });
+        }
+
+        // Fetch products
+        const res = await api.get(`/products?${slug !== 'all' ? `categorySlug=${slug}&` : ''}sortOrder=${sortOrder}`);
         setProducts(res.data);
       } catch (error) {
         console.error("Lỗi fetch dữ liệu:", error);
         setProducts([]); 
-        setCategory({ name: slug.replace('-', ' ') });
+        setCategory({ name: slug === 'all' ? "Tất cả sản phẩm" : "Không tìm thấy" });
       } finally {
         setLoading(false);
       }
@@ -71,12 +71,44 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
           </h1>
         </div>
 
-        {/* Dynamic Sorting Input */}
-        <div className="mt-6 md:mt-0 flex items-center gap-4 bg-stone-50 py-2.5 px-4 rounded-xl border border-stone-100 flex-shrink-0 shadow-sm">
-          <label className="text-[10px] font-black text-stone-400 uppercase tracking-widest hidden sm:block">Sắp xếp</label>
-          <svg className="w-4 h-4 text-stone-400 sm:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" /></svg>
+      </div>
+
+      {/* FILTER CONTROLS */}
+      <div className="flex flex-col sm:flex-row items-center gap-4 mb-8 bg-stone-50 p-4 rounded-2xl border border-stone-100 shadow-sm">
+        
+        {/* Category Dropdown */}
+        <div className="flex items-center gap-3 w-full sm:w-auto flex-1">
+          <svg className="w-4 h-4 text-stone-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h7" /></svg>
           <select 
-            className="border-none bg-transparent text-xs font-black text-stone-900 focus:outline-none cursor-pointer pr-4 uppercase tracking-wider w-full sm:w-auto"
+            className="w-full bg-transparent text-xs font-black text-stone-900 focus:outline-none cursor-pointer uppercase tracking-widest border-none p-0 focus:ring-0"
+            value={slug}
+            onChange={(e) => {
+              if (e.target.value === 'all') {
+                router.push('/category/all');
+              } else {
+                router.push(`/category/${e.target.value}`);
+              }
+            }}
+          >
+            <option value="all">Khám phá sản phẩm</option>
+            {allCategories.filter(c => !c.parentId).map(parent => (
+              <optgroup key={parent.id} label={parent.name}>
+                <option value={parent.slug}>➤ {parent.name} (Tất cả)</option>
+                {allCategories.filter(c => c.parentId === parent.id).map(child => (
+                   <option key={child.id} value={child.slug}>&nbsp;&nbsp;&nbsp;• {child.name}</option>
+                ))}
+              </optgroup>
+            ))}
+          </select>
+        </div>
+
+        <div className="hidden sm:block w-px h-6 bg-stone-200"></div>
+
+        {/* Dynamic Sorting Input */}
+        <div className="flex items-center gap-3 w-full sm:w-auto">
+          <svg className="w-4 h-4 text-stone-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" /></svg>
+          <select 
+            className="w-full bg-transparent text-xs font-black text-stone-900 focus:outline-none cursor-pointer uppercase tracking-widest border-none p-0 focus:ring-0"
             value={sortOrder}
             onChange={(e) => setSortOrder(e.target.value)}
           >
@@ -87,27 +119,6 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
           </select>
         </div>
       </div>
-
-      {/* SUBCATEGORY PILLS (Horizontal Scroll) */}
-      {subcategories && subcategories.length > 0 && (
-        <div className="flex gap-3 overflow-x-auto pb-6 mb-4 custom-scrollbar">
-          <Link 
-            href={`/category/${slug}`}
-            className="px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest bg-stone-900 text-white shadow-lg whitespace-nowrap flex-shrink-0"
-          >
-            Tất cả
-          </Link>
-          {subcategories.map((sub: any) => (
-            <Link 
-              key={sub.id}
-              href={`/category/${sub.slug}`}
-              className="px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest bg-stone-50 text-stone-400 hover:bg-stone-100 hover:text-stone-900 transition-all whitespace-nowrap flex-shrink-0 border border-stone-100"
-            >
-              {sub.name}
-            </Link>
-          ))}
-        </div>
-      )}
 
       {/* PRODUCT GRID */}
       {loading ? (

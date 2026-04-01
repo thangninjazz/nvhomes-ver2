@@ -10,6 +10,9 @@ public class ProjectImage : BaseEntity
     public Project? Project { get; set; }
     
     public string ImageUrl { get; set; } = string.Empty;
+    
+    [NotMapped]
     public string? Caption { get; set; }
+    
     public int OrderIndex { get; set; } = 0;
 }

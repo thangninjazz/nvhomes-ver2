@@ -281,9 +281,9 @@ export default function ProductDetail({ params }: { params: Promise<{ slug: stri
 
           <button 
             onClick={handleConsult}
-            className="flex-1 bg-red-600 text-white h-full font-black uppercase tracking-widest text-[11px] flex items-center justify-center gap-2 active:bg-red-700 transition-all"
+            className="flex-1 bg-red-600 text-white h-full font-black uppercase tracking-widest text-[10px] sm:text-[11px] flex items-center justify-center gap-1.5 active:bg-red-700 transition-all text-center leading-tight px-1"
           >
-            Mua Ngay
+            Tư Vấn Chuyên Viên
           </button>
         </div>
       </div>

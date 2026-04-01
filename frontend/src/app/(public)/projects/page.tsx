@@ -48,46 +48,49 @@ export default function ProjectsPage() {
         </div>
 
         {/* Filter Bar */}
-        <div className="mb-12">
-          <div className="flex items-center justify-between mb-6">
+        <div className="mb-12 border-b border-stone-100 pb-8">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-stone-400">Khám Phá Dự Án</h3>
-            <div className="flex items-center gap-2 bg-stone-50 py-1.5 px-3 rounded-lg border border-stone-100 shadow-sm">
-               <select 
-                 className="bg-transparent text-[10px] font-black text-stone-900 focus:outline-none cursor-pointer uppercase tracking-widest"
-                 onChange={(e) => {
-                   const val = e.target.value;
-                   const sorted = [...projects];
-                   if (val === 'newest') sorted.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-                   if (val === 'oldest') sorted.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
-                   setProjects(sorted);
-                 }}
-               >
-                 <option value="newest">Mới nhất</option>
-                 <option value="oldest">Cũ nhất</option>
-               </select>
-            </div>
-          </div>
+            
+            <div className="flex w-full sm:w-auto items-center gap-3">
+               {/* Category Filter */}
+               <div className="flex-1 sm:flex-none flex items-center gap-2 bg-stone-50 py-2 px-3 rounded-xl border border-stone-100 shadow-sm">
+                 <svg className="w-4 h-4 text-stone-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h7" /></svg>
+                 <select 
+                   className="bg-transparent text-[11px] font-black text-stone-900 focus:outline-none cursor-pointer uppercase tracking-wider w-full"
+                   value={selectedCategory}
+                   onChange={(e) => setSelectedCategory(e.target.value)}
+                 >
+                   <option value="all">Tất cả danh mục</option>
+                   {categories.filter(c => !c.parentId).map(parent => (
+                     <optgroup key={parent.id} label={parent.name}>
+                       <option value={parent.id}>➤ {parent.name} (Tất cả)</option>
+                       {categories.filter(c => c.parentId === parent.id).map(child => (
+                         <option key={child.id} value={child.id}>&nbsp;&nbsp;&nbsp;• {child.name}</option>
+                       ))}
+                     </optgroup>
+                   ))}
+                 </select>
+               </div>
 
-          <div className="flex gap-2 overflow-x-auto pb-4 no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
-              <button 
-                onClick={() => setSelectedCategory("all")}
-                className={`px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap border ${
-                  selectedCategory === "all" ? 'bg-stone-900 text-white border-stone-900 shadow-md' : 'bg-white text-stone-500 border-stone-200 hover:border-stone-900 hover:text-stone-900'
-                }`}
-              >
-                Tất cả
-              </button>
-              {categories.map(cat => (
-                <button 
-                  key={cat.id}
-                  onClick={() => setSelectedCategory(cat.id)}
-                  className={`px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap border ${
-                    selectedCategory === cat.id ? 'bg-stone-900 text-white border-stone-900 shadow-md' : 'bg-white text-stone-500 border-stone-200 hover:border-stone-900 hover:text-stone-900'
-                  }`}
-                >
-                  {cat.name}
-                </button>
-              ))}
+               {/* Sort Filter */}
+               <div className="flex-1 sm:flex-none flex items-center gap-2 bg-stone-50 py-2 px-3 rounded-xl border border-stone-100 shadow-sm">
+                  <svg className="w-4 h-4 text-stone-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" /></svg>
+                  <select 
+                    className="bg-transparent text-[11px] font-black text-stone-900 focus:outline-none cursor-pointer uppercase tracking-widest w-full"
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      const sorted = [...projects];
+                      if (val === 'newest') sorted.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+                      if (val === 'oldest') sorted.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+                      setProjects(sorted);
+                    }}
+                  >
+                    <option value="newest">Mới nhất</option>
+                    <option value="oldest">Cũ nhất</option>
+                  </select>
+               </div>
+            </div>
           </div>
         </div>
 
