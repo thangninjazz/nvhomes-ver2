@@ -22,7 +22,7 @@ export function HeroSection() {
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 py-24 lg:py-32">
         <div className="max-w-3xl">
           <p className="text-sm md:text-base tracking-[0.3em] uppercase text-background/80 mb-6 font-medium">
-            Thiết kế & Thi công nội thất
+            Thiết kế & Thi công nội thất | Thắng đẹp trai v1.5.2
           </p>
           
           <h1 className="font-serif text-4xl md:text-6xl lg:text-7xl text-background leading-tight mb-8 text-balance">
