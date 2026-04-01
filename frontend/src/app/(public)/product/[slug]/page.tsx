@@ -65,6 +65,9 @@ export default function ProductDetail({ params }: { params: Promise<{ slug: stri
     });
     localStorage.setItem('cart', JSON.stringify(cart));
     
+    // Kích hoạt sự kiện để Navbar cập nhật số lượng badge
+    window.dispatchEvent(new CustomEvent('cart-updated'));
+    
     setModalConfig({
       isOpen: true,
       title: "Thêm vào giỏ hàng",

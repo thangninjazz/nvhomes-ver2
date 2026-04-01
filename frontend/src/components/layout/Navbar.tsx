@@ -18,8 +18,14 @@ export function Navbar() {
   const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [cartCount, setCartCount] = useState(0);
   const router = useRouter();
   const searchInputRef = useRef<HTMLInputElement>(null);
+
+  const updateCartCount = () => {
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    setCartCount(cart.length);
+  };
 
   useEffect(() => {
     const fetchMenu = async () => {
@@ -32,6 +38,11 @@ export function Navbar() {
       }
     };
     fetchMenu();
+    updateCartCount();
+
+    // Lắng nghe sự kiện cập nhật giỏ hàng từ các component khác
+    window.addEventListener('cart-updated', updateCartCount);
+    return () => window.removeEventListener('cart-updated', updateCartCount);
   }, []);
 
   const handleSearch = (e?: React.FormEvent) => {
@@ -105,13 +116,13 @@ export function Navbar() {
           </div>
 
           {/* Right Actions */}
-          <div className="flex items-center gap-2 lg:gap-6 shrink-0">
+          <div className="flex items-center gap-2 lg:gap-5 shrink-0">
             {/* Search Toggle */}
             <div className="relative">
               {!isSearchOpen ? (
                 <button 
                   onClick={() => setIsSearchOpen(true)}
-                  className="p-2.5 text-stone-700 hover:bg-stone-100 rounded-full transition-colors"
+                  className="p-2 text-stone-700 hover:bg-stone-100 rounded-full transition-colors"
                 >
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
                 </button>
@@ -126,12 +137,21 @@ export function Navbar() {
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onBlur={() => !searchQuery && setIsSearchOpen(false)}
                   />
-                  <button type="submit" className="text-stone-500 hover:text-red-500">
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-                  </button>
                 </form>
               )}
             </div>
+
+            {/* Cart Icon with Badge */}
+            <Link href="/cart" className="p-2 text-stone-700 hover:bg-stone-100 rounded-full transition-colors relative">
+               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+               </svg>
+               {cartCount > 0 && (
+                 <span className="absolute -top-0 -right-0 bg-red-600 text-white text-[10px] font-black w-4.5 h-4.5 flex items-center justify-center rounded-full shadow-lg border-2 border-white">
+                   {cartCount}
+                 </span>
+               )}
+            </Link>
 
             <Link href="/contact" className="hidden lg:flex bg-stone-900 text-white px-7 py-3 rounded-full font-black text-[11px] tracking-widest uppercase shadow-[0_10px_20px_rgba(0,0,0,0.1)] hover:bg-stone-800 transition-all hover:-translate-y-0.5">
               Nhận Báo Giá
