@@ -72,10 +72,10 @@ export default function CustomersAdmin() {
     setEditingId(c.id);
     setEditForm({ 
       phoneNumber: c.phoneNumber, 
-      name: c.name, 
-      address: c.address || "",
+      name: decodeHtml(c.name), 
+      address: decodeHtml(c.address || ""),
       status: c.status, 
-      note: c.note || "" 
+      note: decodeHtml(c.note || "") 
     });
   };
 
