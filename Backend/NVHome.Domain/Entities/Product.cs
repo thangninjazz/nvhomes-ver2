@@ -28,5 +28,12 @@ public class Product : BaseEntity
     // Tùy chọn (Màu sắc, kích thước...)
     public string? CustomOptions { get; set; }
 
+    // === SHOPEE-STYLE VARIATIONS & AGGREGATE STATS ===
+    public bool HasVariations { get; set; } = false;
+    public string? VariationsData { get; set; } // JSON array of [{ name: string, subName: string, originalPrice: number, discountPrice: number }]
+    public double? Rating { get; set; } = 5.0; // Default glowing rating 5 stars
+    public int? ReviewCount { get; set; } = 0;
+    public int? SoldCount { get; set; } = 0;
+
     public ICollection<ProjectProduct> ProjectProducts { get; set; } = new List<ProjectProduct>();
 }

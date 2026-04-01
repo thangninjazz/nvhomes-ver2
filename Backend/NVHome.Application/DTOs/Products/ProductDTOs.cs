@@ -12,6 +12,12 @@ public class CreateProductRequest
     public List<ProductSpecificationDTO>? Specifications { get; set; }
     public List<string>? Features { get; set; }
     public string? CustomOptions { get; set; }
+
+    public bool HasVariations { get; set; } = false;
+    public string? VariationsData { get; set; }
+    public double? Rating { get; set; } = 5.0;
+    public int? ReviewCount { get; set; } = 0;
+    public int? SoldCount { get; set; } = 0;
 }
 
 public class ProductSpecificationDTO
@@ -38,5 +44,12 @@ public class ProductResponse
     public List<ProductSpecificationDTO>? Specifications { get; set; }
     public List<string>? Features { get; set; }
     public string? CustomOptions { get; set; }
+    
+    public bool HasVariations { get; set; }
+    public string? VariationsData { get; set; }
+    public double? Rating { get; set; }
+    public int? ReviewCount { get; set; }
+    public int? SoldCount { get; set; }
+    
     public DateTime CreatedAt { get; set; }
 }

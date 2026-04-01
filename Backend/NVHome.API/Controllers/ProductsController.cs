@@ -90,6 +90,11 @@ public class ProductsController : ControllerBase
             Specifications = SafeDeserialize<List<ProductSpecificationDTO>>(p.Specifications),
             Features = SafeDeserialize<List<string>>(p.Features),
             CustomOptions = p.CustomOptions,
+            HasVariations = p.HasVariations,
+            VariationsData = p.VariationsData,
+            Rating = p.Rating,
+            ReviewCount = p.ReviewCount,
+            SoldCount = p.SoldCount,
             CreatedAt = p.CreatedAt
         }).ToListAsync();
         return Ok(products);
@@ -124,7 +129,13 @@ public class ProductsController : ControllerBase
             Images = p.Images,
             Specifications = SafeDeserialize<List<ProductSpecificationDTO>>(p.Specifications),
             Features = SafeDeserialize<List<string>>(p.Features),
-            CustomOptions = p.CustomOptions, CreatedAt = p.CreatedAt
+            CustomOptions = p.CustomOptions, 
+            HasVariations = p.HasVariations,
+            VariationsData = p.VariationsData,
+            Rating = p.Rating,
+            ReviewCount = p.ReviewCount,
+            SoldCount = p.SoldCount,
+            CreatedAt = p.CreatedAt
         });
     }
 
@@ -150,7 +161,13 @@ public class ProductsController : ControllerBase
             Images = p.Images,
             Specifications = SafeDeserialize<List<ProductSpecificationDTO>>(p.Specifications),
             Features = SafeDeserialize<List<string>>(p.Features),
-            CustomOptions = p.CustomOptions, CreatedAt = p.CreatedAt
+            CustomOptions = p.CustomOptions, 
+            HasVariations = p.HasVariations,
+            VariationsData = p.VariationsData,
+            Rating = p.Rating,
+            ReviewCount = p.ReviewCount,
+            SoldCount = p.SoldCount,
+            CreatedAt = p.CreatedAt
         });
     }
 
@@ -180,7 +197,12 @@ public class ProductsController : ControllerBase
             Images = request.Images,
             Specifications = request.Specifications != null ? JsonSerializer.Serialize(request.Specifications) : null,
             Features = request.Features != null ? JsonSerializer.Serialize(request.Features) : null,
-            CustomOptions = request.CustomOptions
+            CustomOptions = request.CustomOptions,
+            HasVariations = request.HasVariations,
+            VariationsData = request.VariationsData,
+            Rating = request.Rating,
+            ReviewCount = request.ReviewCount,
+            SoldCount = request.SoldCount
         };
 
         _context.Products.Add(product);
@@ -216,7 +238,13 @@ public class ProductsController : ControllerBase
         product.CategoryId = request.CategoryId; product.Images = request.Images;
         product.Specifications = request.Specifications != null ? JsonSerializer.Serialize(request.Specifications) : null;
         product.Features = request.Features != null ? JsonSerializer.Serialize(request.Features) : null;
-        product.CustomOptions = request.CustomOptions; product.UpdatedAt = DateTime.UtcNow;
+        product.CustomOptions = request.CustomOptions; 
+        product.HasVariations = request.HasVariations;
+        product.VariationsData = request.VariationsData;
+        if(request.Rating.HasValue) product.Rating = request.Rating;
+        if(request.ReviewCount.HasValue) product.ReviewCount = request.ReviewCount;
+        if(request.SoldCount.HasValue) product.SoldCount = request.SoldCount;
+        product.UpdatedAt = DateTime.UtcNow;
 
         await _context.SaveChangesAsync();
         return Ok(new { Message = "Cập nhật sản phẩm thành công." });

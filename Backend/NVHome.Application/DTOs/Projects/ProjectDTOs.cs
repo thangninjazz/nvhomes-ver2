@@ -14,6 +14,7 @@ public class CreateProjectRequest
     public Guid? CategoryId { get; set; }
     public List<string> Gallery { get; set; } = new();
     public List<Guid> RelatedProductIds { get; set; } = new();
+    public DateTime? CompletionDate { get; set; }
 }
 
 public class ProjectResponse
@@ -30,6 +31,7 @@ public class ProjectResponse
     public string? CategoryName { get; set; }
     public List<string> Gallery { get; set; } = new();
     public List<RelatedProductDTO> RelatedProducts { get; set; } = new();
+    public DateTime? CompletionDate { get; set; }
     public DateTime CreatedAt { get; set; }
 }
 

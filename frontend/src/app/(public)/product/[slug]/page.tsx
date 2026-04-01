@@ -20,7 +20,7 @@ export default function ProductDetail({ params }: { params: Promise<{ slug: stri
   });
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
-  const [showCartModal, setShowCartModal] = useState(false);
+  const [showCartToast, setShowCartToast] = useState(false);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -69,8 +69,11 @@ export default function ProductDetail({ params }: { params: Promise<{ slug: stri
     // Kích hoạt sự kiện để Navbar cập nhật số lượng badge
     window.dispatchEvent(new CustomEvent('cart-updated'));
     
-    // Hiển thị Modal lựa chọn bước tiếp theo thay vì Modal nhập SĐT ngay
-    setShowCartModal(true);
+    // Hiển thị Shopee style Toast
+    setShowCartToast(true);
+    setTimeout(() => {
+        setShowCartToast(false);
+    }, 2000);
   };
 
   const handleConsult = () => {
@@ -278,36 +281,16 @@ export default function ProductDetail({ params }: { params: Promise<{ slug: stri
         </div>
       </div>
 
-      {/* Cart Success Choice Modal */}
-      {showCartModal && (
-        <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-          <div className="bg-white rounded-[2.5rem] w-full max-w-md overflow-hidden relative shadow-2xl animate-in fade-in zoom-in duration-300 p-10 text-center">
-            <button 
-              onClick={() => setShowCartModal(false)}
-              className="absolute top-6 right-6 text-stone-400 hover:text-stone-900 transition-colors"
-            >
-              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
-            </button>
-            <div className="w-20 h-20 bg-green-50 text-green-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner">
-              <svg className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
-            </div>
-            <h3 className="text-2xl font-black text-stone-900 uppercase tracking-tight mb-2">Đã thêm vào giỏ!</h3>
-            <p className="text-stone-500 mb-10 font-medium">Sản phẩm tuyệt vời này đã sẵn sàng trong giỏ hàng của bạn.</p>
-            <div className="grid grid-cols-1 gap-4">
-              <Link 
-                href="/cart" 
-                className="w-full py-5 bg-stone-900 text-white rounded-2xl font-black uppercase tracking-widest hover:bg-black transition-all shadow-xl flex items-center justify-center gap-2"
-              >
-                Đến giỏ hàng ngay
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
-              </Link>
-              <button 
-                onClick={() => setShowCartModal(false)}
-                className="w-full py-5 bg-stone-50 text-stone-600 rounded-2xl font-black uppercase tracking-widest hover:bg-stone-100 transition-all"
-              >
-                Tiếp tục mua sắm
-              </button>
-            </div>
+      {/* Shopee-style Success Toast */}
+      {showCartToast && (
+        <div className="fixed inset-0 z-[120] flex items-center justify-center pointer-events-none">
+          <div className="bg-black/70 backdrop-blur-md rounded-2xl flex flex-col items-center justify-center w-40 h-40 animate-in fade-in zoom-in duration-200 shadow-2xl">
+             <div className="w-14 h-14 bg-green-500 rounded-full flex items-center justify-center mb-4 shadow-lg ring-4 ring-green-500/30">
+               <svg className="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={4}>
+                 <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+               </svg>
+             </div>
+             <span className="text-white text-xs font-bold text-center px-4 leading-relaxed tracking-wide">Sản phẩm đã được<br/>thêm vào giỏ</span>
           </div>
         </div>
       )}

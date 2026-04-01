@@ -35,6 +35,7 @@ public class ProjectsController : ControllerBase
                 Thumbnail = p.Thumbnail,
                 CategoryId = p.CategoryId,
                 CategoryName = p.Category != null ? p.Category.Name : null,
+                CompletionDate = p.CompletionDate,
                 CreatedAt = p.CreatedAt
             })
             .ToListAsync();
@@ -72,6 +73,7 @@ public class ProjectsController : ControllerBase
                 OriginalPrice = pp.Product.OriginalPrice,
                 DiscountPrice = pp.Product.DiscountPrice
             }).ToList(),
+            CompletionDate = p.CompletionDate,
             CreatedAt = p.CreatedAt
         });
     }
@@ -89,7 +91,8 @@ public class ProjectsController : ControllerBase
                 Description = request.Description, Content = request.Content,
                 Tags = request.Tags, VideoUrl = request.VideoUrl,
                 Thumbnail = request.Thumbnail,
-                CategoryId = request.CategoryId
+                CategoryId = request.CategoryId,
+                CompletionDate = request.CompletionDate
             };
 
             _context.Projects.Add(project);
@@ -157,6 +160,7 @@ public class ProjectsController : ControllerBase
             project.Tags = request.Tags; project.VideoUrl = request.VideoUrl;
             project.Thumbnail = request.Thumbnail; 
             project.CategoryId = request.CategoryId;
+            project.CompletionDate = request.CompletionDate;
             project.UpdatedAt = DateTime.UtcNow;
 
             // Update Gallery (Clear and Re-add)

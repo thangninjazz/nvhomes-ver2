@@ -16,6 +16,8 @@ public class Project : BaseEntity
     public string? Tags { get; set; }
     
     // === MEDIA ===
+    public DateTime? CompletionDate { get; set; } // Ngày Hoàn Thành (Shopee / Portfolio style requirement)
+
     // URL Video YouTube hoặc File MP4
     public string? VideoUrl { get; set; }
     
