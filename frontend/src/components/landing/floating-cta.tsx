@@ -18,18 +18,31 @@ export function FloatingCTA() {
 
   const handleSubmitPhone = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!phone || phone.length < 10) {
-      toast.error("Vui lòng nhập số điện thoại hợp lệ")
+    
+    const validatePhone = (p: string) => {
+      const regex = /^(0|84)(3|5|7|8|9)[0-9]{8}$|^(0|84)2[0-9]{9}$/;
+      return regex.test(p.replace(/\s/g, ""));
+    };
+
+    if (!validatePhone(phone)) {
+      toast.error("Quý khách đã nhập sai số điện thoại, vui lòng nhập lại.")
       return
     }
+
+    const decodeHtml = (html: string) => {
+      if (typeof document === 'undefined') return html;
+      const txt = document.createElement("textarea");
+      txt.innerHTML = html;
+      return txt.value.replace(/\u00a0/g, ' ').replace(/&nbsp;/g, ' ');
+    };
 
     setIsSubmitting(true)
     try {
       await api.post("/customers", {
-        name: "Khách hàng từ LiveChat",
-        PhoneNumber: phone,
-        address: "Live Chat Source",
-        Note: "Gửi số điện thoại từ khung chat tư vấn"
+        name: decodeHtml("Khách hàng từ LiveChat"),
+        phoneNumber: phone.replace(/\s/g, ""),
+        address: decodeHtml("Live Chat Source"),
+        note: decodeHtml("Gửi số điện thoại từ khung chat tư vấn")
       })
       setPhoneSubmitted(phone)
       setIsSubmitted(true)

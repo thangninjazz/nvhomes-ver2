@@ -31,10 +31,19 @@ export default function ContactPage() {
       return;
     }
 
+    const decodeHtml = (html: string) => {
+      if (typeof document === 'undefined') return html;
+      const txt = document.createElement("textarea");
+      txt.innerHTML = html;
+      return txt.value.replace(/\u00a0/g, ' ').replace(/&nbsp;/g, ' ');
+    };
+
     try {
       await api.post("/customers", {
         phoneNumber: formData.phone.replace(/\s/g, ""),
-        name: formData.name,
+        name: decodeHtml(formData.name),
+        address: decodeHtml(formData.address),
+        note: decodeHtml(`NHU CẦU: ${formData.needs} | LỜI NHẮN: ${formData.message}`),
         source: "Contact"
       });
       setSuccess(true);

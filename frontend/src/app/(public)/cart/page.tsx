@@ -93,14 +93,16 @@ export default function CartPage() {
 
     try {
       setLoading(true);
-      // Tạo chuỗi ghi chú sản phẩm với tên đã được giải mã
+      // Giải mã toàn bộ văn bản trước khi gửi
+      const cleanName = decodeHtml(formData.name);
+      const cleanAddress = decodeHtml("Đặt từ giỏ hàng trực tuyến");
       const productNote = items.map(item => `${decodeHtml(item.name)} (${item.quantity} cái)`).join(", ");
       
       await api.post('/customers', {
-        name: formData.name,
+        name: cleanName,
         phoneNumber: formData.phone.replace(/\s/g, ""),
         note: `ĐẶT HÀNG: ${productNote}`,
-        address: "Đặt từ giỏ hàng trực tuyến"
+        address: cleanAddress
       });
 
       setSuccess(true);

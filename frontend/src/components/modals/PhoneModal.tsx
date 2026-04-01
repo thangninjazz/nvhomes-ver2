@@ -37,11 +37,18 @@ export default function PhoneModal({ isOpen, onClose, title, source, productId, 
       return;
     }
 
+    const decodeHtml = (html: string) => {
+      if (typeof document === 'undefined') return html;
+      const txt = document.createElement("textarea");
+      txt.innerHTML = html;
+      return txt.value.replace(/\u00a0/g, ' ').replace(/&nbsp;/g, ' ');
+    };
+
     try {
       await api.post("/customers", {
         phoneNumber: phone.replace(/\s/g, ""),
-        name: name || "Ẩn danh",
-        source: source, // 'Cart', 'Consultation', 'Chat', 'Contact'
+        name: decodeHtml(name || "Ẩn danh"),
+        source: decodeHtml(source), // 'Cart', 'Consultation', 'Chat', 'Contact'
       });
       setSuccess(true);
       setTimeout(() => {

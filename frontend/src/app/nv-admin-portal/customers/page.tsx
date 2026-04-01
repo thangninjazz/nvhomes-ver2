@@ -119,6 +119,14 @@ export default function CustomersAdmin() {
     document.body.removeChild(link);
   };
 
+  const decodeHtml = (html: string) => {
+    if (!html) return "";
+    if (typeof document === 'undefined') return html;
+    const txt = document.createElement("textarea");
+    txt.innerHTML = html;
+    return txt.value.replace(/\u00a0/g, ' ').replace(/&nbsp;/g, ' ');
+  };
+
   return (
     <div className="p-8">
       <div className="flex justify-between items-center mb-10">
@@ -197,8 +205,8 @@ export default function CustomersAdmin() {
                 <tr key={c.id} className="hover:bg-stone-50/50 transition-colors group">
                   <td className="px-8 py-6">
                     <p className="font-black text-stone-900">{c.phoneNumber}</p>
-                    <p className="text-[11px] text-stone-800 font-bold uppercase">{c.name || "Chưa có tên"}</p>
-                    {c.address && <p className="text-[10px] text-blue-600 font-bold uppercase mt-1">🏠 Đ/C: {c.address}</p>}
+                    <p className="text-[11px] text-stone-800 font-bold uppercase">{decodeHtml(c.name) || "Chưa có tên"}</p>
+                    {c.address && <p className="text-[10px] text-blue-600 font-bold uppercase mt-1">🏠 Đ/C: {decodeHtml(c.address)}</p>}
                   </td>
                   <td className="px-8 py-6 text-center">
                     <span className={`px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest border transition-all ${STATUS_BADGE[c.status] || 'bg-stone-100 text-stone-500'}`}>
@@ -206,7 +214,7 @@ export default function CustomersAdmin() {
                     </span>
                   </td>
                   <td className="px-8 py-6 text-sm text-stone-500 font-medium max-w-xs truncate">
-                    {c.note || "---"}
+                    {decodeHtml(c.note) || "---"}
                   </td>
                   <td className="px-8 py-6 text-right text-xs text-stone-400 font-bold whitespace-nowrap">
                     {new Date(c.createdAt).toLocaleString('vi-VN', { 
