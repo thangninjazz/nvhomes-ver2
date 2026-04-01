@@ -230,61 +230,40 @@ export function Header() {
 
       {/* Mobile Menu Drawer */}
       <div 
-        className={`fixed top-0 right-0 z-[110] h-screen w-[70%] sm:w-[50%] bg-white shadow-[-10px_0_30px_rgba(0,0,0,0.1)] transition-transform duration-300 ease-out transform lg:hidden ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
+        className={`fixed top-0 right-0 z-[110] h-screen w-[75%] sm:w-[50%] bg-white/95 backdrop-blur-2xl shadow-[-15px_0_40px_rgba(0,0,0,0.1)] transition-transform duration-500 cubic-bezier(0.16, 1, 0.3, 1) transform lg:hidden rounded-l-3xl ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
         style={{ height: '100vh' }}
       >
-        <div className="flex flex-col h-full bg-white">
+        <div className="flex flex-col h-full">
           {/* Drawer Header */}
-          <div className="flex items-center justify-between p-6 border-b border-gray-100 flex-shrink-0">
-            <span className="font-serif text-xl font-bold text-gray-900">Danh mục</span>
+          <div className="flex items-center justify-between p-7 border-b border-stone-100 flex-shrink-0">
+            <span className="font-serif text-xl font-bold text-stone-900 tracking-tight">Thanh Menu</span>
             <button 
               onClick={() => setIsOpen(false)}
-              className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-500"
+              className="p-3 bg-stone-50 hover:bg-stone-100 rounded-full transition-colors text-stone-400"
             >
               <X className="w-6 h-6" />
             </button>
           </div>
           
-          {/* Search Box in Mobile Menu */}
-          <div className="px-6 pt-6 flex-shrink-0 sm:hidden">
-            <form onSubmit={handleSearch} className="relative">
-              <input
-                type="text"
-                placeholder="Tìm sản phẩm..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-gray-50 border border-gray-100 rounded-xl h-12 pl-12 pr-12 text-sm font-bold focus:ring-2 focus:ring-primary transition-all text-gray-900"
-              />
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <button 
-                type="submit"
-                className="absolute right-1.5 top-1/2 -translate-y-1/2 w-9 h-9 bg-primary text-white rounded-lg flex items-center justify-center hover:bg-primary/90 transition-colors shadow-sm"
-                aria-label="Tìm kiếm"
-              >
-                <Search className="w-4 h-4" />
-              </button>
-            </form>
-          </div>
-
           {/* Navigation Links */}
-          <nav className="flex-1 py-4 px-4 overflow-y-auto custom-scrollbar">
-            <div className="flex flex-col gap-1">
+          <nav className="flex-1 py-6 px-5 overflow-y-auto custom-scrollbar">
+            <div className="flex flex-col gap-2">
               {navLinks.map((link) => (
                 <div key={link.label} className="flex flex-col">
-                  <div className={`flex items-center justify-between rounded-xl px-2 transition-all ${expandedParent === link.label ? 'bg-gray-50' : 'hover:bg-gray-50'}`}>
+                  <div className={`flex items-center justify-between rounded-2xl px-3 transition-all ${expandedParent === link.label ? 'bg-stone-50' : 'hover:bg-stone-50'}`}>
                     <Link
                       href={link.href}
                       onClick={() => setIsOpen(false)}
-                      className="text-base py-4 px-2 text-gray-800 hover:text-primary transition-colors font-bold flex-1"
+                      className="text-base py-4 text-stone-800 hover:text-stone-900 transition-colors font-bold flex-1"
                     >
                       {link.label}
                     </Link>
                     {link.children && link.children.length > 0 && (
                       <button 
                         onClick={() => setExpandedParent(expandedParent === link.label ? null : link.label)}
-                        className="p-4 text-gray-400 hover:text-primary transition-all"
+                        className="p-4 text-stone-400 hover:text-stone-900 transition-all"
                       >
-                        <span className={`inline-block transition-transform duration-300 ${expandedParent === link.label ? 'rotate-180 text-primary' : ''}`}>
+                        <span className={`inline-block transition-transform duration-300 ${expandedParent === link.label ? 'rotate-180 text-stone-900' : ''}`}>
                           ▼
                         </span>
                       </button>
@@ -292,13 +271,13 @@ export function Header() {
                   </div>
                   
                   {link.children && link.children.length > 0 && expandedParent === link.label && (
-                    <div className="ml-6 mr-2 flex flex-col gap-1 border-l-2 border-primary/20 mt-1 mb-4 animate-in slide-in-from-top-2 duration-300 bg-gray-50/50 rounded-r-xl p-2">
+                    <div className="ml-6 mr-2 flex flex-col gap-1 border-l-2 border-stone-900/10 mt-1 mb-4 animate-in slide-in-from-top-2 duration-300 bg-stone-50/30 rounded-r-2xl p-3">
                       {link.children.map(child => (
                         <Link
                           key={child.label}
                           href={child.href}
                           onClick={() => setIsOpen(false)}
-                          className="text-sm py-3 px-4 text-gray-600 hover:text-primary hover:bg-white rounded-lg transition-all font-medium"
+                          className="text-sm py-3 px-4 text-stone-600 hover:text-stone-900 hover:bg-white rounded-xl transition-all font-medium"
                         >
                           {child.label}
                         </Link>
@@ -311,17 +290,18 @@ export function Header() {
           </nav>
           
           {/* Drawer Footer */}
-          <div className="p-6 border-t border-gray-100 bg-gray-50 flex-shrink-0">
-            <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4">Kết nối với chúng tôi</p>
-            <div className="flex gap-4">
-              <a href="tel:0966245396" className="flex-1 bg-white border border-gray-200 py-3 px-4 flex items-center justify-center gap-2 rounded-xl hover:text-primary hover:border-primary transition-all shadow-sm group">
-                <span className="text-lg">📞</span>
-                <span className="text-xs font-bold text-gray-700">Gọi ngay</span>
+          <div className="p-7 border-t border-stone-100 bg-stone-50/50 flex-shrink-0">
+            <p className="text-[10px] font-black text-stone-400 uppercase tracking-widest mb-5">Liên hệ tư vấn viên</p>
+            <div className="flex flex-col gap-3">
+              <a href="tel:0966245396" className="w-full bg-stone-900 text-white py-4 px-6 flex items-center justify-center gap-3 rounded-2xl hover:bg-stone-800 transition-all shadow-lg shadow-stone-900/20 active:scale-95">
+                <span className="text-xl">📞</span>
+                <span className="text-sm font-bold uppercase tracking-wide">0966.245.396</span>
               </a>
-              <a href="https://zalo.me/0966245396" className="flex-1 bg-[#0068ff] text-white py-3 px-4 flex items-center justify-center gap-2 rounded-xl hover:opacity-90 transition-all shadow-sm">
-                <span className="text-xs font-bold uppercase tracking-wider">Zalo</span>
+              <a href="https://zalo.me/0966245396" className="w-full bg-[#0068ff] text-white py-4 px-6 flex items-center justify-center gap-3 rounded-2xl hover:opacity-90 transition-all shadow-lg shadow-blue-500/20 active:scale-95">
+                <span className="text-sm font-bold uppercase tracking-wider">Tư vấn qua Zalo</span>
               </a>
             </div>
+            <p className="mt-8 text-center text-[9px] text-stone-400 font-medium">© 2026 NV Homes. All rights reserved.</p>
           </div>
         </div>
       </div>
