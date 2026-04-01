@@ -147,16 +147,19 @@ export function Navbar() {
             {/* Shopee-style Cart Icon with Badge */}
             <Link 
               href="/cart" 
-              className={`p-2.5 text-stone-700 hover:bg-stone-100 rounded-full transition-all relative ${isCartBouncing ? 'nav-cart-pop' : ''}`}
+              className={`flex items-center gap-2 px-3 py-2 text-stone-700 hover:bg-stone-100 rounded-2xl transition-all relative group ${isCartBouncing ? 'nav-cart-pop' : ''}`}
             >
-               <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-               </svg>
-               {cartCount > 0 && (
-                 <span className={`absolute -top-0 -right-0 bg-[#ee4d2d] text-white text-[9px] font-black min-w-[18px] h-[18px] px-1 flex items-center justify-center rounded-full shadow-md border-2 border-white transition-all ${isCartBouncing ? 'scale-125' : 'scale-100'}`}>
-                   {cartCount}
-                 </span>
-               )}
+               <div className="relative">
+                  <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                  </svg>
+                  {cartCount > 0 && (
+                    <span className={`absolute -top-1.5 -right-1.5 bg-[#ee4d2d] text-white text-[10px] font-black min-w-[20px] h-[20px] px-1.5 flex items-center justify-center rounded-full shadow-lg border-2 border-white transition-all ${isCartBouncing ? 'scale-125' : 'scale-100'}`}>
+                      {cartCount}
+                    </span>
+                  )}
+               </div>
+               <span className="hidden xl:inline text-[11px] font-black uppercase tracking-widest text-stone-700 group-hover:text-red-600 transition-colors">Giỏ hàng</span>
             </Link>
 
             <style jsx>{`

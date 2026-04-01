@@ -14,9 +14,10 @@ interface CartItem {
 
 export default function CartPage() {
   const [items, setItems] = useState<CartItem[]>([]);
-  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({ name: "", phone: "" });
+  const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [error, setError] = useState("");
 
   const syncCart = (newItems: CartItem[]) => {
     setItems(newItems);
@@ -67,8 +68,9 @@ export default function CartPage() {
 
   const handleCheckout = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError("");
     if (!formData.name || !formData.phone) {
-      alert("Vui lòng nhập đầy đủ Họ tên và Số điện thoại.");
+      setError("Vui lòng nhập đầy đủ Họ tên và Số điện thoại.");
       return;
     }
 
@@ -78,7 +80,7 @@ export default function CartPage() {
     };
 
     if (!validatePhone(formData.phone)) {
-      alert("Quý khách đã nhập sai số điện thoại, vui lòng nhập lại.");
+      setError("Quý khách đã nhập sai số điện thoại, vui lòng nhập lại.");
       return;
     }
 
@@ -229,6 +231,14 @@ export default function CartPage() {
                                         onChange={(e) => setFormData({...formData, phone: e.target.value})}
                                     />
                                 </div>
+
+                                {error && (
+                                    <div className="bg-red-50 p-4 rounded-xl border border-red-100 mb-6 animate-shake">
+                                        <p className="text-red-600 text-sm font-black text-center leading-relaxed">
+                                            {error}
+                                        </p>
+                                    </div>
+                                )}
 
                                 <div className="pt-6 border-t border-stone-100 mt-8">
                                     <div className="flex justify-between items-center mb-6">

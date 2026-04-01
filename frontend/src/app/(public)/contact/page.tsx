@@ -134,7 +134,13 @@ export default function ContactPage() {
                       />
                   </div>
 
-                  {error && <p className="text-red-500 text-xs font-bold text-center">{error}</p>}
+                  {error && (
+                    <div className="bg-red-50 p-4 rounded-2xl border border-red-100 mb-6 animate-shake">
+                      <p className="text-red-600 text-sm font-black text-center leading-relaxed">
+                        {error}
+                      </p>
+                    </div>
+                  )}
 
                   <button 
                     disabled={submitting}

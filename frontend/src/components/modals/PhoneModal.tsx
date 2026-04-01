@@ -100,7 +100,13 @@ export default function PhoneModal({ isOpen, onClose, title, source, productId, 
                 value={phone}
                 onChange={e => setPhone(e.target.value)}
               />
-              {error && <p className="text-red-500 text-xs font-bold">{error}</p>}
+              {error && (
+                <div className="bg-red-50 p-4 rounded-xl border border-red-100 animate-shake">
+                  <p className="text-red-600 text-sm font-black text-center leading-relaxed">
+                    {error}
+                  </p>
+                </div>
+              )}
               <button
                 type="submit"
                 disabled={submitting}
