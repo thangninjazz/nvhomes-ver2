@@ -136,8 +136,9 @@ export function ConsultationModal({ isOpen, onClose }: ConsultationModalProps) {
                            <span className="text-[11px] font-black uppercase tracking-[0.2em] text-red-600">Ưu đãi hôm nay</span>
                         </div>
                         
-                        <h3 className="text-2xl sm:text-4xl font-black text-stone-900 uppercase tracking-tighter leading-[1.1] mb-4 text-balance">
-                          Miễn phí <span className="text-red-500">Thiết kế 3d</span>, <br className="hidden sm:block" /> Đo đạc tận nơi
+                        <h3 className="text-[22px] sm:text-4xl font-black text-stone-900 uppercase tracking-tighter leading-[1.3] sm:leading-[1.2] mb-5 text-balance">
+                          Miễn phí Thiết kế 3d <br className="sm:hidden" />
+                          <span className="text-red-500"> & Đo đạc tận nơi</span>
                         </h3>
                         
                         <p className="text-stone-400 text-[10px] sm:text-xs font-bold uppercase tracking-[0.15em] leading-relaxed max-w-sm mx-auto md:mx-0">

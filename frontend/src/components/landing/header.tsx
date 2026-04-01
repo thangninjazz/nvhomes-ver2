@@ -22,7 +22,6 @@ export function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [cartCount, setCartCount] = useState(0)
   const [isCartBouncing, setIsCartBouncing] = useState(false)
-  const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false)
 
   // Sync Cart Count
   useEffect(() => {
@@ -163,14 +162,6 @@ export function Header() {
                 </button>
               </form>
 
-              {/* 2. Mobile Search Toggle */}
-              <button 
-                onClick={() => setIsMobileSearchOpen(!isMobileSearchOpen)}
-                className="lg:hidden p-2.5 text-stone-700 hover:text-stone-900 hover:bg-stone-100 rounded-full transition-all"
-                aria-label="Tìm kiếm"
-              >
-                <Search className="w-6 h-6" />
-              </button>
 
               {/* 3. Shopee-style Cart Icon */}
               <Link 
@@ -201,22 +192,6 @@ export function Header() {
             </div>
           </div>
 
-          {/* 5. Mobile Search Bar (Expandable) */}
-          {isMobileSearchOpen && (
-            <div className="lg:hidden pb-4 pt-1 animate-in slide-in-from-top-4 duration-300 ease-out px-2">
-              <div className="relative">
-                <input
-                  type="text"
-                  placeholder="Hôm nay bạn tìm gì cho ngôi nhà mình?"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-white border border-stone-200 rounded-2xl h-12 pl-12 pr-4 text-[13px] font-medium focus:ring-4 focus:ring-stone-900/5 focus:border-stone-900 transition-all text-stone-900 shadow-sm"
-                  autoFocus
-                />
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-stone-400" />
-              </div>
-            </div>
-          )}
         </div>
       </header>
 
@@ -234,15 +209,34 @@ export function Header() {
         style={{ height: '100vh' }}
       >
         <div className="flex flex-col h-full">
-          {/* Drawer Header */}
-          <div className="flex items-center justify-between p-7 border-b border-stone-100 flex-shrink-0">
-            <span className="font-serif text-xl font-bold text-stone-900 tracking-tight">Thanh Menu</span>
-            <button 
-              onClick={() => setIsOpen(false)}
-              className="p-3 bg-stone-50 hover:bg-stone-100 rounded-full transition-colors text-stone-400"
-            >
-              <X className="w-6 h-6" />
-            </button>
+          <div className="flex flex-col p-7 border-b border-stone-100 flex-shrink-0 gap-6 bg-white">
+            <div className="flex items-center justify-between">
+              <span className="font-serif text-xl font-bold text-stone-900 tracking-tight">Thanh Menu</span>
+              <button 
+                onClick={() => setIsOpen(false)}
+                className="p-3 bg-stone-50 hover:bg-stone-100 rounded-full transition-colors text-stone-400"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+            
+            {/* 🔍 Mobile Search Form inside Menu */}
+            <form onSubmit={handleSearch} className="relative w-full">
+              <input
+                type="text"
+                placeholder="Tìm sản phẩm, dự án..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full bg-stone-50 border border-stone-100 rounded-2xl h-13 pl-12 pr-4 text-[14px] font-medium focus:ring-4 focus:ring-stone-900/5 focus:bg-white focus:border-stone-900 transition-all text-stone-900 shadow-sm outline-none"
+              />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-stone-400" />
+              <button 
+                type="submit"
+                className="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 bg-stone-900 text-white rounded-xl flex items-center justify-center hover:scale-105 transition-transform"
+              >
+                <Search className="w-4 h-4" />
+              </button>
+            </form>
           </div>
           
           {/* Navigation Links */}
