@@ -122,9 +122,19 @@ export default function CustomersAdmin() {
   const decodeHtml = (html: string) => {
     if (!html) return "";
     if (typeof document === 'undefined') return html;
+    
+    // Robust decoding (handles double-encoding)
+    let decoded = html;
     const txt = document.createElement("textarea");
-    txt.innerHTML = html;
-    return txt.value.replace(/\u00a0/g, ' ').replace(/&nbsp;/g, ' ');
+    
+    // Try decoding up to 2 times to be safe
+    for (let i = 0; i < 2; i++) {
+      if (!decoded.includes("&")) break;
+      txt.innerHTML = decoded;
+      decoded = txt.value;
+    }
+    
+    return decoded.replace(/\u00a0/g, ' ').replace(/&nbsp;/g, ' ');
   };
 
   return (

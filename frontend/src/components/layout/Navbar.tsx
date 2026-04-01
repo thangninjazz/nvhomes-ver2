@@ -119,7 +119,7 @@ export function Navbar() {
           </div>
 
           {/* Right Actions */}
-          <div className="flex items-center gap-1 sm:gap-2 lg:gap-5 shrink-0 ml-auto">
+          <div className="flex items-center flex-nowrap gap-1 sm:gap-2 lg:gap-5 shrink-0 ml-auto px-1">
             {/* 1. Search Toggle */}
             <div className="relative z-[50]">
               {!isSearchOpen ? (
@@ -130,12 +130,12 @@ export function Navbar() {
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
                 </button>
               ) : (
-                <form onSubmit={handleSearch} className="flex items-center bg-stone-100 rounded-full px-4 py-2 animate-in fade-in zoom-in-95 duration-200">
+                <form onSubmit={handleSearch} className="flex items-center bg-stone-100 rounded-full px-3 py-1.5 animate-in fade-in zoom-in-95 duration-200">
                   <input 
                     ref={searchInputRef}
                     type="text" 
-                    placeholder="Tìm kiếm..."
-                    className="bg-transparent border-none outline-none text-sm font-bold w-24 sm:w-32 md:w-64 text-stone-900"
+                    placeholder="Tìm..."
+                    className="bg-transparent border-none outline-none text-[11px] font-bold w-16 sm:w-24 md:w-64 text-stone-900"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onBlur={() => !searchQuery && setIsSearchOpen(false)}
@@ -159,7 +159,10 @@ export function Navbar() {
                     </span>
                   )}
                </div>
-               <span className="hidden xl:inline text-[11px] font-black uppercase tracking-widest text-stone-700 group-hover:text-red-600 transition-colors">Giỏ hàng</span>
+               <div className="flex flex-col items-start leading-none gap-0.5">
+                  <span className="hidden xl:inline text-[11px] font-black uppercase tracking-widest text-stone-700 group-hover:text-red-600 transition-colors">Giỏ hàng</span>
+                  <span className="text-[7px] font-black text-stone-300 opacity-50 xl:ml-0 self-center">v1.5.1-FINAL</span>
+               </div>
             </Link>
 
             {/* 3. CTA (Desktop only) */}
