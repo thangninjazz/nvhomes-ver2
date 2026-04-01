@@ -25,9 +25,21 @@ export default function PhoneModal({ isOpen, onClose, title, source, productId, 
     e.preventDefault();
     setSubmitting(true);
     setError("");
+
+    const validatePhone = (p: string) => {
+      const regex = /^(0|84)(3|5|7|8|9)[0-9]{8}$|^(0|84)2[0-9]{9}$/;
+      return regex.test(p.replace(/\s/g, ""));
+    };
+
+    if (!validatePhone(phone)) {
+      setError("Quý khách đã nhập sai số điện thoại, vui lòng nhập lại.");
+      setSubmitting(false);
+      return;
+    }
+
     try {
       await api.post("/customers", {
-        phoneNumber: phone,
+        phoneNumber: phone.replace(/\s/g, ""),
         name: name || "Ẩn danh",
         source: source, // 'Cart', 'Consultation', 'Chat', 'Contact'
       });

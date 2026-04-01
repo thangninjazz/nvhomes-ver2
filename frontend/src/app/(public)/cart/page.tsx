@@ -72,6 +72,16 @@ export default function CartPage() {
       return;
     }
 
+    const validatePhone = (p: string) => {
+      const regex = /^(0|84)(3|5|7|8|9)[0-9]{8}$|^(0|84)2[0-9]{9}$/;
+      return regex.test(p.replace(/\s/g, ""));
+    };
+
+    if (!validatePhone(formData.phone)) {
+      alert("Quý khách đã nhập sai số điện thoại, vui lòng nhập lại.");
+      return;
+    }
+
     try {
       setLoading(true);
       // Tạo chuỗi ghi chú sản phẩm
@@ -79,7 +89,7 @@ export default function CartPage() {
       
       await api.post('/customers', {
         name: formData.name,
-        phoneNumber: formData.phone,
+        phoneNumber: formData.phone.replace(/\s/g, ""),
         note: `ĐẶT HÀNG: ${productNote}`,
         address: "Đặt từ giỏ hàng trực tuyến"
       });

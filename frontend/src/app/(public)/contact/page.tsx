@@ -19,9 +19,21 @@ export default function ContactPage() {
     e.preventDefault();
     setSubmitting(true);
     setError("");
+
+    const validatePhone = (p: string) => {
+      const regex = /^(0|84)(3|5|7|8|9)[0-9]{8}$|^(0|84)2[0-9]{9}$/;
+      return regex.test(p.replace(/\s/g, ""));
+    };
+
+    if (!validatePhone(formData.phone)) {
+      setError("Quý khách đã nhập sai số điện thoại, vui lòng nhập lại.");
+      setSubmitting(false);
+      return;
+    }
+
     try {
       await api.post("/customers", {
-        phoneNumber: formData.phone,
+        phoneNumber: formData.phone.replace(/\s/g, ""),
         name: formData.name,
         source: "Contact"
       });

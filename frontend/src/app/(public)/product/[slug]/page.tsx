@@ -20,6 +20,7 @@ export default function ProductDetail({ params }: { params: Promise<{ slug: stri
   });
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
+  const [showCartModal, setShowCartModal] = useState(false);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -68,11 +69,8 @@ export default function ProductDetail({ params }: { params: Promise<{ slug: stri
     // Kích hoạt sự kiện để Navbar cập nhật số lượng badge
     window.dispatchEvent(new CustomEvent('cart-updated'));
     
-    setModalConfig({
-      isOpen: true,
-      title: "Thêm vào giỏ hàng",
-      source: "Cart"
-    });
+    // Hiển thị Modal lựa chọn bước tiếp theo thay vì Modal nhập SĐT ngay
+    setShowCartModal(true);
   };
 
   const handleConsult = () => {
@@ -150,7 +148,7 @@ export default function ProductDetail({ params }: { params: Promise<{ slug: stri
                   <div className="grid grid-cols-4 gap-4 md:gap-6">
                       {images.map((img: string, idx: number) => (
                           <button 
-                              key={idx} 
+                               key={idx} 
                               onClick={() => setActiveImage(idx)}
                               className={`aspect-square rounded-2xl overflow-hidden border-2 transition-all duration-300 relative ${activeImage === idx ? 'border-stone-900 shadow-md ring-4 ring-stone-900/10 scale-[1.02]' : 'border-transparent hover:border-stone-300 opacity-60 hover:opacity-100 bg-stone-50'}`}
                           >
@@ -186,7 +184,7 @@ export default function ProductDetail({ params }: { params: Promise<{ slug: stri
                       onClick={handleAddToCart}
                       className="bg-stone-900 text-white font-black uppercase tracking-widest py-5 rounded-2xl hover:bg-black transition-all hover:scale-[1.02] shadow-[0_10px_30px_rgba(0,0,0,0.1)] flex justify-center items-center gap-3 text-[11px]">
                         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
-                        Đặt Hàng Ngay
+                        Thêm Vào Giỏ Hàng
                     </button>
                     <button 
                       onClick={handleConsult}
@@ -242,6 +240,40 @@ export default function ProductDetail({ params }: { params: Promise<{ slug: stri
             </div>
         </div>
       </div>
+
+      {/* Cart Success Choice Modal */}
+      {showCartModal && (
+        <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+          <div className="bg-white rounded-[2.5rem] w-full max-w-md overflow-hidden relative shadow-2xl animate-in fade-in zoom-in duration-300 p-10 text-center">
+            <button 
+              onClick={() => setShowCartModal(false)}
+              className="absolute top-6 right-6 text-stone-400 hover:text-stone-900 transition-colors"
+            >
+              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+            <div className="w-20 h-20 bg-green-50 text-green-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner">
+              <svg className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
+            </div>
+            <h3 className="text-2xl font-black text-stone-900 uppercase tracking-tight mb-2">Đã thêm vào giỏ!</h3>
+            <p className="text-stone-500 mb-10 font-medium">Sản phẩm tuyệt vời này đã sẵn sàng trong giỏ hàng của bạn.</p>
+            <div className="grid grid-cols-1 gap-4">
+              <Link 
+                href="/cart" 
+                className="w-full py-5 bg-stone-900 text-white rounded-2xl font-black uppercase tracking-widest hover:bg-black transition-all shadow-xl flex items-center justify-center gap-2"
+              >
+                Đến giỏ hàng ngay
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+              </Link>
+              <button 
+                onClick={() => setShowCartModal(false)}
+                className="w-full py-5 bg-stone-50 text-stone-600 rounded-2xl font-black uppercase tracking-widest hover:bg-stone-100 transition-all"
+              >
+                Tiếp tục mua sắm
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <PhoneModal 
         isOpen={modalConfig.isOpen}

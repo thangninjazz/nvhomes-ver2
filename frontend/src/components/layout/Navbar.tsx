@@ -19,12 +19,15 @@ export function Navbar() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [cartCount, setCartCount] = useState(0);
+  const [isCartBouncing, setIsCartBouncing] = useState(false);
   const router = useRouter();
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   const updateCartCount = () => {
     const cart = JSON.parse(localStorage.getItem('cart') || '[]');
     setCartCount(cart.length);
+    setIsCartBouncing(true);
+    setTimeout(() => setIsCartBouncing(false), 600);
   };
 
   useEffect(() => {
@@ -142,16 +145,31 @@ export function Navbar() {
             </div>
 
             {/* Cart Icon with Badge */}
-            <Link href="/cart" className="p-2 text-stone-700 hover:bg-stone-100 rounded-full transition-colors relative">
+            <Link 
+              href="/cart" 
+              className={`p-2 text-stone-700 hover:bg-stone-100 rounded-full transition-all relative ${isCartBouncing ? 'nav-cart-pop' : ''}`}
+            >
                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                </svg>
                {cartCount > 0 && (
-                 <span className="absolute -top-0 -right-0 bg-red-600 text-white text-[10px] font-black w-4.5 h-4.5 flex items-center justify-center rounded-full shadow-lg border-2 border-white">
+                 <span className={`absolute -top-0 -right-0 bg-red-600 text-white text-[10px] font-black w-4.5 h-4.5 flex items-center justify-center rounded-full shadow-lg border-2 border-white transition-transform ${isCartBouncing ? 'scale-125' : 'scale-100'}`}>
                    {cartCount}
                  </span>
                )}
             </Link>
+
+            <style jsx>{`
+              @keyframes nav-cart-pop {
+                0% { transform: scale(1); }
+                50% { transform: scale(1.3); }
+                100% { transform: scale(1); }
+              }
+              .nav-cart-pop {
+                animation: nav-cart-pop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                color: #ef4444 !important;
+              }
+            `}</style>
 
             <Link href="/contact" className="hidden lg:flex bg-stone-900 text-white px-7 py-3 rounded-full font-black text-[11px] tracking-widest uppercase shadow-[0_10px_20px_rgba(0,0,0,0.1)] hover:bg-stone-800 transition-all hover:-translate-y-0.5">
               Nhận Báo Giá
