@@ -246,7 +246,8 @@ export default function ProjectManager() {
                 <div className="bg-white p-8 rounded-[2rem] border border-stone-200 shadow-sm">
                    <h2 className="text-sm font-black text-stone-900 uppercase tracking-widest mb-6 border-b border-stone-100 pb-4">3. Bài Viết Chuyên Sâu</h2>
                    <div className="rich-text-container bg-stone-50 rounded-2xl overflow-hidden border border-stone-200">
-                     <ReactQuill theme="snow" value={formData.content} onChange={(val) => setFormData({ ...formData, content: val })} modules={quillModules} className="min-h-[500px] bg-white" />
+                     {/* @ts-ignore */}
+                     <ReactQuill ref={quillRef} theme="snow" value={formData.content} onChange={(val) => setFormData({ ...formData, content: val })} modules={quillModules} className="min-h-[500px] bg-white" />
                    </div>
                 </div>
              </div>

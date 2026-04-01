@@ -200,17 +200,17 @@ export default function ProductDetail({ params }: { params: Promise<{ slug: stri
                 </div>
 
                 {/* Main Call to Actions (Desktop Only) */}
-                <div className="hidden sm:flex flex-row gap-4 mb-12">
+                <div className="hidden sm:flex flex-row gap-0 mb-12 rounded-xl overflow-hidden border border-red-200 shadow-sm">
                     <button 
                       onClick={handleAddToCart}
-                      className="flex-[2] bg-stone-900 text-white font-black uppercase tracking-widest py-6 rounded-2xl hover:bg-black transition-all hover:shadow-[0_20px_40px_rgba(0,0,0,0.2)] flex justify-center items-center gap-3 text-xs">
-                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
+                      className="flex-1 bg-red-50 text-red-600 font-extrabold uppercase tracking-widest py-5 hover:bg-red-100 transition-all flex justify-center items-center gap-3 text-sm border-r border-red-200">
+                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
                         Thêm Vào Giỏ Hàng
                     </button>
                     <button 
                       onClick={handleConsult}
-                      className="flex-1 bg-white text-stone-900 font-black border-2 border-stone-100 uppercase tracking-widest py-6 rounded-2xl hover:border-stone-900 hover:bg-stone-50 transition-all flex justify-center items-center gap-3 text-xs">
-                        Tư Vấn
+                      className="flex-1 bg-red-600 text-white font-extrabold uppercase tracking-widest py-5 hover:bg-red-700 transition-all flex justify-center items-center gap-3 text-sm">
+                        Tư Vấn Với Chuyên Viên
                     </button>
                 </div>
 
@@ -236,22 +236,29 @@ export default function ProductDetail({ params }: { params: Promise<{ slug: stri
                   </div>
                 </div>
 
+            </div>
+        </div>
+        
+        {/* Full-width Specificatons and Description Section */}
+        <div className="mt-20 border-t border-stone-100 pt-16">
+            <div className="bg-white rounded-3xl p-8 md:p-12 shadow-sm border border-stone-100">
                 {/* Specifications Section */}
                 {product.specifications && product.specifications.length > 0 && (
-                  <div className="mb-12 pt-10 border-t border-stone-100">
-                    <h3 className="text-xs font-black text-stone-400 uppercase tracking-widest mb-6">Thông Số Kỹ Thuật</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4">
+                  <div className="mb-16">
+                    <h3 className="text-xl inline-block font-black text-stone-900 uppercase tracking-widest mb-8 border-b-4 border-red-600 pb-2">Đặc Tính Sản Phẩm</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4 bg-stone-50 p-6 md:p-8 rounded-2xl border border-stone-100">
                       {product.specifications.map((spec: any, idx: number) => (
-                        <div key={idx} className="spec-item-row py-3 border-b border-stone-50">
-                          <span className="text-stone-500 text-sm font-bold uppercase tracking-wider min-w-[120px]">{spec.key}</span>
-                          <span className="text-stone-900 text-sm font-black text-right md:text-left flex-1 break-words">{spec.value}</span>
+                        <div key={idx} className="spec-item-row py-3 flex justify-between border-b border-stone-200/50 last:border-0 md:odd:[&:nth-last-child(1)]:border-0 md:even:[&:nth-last-child(2)]:border-0 md:even:[&:nth-last-child(1)]:border-0">
+                          <span className="text-stone-500 text-sm font-bold uppercase tracking-wider">{spec.key}</span>
+                          <span className="text-stone-900 text-sm font-black text-right break-words pl-4">{spec.value}</span>
                         </div>
                       ))}
                     </div>
                   </div>
                 )}
 
-                <div className="mb-12 text-stone-600 leading-relaxed font-medium">
+                <h3 className="text-xl inline-block font-black text-stone-900 uppercase tracking-widest mb-8 border-b-4 border-red-600 pb-2">Mô Tả Sản Phẩm</h3>
+                <div className="text-stone-600 leading-relaxed font-medium">
                     <div 
                       className="product-rich-text"
                       dangerouslySetInnerHTML={{ __html: decodeHtml(product.description) }}
@@ -262,11 +269,11 @@ export default function ProductDetail({ params }: { params: Promise<{ slug: stri
       </div>
 
       {/* Shopee-style Mobile Fixed Bottom Action Bar */}
-      <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-stone-100 p-3 sm:hidden shadow-[0_-5px_20px_rgba(0,0,0,0.05)] safe-area-pb">
-        <div className="flex items-center gap-3 h-12">
+      <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-stone-100 sm:hidden shadow-[0_-5px_20px_rgba(0,0,0,0.05)] safe-area-pb">
+        <div className="flex items-center h-14">
           <button 
             onClick={handleConsult}
-            className="flex flex-col items-center justify-center bg-stone-50 text-stone-900 rounded-xl px-4 h-full border border-stone-100 hover:bg-stone-100 transition-colors"
+            className="flex flex-col items-center justify-center bg-stone-50 text-stone-900 px-4 h-full border-r border-stone-200 hover:bg-stone-100 transition-colors"
           >
             <svg className="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
             <span className="text-[9px] font-black uppercase tracking-widest text-stone-500">Tư vấn</span>
@@ -274,9 +281,17 @@ export default function ProductDetail({ params }: { params: Promise<{ slug: stri
           
           <button 
             onClick={handleAddToCart}
-            className="flex-1 bg-stone-900 text-white rounded-xl h-full font-black uppercase tracking-widest text-[11px] shadow-lg flex items-center justify-center gap-2 active:scale-[0.98] transition-all"
+            className="flex-1 bg-red-50 text-red-600 h-full font-black uppercase tracking-widest text-[11px] flex items-center justify-center gap-2 active:bg-red-100 transition-all border-r border-red-200"
           >
+            <svg className="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
             Thêm Vào Giỏ
+          </button>
+
+          <button 
+            onClick={handleConsult}
+            className="flex-1 bg-red-600 text-white h-full font-black uppercase tracking-widest text-[11px] flex items-center justify-center gap-2 active:bg-red-700 transition-all"
+          >
+            Mua Ngay
           </button>
         </div>
       </div>
