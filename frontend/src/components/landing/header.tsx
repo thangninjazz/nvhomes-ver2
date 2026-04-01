@@ -119,20 +119,21 @@ export function Header() {
                   >
                     {link.label}
                     {link.children && link.children.length > 0 && (
-                      <span className="text-[10px] opacity-50 group-hover:rotate-180 transition-transform">▼</span>
+                      <span className="text-[10px] opacity-30 group-hover:rotate-180 transition-transform duration-300">▼</span>
                     )}
                   </Link>
                   
                   {link.children && link.children.length > 0 && (
-                    <div className="absolute top-full left-0 pt-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
-                      <div className="bg-white border border-border/50 shadow-xl p-4 min-w-[200px] grid gap-2">
+                    <div className="absolute top-full left-0 pt-4 opacity-0 invisible translate-y-2 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-300 ease-out z-[60]">
+                      <div className="bg-white/95 backdrop-blur-xl border border-stone-200/50 shadow-[0_20px_50px_rgba(0,0,0,0.1)] p-5 min-w-[220px] rounded-2xl grid gap-1">
                          {link.children.map(child => (
                            <Link 
                              key={child.label} 
                              href={child.href}
-                             className="text-xs py-2 px-3 hover:bg-secondary text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap"
+                             className="text-[13px] py-2.5 px-4 hover:bg-stone-50 text-stone-600 hover:text-stone-900 rounded-xl transition-all font-medium flex items-center justify-between group/item"
                            >
                              {child.label}
+                             <div className="w-1 h-1 bg-stone-900 rounded-full opacity-0 group-hover/item:opacity-100 transition-all scale-0 group-hover/item:scale-100" />
                            </Link>
                          ))}
                       </div>
@@ -143,20 +144,20 @@ export function Header() {
             </nav>
 
             {/* Actions: Search, Cart, Menu */}
-            <div className="flex items-center gap-1 sm:gap-4 ml-auto">
+            <div className="flex items-center gap-1 sm:gap-3 lg:gap-4 ml-auto">
               {/* 1. Desktop Search */}
-              <form onSubmit={handleSearch} className="relative group hidden sm:block w-[150px] lg:w-[250px]">
+              <form onSubmit={handleSearch} className="relative group hidden lg:block w-[200px] xl:w-[280px]">
                 <input
                   type="text"
-                  placeholder="Tìm sản phẩm..."
+                  placeholder="Tìm kiếm nội thất..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-stone-100 border-none rounded-full h-10 pl-10 pr-10 text-xs font-bold focus:ring-2 focus:ring-primary transition-all text-stone-900"
+                  className="w-full bg-stone-100/50 border border-stone-200/30 rounded-full h-11 pl-11 pr-11 text-[13px] font-medium focus:ring-2 focus:ring-stone-900/10 focus:bg-white focus:border-stone-900/20 transition-all outline-none text-stone-900"
                 />
-                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400" />
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400 group-focus-within:text-stone-900 transition-colors" />
                 <button 
                   type="submit"
-                  className="absolute right-1 top-1/2 -translate-y-1/2 w-8 h-8 bg-stone-900 text-white rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-sm"
+                  className="absolute right-1.5 top-1/2 -translate-y-1/2 w-8 h-8 bg-stone-900 text-white rounded-full flex items-center justify-center hover:scale-105 active:scale-95 transition-transform shadow-lg shadow-stone-900/20"
                 >
                   <Search className="w-3.5 h-3.5" />
                 </button>
@@ -165,7 +166,7 @@ export function Header() {
               {/* 2. Mobile Search Toggle */}
               <button 
                 onClick={() => setIsMobileSearchOpen(!isMobileSearchOpen)}
-                className="p-2 sm:hidden text-stone-700 hover:text-primary transition-colors"
+                className="lg:hidden p-2.5 text-stone-700 hover:text-stone-900 hover:bg-stone-100 rounded-full transition-all"
                 aria-label="Tìm kiếm"
               >
                 <Search className="w-6 h-6" />
@@ -174,25 +175,25 @@ export function Header() {
               {/* 3. Shopee-style Cart Icon */}
               <Link 
                 href="/cart" 
-                className={`relative p-2 text-stone-700 hover:text-primary transition-all flex flex-col items-center ${isCartBouncing ? 'scale-110' : ''}`}
+                className={`relative p-2.5 text-stone-700 hover:text-stone-900 hover:bg-stone-100 rounded-full transition-all flex flex-col items-center group/cart ${isCartBouncing ? 'nav-cart-pop' : ''}`}
               >
                 <div className="relative">
-                  <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                  <svg className="w-6.5 h-6.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.4} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                   </svg>
                   {cartCount > 0 && (
-                    <span className="absolute -top-1.5 -right-1.5 bg-[#ee4d2d] text-white text-[10px] font-black min-w-[18px] h-[18px] flex items-center justify-center rounded-full border-2 border-white shadow-sm">
+                    <span className="absolute -top-1 -right-1.5 bg-[#ee4d2d] text-white text-[9px] font-black min-w-[18px] h-[18px] flex items-center justify-center rounded-full border-2 border-white shadow-md pulse-soft">
                       {cartCount}
                     </span>
                   )}
                 </div>
-                <span className="text-[6px] font-black text-red-500 mt-0.5">v1.5.3-FINAL</span>
               </Link>
 
               {/* 4. Hamburger Menu (Mobile/Tablet only) */}
+              <div className="lg:hidden h-8 w-px bg-stone-200 mx-1" />
               <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="lg:hidden p-2 text-stone-900 -mr-2"
+                className="lg:hidden p-2 text-stone-900 hover:bg-stone-100 rounded-full transition-all"
                 aria-label="Toggle menu"
               >
                 {isOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
@@ -202,18 +203,18 @@ export function Header() {
 
           {/* 5. Mobile Search Bar (Expandable) */}
           {isMobileSearchOpen && (
-            <div className="sm:hidden pb-4 pt-1 animate-in slide-in-from-top-2 duration-300">
-              <form onSubmit={handleSearch} className="relative">
+            <div className="lg:hidden pb-4 pt-1 animate-in slide-in-from-top-4 duration-300 ease-out px-2">
+              <div className="relative">
                 <input
                   type="text"
-                  placeholder="Hôm nay bạn tìm gì?"
+                  placeholder="Hôm nay bạn tìm gì cho ngôi nhà mình?"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-stone-100 border-none rounded-xl h-12 pl-12 pr-4 text-sm font-bold focus:ring-2 focus:ring-primary transition-all text-stone-900"
+                  className="w-full bg-white border border-stone-200 rounded-2xl h-12 pl-12 pr-4 text-[13px] font-medium focus:ring-4 focus:ring-stone-900/5 focus:border-stone-900 transition-all text-stone-900 shadow-sm"
                   autoFocus
                 />
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-stone-400" />
-              </form>
+              </div>
             </div>
           )}
         </div>
