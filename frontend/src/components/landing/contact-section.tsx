@@ -83,9 +83,21 @@ export function ContactSection() {
         });
       });
 
+      // Phone Validation
+      const validatePhone = (p: string) => {
+        const regex = /^(0|84)(3|5|7|8|9)[0-9]{8}$|^(0|84)2[0-9]{9}$/;
+        return regex.test(p.replace(/\s/g, ""));
+      };
+
+      if (!validatePhone(formData.phone)) {
+        setError("Quý khách đã nhập sai số điện thoại, vui lòng nhập lại.");
+        setIsSubmitting(false);
+        return;
+      }
+
       // 2. Gửi dữ liệu kèm Token xác thực
       await api.post("/customers", {
-        phoneNumber: formData.phone,
+        phoneNumber: formData.phone.replace(/\s/g, ""),
         name: formData.name,
         source: "ContactSection",
         note: `Message: ${formData.message}`,
@@ -192,12 +204,16 @@ export function ContactSection() {
                   <Input
                     id="phone"
                     type="tel"
-                    placeholder="0912 345 678"
+                    placeholder="Vd: 0912 345 678"
                     value={formData.phone}
-                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    className="rounded-none border-border bg-background h-12"
+                    onChange={(e) => {
+                      setFormData({ ...formData, phone: e.target.value });
+                      if (error) setError("");
+                    }}
+                    className={`rounded-none bg-background h-12 transition-all ${error ? 'border-red-500 ring-1 ring-red-500' : 'border-border'}`}
                     required
                   />
+                  {error && <p className="text-[10px] font-bold text-red-500 mt-2 uppercase tracking-wider animate-in fade-in slide-in-from-top-1 duration-200">❌ {error}</p>}
                 </div>
 
 
@@ -214,7 +230,7 @@ export function ContactSection() {
                   />
                 </div>
 
-                {error && <p className="text-sm text-destructive font-medium">{error}</p>}
+
 
                 <Button 
                   type="submit" 

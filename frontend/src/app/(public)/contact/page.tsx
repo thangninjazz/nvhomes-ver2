@@ -124,11 +124,19 @@ export default function ContactPage() {
                        <input 
                          type="tel" 
                          required
-                         className="w-full px-6 py-4 rounded-2xl bg-white border-none text-stone-900 font-bold focus:ring-4 focus:ring-red-500/10 placeholder:text-stone-200"
+                         className={`w-full px-6 py-4 rounded-2xl bg-white border-none text-stone-900 font-bold focus:ring-4 transition-all placeholder:text-stone-200 ${error && error.includes("số điện thoại") ? 'ring-2 ring-red-500' : 'focus:ring-red-500/10'}`}
                          placeholder="Vd: 0966..."
                          value={formData.phone}
-                         onChange={e => setFormData({...formData, phone: e.target.value})}
+                         onChange={e => {
+                           setFormData({...formData, phone: e.target.value});
+                           if (error) setError("");
+                         }}
                        />
+                       {error && error.includes("số điện thoại") && (
+                         <p className="text-[10px] font-bold text-red-500 mt-2 ml-4 uppercase tracking-wider animate-in fade-in slide-in-from-top-1 duration-200">
+                           ❌ {error}
+                         </p>
+                       )}
                     </div>
                   </div>
 

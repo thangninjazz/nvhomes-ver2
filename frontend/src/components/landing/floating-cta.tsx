@@ -13,6 +13,7 @@ export function FloatingCTA() {
   const [phone, setPhone] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const [phoneError, setPhoneError] = useState("")
 
   const [phoneSubmitted, setPhoneSubmitted] = useState("")
 
@@ -25,10 +26,11 @@ export function FloatingCTA() {
     };
 
     if (!validatePhone(phone)) {
-      toast.error("Quý khách đã nhập sai số điện thoại, vui lòng nhập lại.")
+      setPhoneError("Số điện thoại không hợp lệ. Vui lòng nhập lại.")
       return
     }
 
+    setPhoneError("")
     const decodeHtml = (html: string) => {
       if (typeof document === 'undefined') return html;
       const txt = document.createElement("textarea");
@@ -97,15 +99,19 @@ export function FloatingCTA() {
                   
                   <form onSubmit={handleSubmitPhone} className="space-y-3">
                     <div className="relative">
-                      <input
-                        type="tel"
-                        placeholder="Số điện thoại của anh/chị..."
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                        className="w-full bg-muted border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary transition-all outline-none"
-                        disabled={isSubmitting}
-                      />
-                    </div>
+                        <input
+                          type="tel"
+                          placeholder="Số điện thoại của anh/chị..."
+                          value={phone}
+                          onChange={(e) => {
+                            setPhone(e.target.value);
+                            if (phoneError) setPhoneError("");
+                          }}
+                          className={`w-full bg-muted border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary transition-all outline-none ${phoneError ? 'ring-1 ring-red-500' : ''}`}
+                          disabled={isSubmitting}
+                        />
+                        {phoneError && <p className="text-[10px] font-bold text-red-500 mt-1 ml-1 animate-in fade-in slide-in-from-top-1 duration-200">{phoneError}</p>}
+                      </div>
                     <Button 
                       type="submit" 
                       className="w-full rounded-xl py-6 font-bold uppercase tracking-widest text-xs h-12"

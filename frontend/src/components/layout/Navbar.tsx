@@ -137,7 +137,6 @@ export function Navbar() {
                </div>
                <div className="flex flex-col items-center leading-none gap-0.5">
                   <span className="hidden xl:inline text-[11px] font-black uppercase tracking-widest text-stone-700 group-hover:text-red-600 transition-colors">Giỏ hàng</span>
-                  <span className="text-[7px] font-black text-stone-400 bg-stone-50 px-1 rounded xl:ml-0">v1.5.2-FINAL</span>
                </div>
             </Link>
 
