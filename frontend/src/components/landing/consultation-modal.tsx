@@ -12,12 +12,12 @@ interface ConsultationModalProps {
 }
 
 const CATEGORIES = [
-  "Trọng gói (Thi công toàn bộ)",
-  "Tủ Bếp Nhựa đặc, cánh Acrylic",
-  "Tủ Bếp Inox cánh kính",
+  "Trọn Gói (Thi công toàn bộ)",
+  "Tủ Bếp Nhựa Đặc, Cánh Acrylic",
+  "Tủ Bếp Inox Cánh Kính",
   "Vách Tivi / Phòng Khách",
   "Phòng Ngủ / Tủ Quần Áo",
-  "Thiết kế riêng theo yêu cầu",
+  "Thiết Kế Riêng Theo Yêu Cầu",
 ];
 
 export function ConsultationModal({ isOpen, onClose }: ConsultationModalProps) {
