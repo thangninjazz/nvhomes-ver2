@@ -20,6 +20,26 @@ export function Header() {
   const [expandedParent, setExpandedParent] = useState<string | null>(null)
   const [searchQuery, setSearchQuery] = useState("")
   const [isScrolled, setIsScrolled] = useState(false)
+  const [cartCount, setCartCount] = useState(0)
+  const [isCartBouncing, setIsCartBouncing] = useState(false)
+  const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false)
+
+  // Sync Cart Count
+  useEffect(() => {
+    const updateCount = () => {
+      const cart = JSON.parse(localStorage.getItem('cart') || '[]')
+      setCartCount(cart.length)
+      setIsCartBouncing(true)
+      setTimeout(() => setIsCartBouncing(false), 300)
+    }
+    updateCount()
+    window.addEventListener('cart-updated', updateCount)
+    window.addEventListener('storage', updateCount)
+    return () => {
+      window.removeEventListener('cart-updated', updateCount)
+      window.removeEventListener('storage', updateCount)
+    }
+  }, [])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -122,35 +142,80 @@ export function Header() {
               ))}
             </nav>
 
-            {/* Search bar & Mobile Menu Button */}
-            <div className="flex items-center flex-1 lg:flex-initial justify-end gap-2 sm:gap-4">
-              <form onSubmit={handleSearch} className="relative group w-full max-w-[120px] sm:max-w-[200px] lg:max-w-[250px] hidden sm:block">
+            {/* Actions: Search, Cart, Menu */}
+            <div className="flex items-center gap-1 sm:gap-4 ml-auto">
+              {/* 1. Desktop Search */}
+              <form onSubmit={handleSearch} className="relative group hidden sm:block w-[150px] lg:w-[250px]">
                 <input
                   type="text"
                   placeholder="Tìm sản phẩm..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-secondary/50 border-none rounded-full h-10 pl-10 pr-10 text-xs font-bold focus:ring-2 focus:ring-primary transition-all placeholder:text-muted-foreground/50 text-foreground"
+                  className="w-full bg-stone-100 border-none rounded-full h-10 pl-10 pr-10 text-xs font-bold focus:ring-2 focus:ring-primary transition-all text-stone-900"
                 />
-                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/50" />
+                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400" />
                 <button 
                   type="submit"
-                  className="absolute right-1 top-1/2 -translate-y-1/2 w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-sm"
-                  aria-label="Tìm kiếm"
+                  className="absolute right-1 top-1/2 -translate-y-1/2 w-8 h-8 bg-stone-900 text-white rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-sm"
                 >
                   <Search className="w-3.5 h-3.5" />
                 </button>
               </form>
 
+              {/* 2. Mobile Search Toggle */}
+              <button 
+                onClick={() => setIsMobileSearchOpen(!isMobileSearchOpen)}
+                className="p-2 sm:hidden text-stone-700 hover:text-primary transition-colors"
+                aria-label="Tìm kiếm"
+              >
+                <Search className="w-6 h-6" />
+              </button>
+
+              {/* 3. Shopee-style Cart Icon */}
+              <Link 
+                href="/cart" 
+                className={`relative p-2 text-stone-700 hover:text-primary transition-all flex flex-col items-center ${isCartBouncing ? 'scale-110' : ''}`}
+              >
+                <div className="relative">
+                  <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                  </svg>
+                  {cartCount > 0 && (
+                    <span className="absolute -top-1.5 -right-1.5 bg-[#ee4d2d] text-white text-[10px] font-black min-w-[18px] h-[18px] flex items-center justify-center rounded-full border-2 border-white shadow-sm">
+                      {cartCount}
+                    </span>
+                  )}
+                </div>
+                <span className="text-[6px] font-black text-red-500 mt-0.5">v1.5.3-FINAL</span>
+              </Link>
+
+              {/* 4. Hamburger Menu (Mobile/Tablet only) */}
               <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="lg:hidden p-2 text-foreground/80 hover:text-primary transition-colors"
+                className="lg:hidden p-2 text-stone-900 -mr-2"
                 aria-label="Toggle menu"
               >
-                {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                {isOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
               </button>
             </div>
           </div>
+
+          {/* 5. Mobile Search Bar (Expandable) */}
+          {isMobileSearchOpen && (
+            <div className="sm:hidden pb-4 pt-1 animate-in slide-in-from-top-2 duration-300">
+              <form onSubmit={handleSearch} className="relative">
+                <input
+                  type="text"
+                  placeholder="Hôm nay bạn tìm gì?"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full bg-stone-100 border-none rounded-xl h-12 pl-12 pr-4 text-sm font-bold focus:ring-2 focus:ring-primary transition-all text-stone-900"
+                  autoFocus
+                />
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-stone-400" />
+              </form>
+            </div>
+          )}
         </div>
       </header>
 
