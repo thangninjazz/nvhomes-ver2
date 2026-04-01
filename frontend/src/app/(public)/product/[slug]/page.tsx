@@ -2,7 +2,7 @@
 
 import { useState, useEffect, use } from 'react';
 import Link from 'next/link';
-import PhoneModal from '@/components/modals/PhoneModal';
+import { ConsultationModal } from '@/components/landing/consultation-modal';
 import { useRouter } from 'next/navigation';
 import { api } from '@/services/api';
 import { ImageLightbox } from '@/components/ui/image-lightbox';
@@ -13,11 +13,7 @@ export default function ProductDetail({ params }: { params: Promise<{ slug: stri
   const [product, setProduct] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [activeImage, setActiveImage] = useState(0);
-  const [modalConfig, setModalConfig] = useState<{isOpen: boolean, title: string, source: string}>({
-    isOpen: false,
-    title: "",
-    source: ""
-  });
+  const [isConsultModalOpen, setIsConsultModalOpen] = useState(false);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
   const [showCartToast, setShowCartToast] = useState(false);
@@ -77,11 +73,7 @@ export default function ProductDetail({ params }: { params: Promise<{ slug: stri
   };
 
   const handleConsult = () => {
-    setModalConfig({
-      isOpen: true,
-      title: "Tư vấn thiết kế",
-      source: "Consultation"
-    });
+    setIsConsultModalOpen(true);
   };
 
   // Hàm giải mã HTML Entities an toàn (giải mã đa tầng nếu bị mã hóa nhiều lần)
@@ -302,16 +294,9 @@ export default function ProductDetail({ params }: { params: Promise<{ slug: stri
         </div>
       )}
 
-      <PhoneModal 
-        isOpen={modalConfig.isOpen}
-        onClose={() => setModalConfig({...modalConfig, isOpen: false})}
-        title={modalConfig.title}
-        source={modalConfig.source}
-        onSuccess={() => {
-          if (modalConfig.source === 'Cart') {
-            router.push('/cart');
-          }
-        }}
+      <ConsultationModal 
+        isOpen={isConsultModalOpen}
+        onClose={() => setIsConsultModalOpen(false)}
       />
 
       <ImageLightbox 
