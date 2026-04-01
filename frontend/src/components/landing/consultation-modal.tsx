@@ -130,13 +130,19 @@ export function ConsultationModal({ isOpen, onClose }: ConsultationModalProps) {
                   </div>
                 ) : (
                   <div className="flex flex-col h-full">
-                    <div className="mb-8">
-                        <div className="flex items-center gap-2 mb-2">
-                           <Sparkles className="w-4 h-4 text-red-600 animate-pulse" />
-                           <span className="text-[10px] font-black uppercase tracking-widest text-red-600">Ưu đãi hôm nay</span>
+                    <div className="mb-10 text-center md:text-left animate-in fade-in slide-in-from-top-4 duration-700">
+                        <div className="flex items-center justify-center md:justify-start gap-2 mb-3">
+                           <Sparkles className="w-4 h-4 text-red-600 animate-pulse shrink-0" />
+                           <span className="text-[11px] font-black uppercase tracking-[0.2em] text-red-600">Ưu đãi hôm nay</span>
                         </div>
-                        <h3 className="text-3xl font-black text-stone-900 uppercase tracking-tighter leading-none mb-2">Nhận Báo Giá <br/> Công Trình</h3>
-                        <p className="text-stone-400 text-xs font-bold uppercase tracking-widest leading-relaxed">Đăng ký để chuyên viên liên hệ trong 15p</p>
+                        
+                        <h3 className="text-2xl sm:text-4xl font-black text-stone-900 uppercase tracking-tighter leading-[1.1] mb-4 text-balance">
+                          Miễn phí <span className="text-red-500">Thiết kế 3d</span>, <br className="hidden sm:block" /> Đo đạc tận nơi
+                        </h3>
+                        
+                        <p className="text-stone-400 text-[10px] sm:text-xs font-bold uppercase tracking-[0.15em] leading-relaxed max-w-sm mx-auto md:mx-0">
+                          Đăng ký để chuyên viên <span className="text-stone-900">NVHomes</span> liên hệ trong <span className="text-stone-900">15 phút</span>
+                        </p>
                     </div>
 
                     <form onSubmit={handleSubmit} className="space-y-4">
