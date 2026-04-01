@@ -1,12 +1,16 @@
-"use client"
-
 import { ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
+import { useState } from "react"
+import { ConsultationModal } from "./consultation-modal"
 
 export function HeroSection() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center pt-20">
+      {/* Consultation Modal */}
+      <ConsultationModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
         <div 
@@ -37,18 +41,18 @@ export function HeroSection() {
             <Button 
               size="lg" 
               className="rounded-none px-8 py-6 text-base bg-background text-foreground hover:bg-background/90 group"
-              onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+              onClick={() => setIsModalOpen(true)}
             >
               Nhận Báo Giá Ngay
-              <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-all" />
             </Button>
             <Link href="/projects">
               <Button 
                 size="lg" 
-                className="rounded-none px-8 py-6 text-base bg-background text-foreground hover:bg-background/90 group w-full sm:w-auto shadow-xl"
+                className="rounded-none px-8 py-6 text-base bg-white/10 backdrop-blur-md text-white border border-white/20 hover:bg-white/20 group w-full sm:w-auto shadow-xl"
               >
                 Xem Mẫu Thiết Kế
-                <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-all" />
               </Button>
             </Link>
           </div>
@@ -56,7 +60,7 @@ export function HeroSection() {
       </div>
 
       {/* Scroll Indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10">
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-[5]">
         <div className="flex flex-col items-center gap-2 text-background/70">
           <span className="text-xs tracking-widest uppercase">Cuộn xuống</span>
           <div className="w-px h-12 bg-background/50 animate-pulse" />
