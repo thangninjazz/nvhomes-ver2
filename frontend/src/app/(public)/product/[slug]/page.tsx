@@ -106,7 +106,7 @@ export default function ProductDetail({ params }: { params: Promise<{ slug: stri
       <div className="bg-white min-h-screen pt-24 md:pt-32 pb-20">
       <div className="container mx-auto px-4 lg:px-8">
         {/* Sticky Breadcrumb Bar */}
-        <div className="sticky top-[64px] z-40 bg-white/95 backdrop-blur-md border-b border-stone-100 -mx-4 px-4 mb-8 py-4 shadow-sm">
+        <div className="sticky top-16 z-40 bg-white/95 backdrop-blur-md border-b border-stone-100 -mx-4 px-4 mb-8 py-4 shadow-sm">
           <nav className="flex items-center gap-2 text-[10px] md:text-xs text-stone-400 font-bold uppercase tracking-widest overflow-x-auto whitespace-nowrap custom-scrollbar">
               <Link href="/" className="hover:text-stone-900 transition-colors flex items-center gap-1">
                 <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
@@ -196,8 +196,8 @@ export default function ProductDetail({ params }: { params: Promise<{ slug: stri
                     </div>
                 </div>
 
-                {/* Main Call to Actions */}
-                <div className="flex flex-col sm:flex-row gap-4 mb-12">
+                {/* Main Call to Actions (Desktop Only) */}
+                <div className="hidden sm:flex flex-row gap-4 mb-12">
                     <button 
                       onClick={handleAddToCart}
                       className="flex-[2] bg-stone-900 text-white font-black uppercase tracking-widest py-6 rounded-2xl hover:bg-black transition-all hover:shadow-[0_20px_40px_rgba(0,0,0,0.2)] flex justify-center items-center gap-3 text-xs">
@@ -255,6 +255,26 @@ export default function ProductDetail({ params }: { params: Promise<{ slug: stri
                     />
                 </div>
             </div>
+        </div>
+      </div>
+
+      {/* Shopee-style Mobile Fixed Bottom Action Bar */}
+      <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-stone-100 p-3 sm:hidden shadow-[0_-5px_20px_rgba(0,0,0,0.05)] safe-area-pb">
+        <div className="flex items-center gap-3 h-12">
+          <button 
+            onClick={handleConsult}
+            className="flex flex-col items-center justify-center bg-stone-50 text-stone-900 rounded-xl px-4 h-full border border-stone-100 hover:bg-stone-100 transition-colors"
+          >
+            <svg className="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
+            <span className="text-[9px] font-black uppercase tracking-widest text-stone-500">Tư vấn</span>
+          </button>
+          
+          <button 
+            onClick={handleAddToCart}
+            className="flex-1 bg-stone-900 text-white rounded-xl h-full font-black uppercase tracking-widest text-[11px] shadow-lg flex items-center justify-center gap-2 active:scale-[0.98] transition-all"
+          >
+            Thêm Vào Giỏ
+          </button>
         </div>
       </div>
 

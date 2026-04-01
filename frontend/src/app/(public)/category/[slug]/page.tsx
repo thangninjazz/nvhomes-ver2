@@ -8,6 +8,7 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
   const { slug } = use(params);
   const [products, setProducts] = useState<any[]>([]);
   const [category, setCategory] = useState<any>(null);
+  const [subcategories, setSubcategories] = useState<any[]>([]);
   const [sortOrder, setSortOrder] = useState('newest');
   const [loading, setLoading] = useState(true);
 
@@ -16,9 +17,20 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
     const fetchData = async () => {
       try {
         setLoading(true);
-        // Fetch category details for breadcrumb (including parent)
-        const catRes = await api.get(`/categories/byslug/${slug}`);
-        setCategory(catRes.data);
+        // Fetch category details and all products categories for subcategories filter
+        const [catRes, allCatsRes] = await Promise.all([
+          api.get(`/categories/byslug/${slug}`),
+          api.get(`/categories?type=Product`)
+        ]);
+        
+        const catData = catRes.data;
+        setCategory(catData);
+        
+        // Find child categories of the current category
+        if (allCatsRes.data && Array.isArray(allCatsRes.data)) {
+           const children = allCatsRes.data.filter((c: any) => c.parentId === catData.id);
+           setSubcategories(children);
+        }
 
         // Gửi slug để backend lọc đúng danh mục
         const res = await api.get(`/products?categorySlug=${slug}&sortOrder=${sortOrder}`);
@@ -60,20 +72,42 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
         </div>
 
         {/* Dynamic Sorting Input */}
-        <div className="mt-6 md:mt-0 flex items-center gap-4 bg-stone-50 p-2 rounded-xl border border-stone-100">
-          <label className="text-[10px] font-black text-stone-400 pl-3 uppercase tracking-widest">SẮP XẾP</label>
+        <div className="mt-6 md:mt-0 flex items-center gap-4 bg-stone-50 py-2.5 px-4 rounded-xl border border-stone-100 flex-shrink-0 shadow-sm">
+          <label className="text-[10px] font-black text-stone-400 uppercase tracking-widest hidden sm:block">Sắp xếp</label>
+          <svg className="w-4 h-4 text-stone-400 sm:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" /></svg>
           <select 
-            className="border-none bg-transparent text-[11px] font-black text-stone-900 focus:outline-none cursor-pointer pr-4 uppercase tracking-wider"
+            className="border-none bg-transparent text-xs font-black text-stone-900 focus:outline-none cursor-pointer pr-4 uppercase tracking-wider w-full sm:w-auto"
             value={sortOrder}
             onChange={(e) => setSortOrder(e.target.value)}
           >
-            <option value="newest">MỚI NHẤT</option>
-            <option value="price_asc">GIÁ: THẤP ĐẾN CAO</option>
-            <option value="price_desc">GIÁ: CAO ĐẾN THẤP</option>
-            <option value="popular">BÁN CHẠY NHẤT</option>
+            <option value="newest">Mới Nhất</option>
+            <option value="price_asc">Giá: Thấp Đến Cao</option>
+            <option value="price_desc">Giá: Cao Đến Thấp</option>
+            <option value="popular">Bán Chạy Nhất</option>
           </select>
         </div>
       </div>
+
+      {/* SUBCATEGORY PILLS (Horizontal Scroll) */}
+      {subcategories && subcategories.length > 0 && (
+        <div className="flex gap-3 overflow-x-auto pb-6 mb-4 custom-scrollbar">
+          <Link 
+            href={`/category/${slug}`}
+            className="px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest bg-stone-900 text-white shadow-lg whitespace-nowrap flex-shrink-0"
+          >
+            Tất cả
+          </Link>
+          {subcategories.map((sub: any) => (
+            <Link 
+              key={sub.id}
+              href={`/category/${sub.slug}`}
+              className="px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest bg-stone-50 text-stone-400 hover:bg-stone-100 hover:text-stone-900 transition-all whitespace-nowrap flex-shrink-0 border border-stone-100"
+            >
+              {sub.name}
+            </Link>
+          ))}
+        </div>
+      )}
 
       {/* PRODUCT GRID */}
       {loading ? (

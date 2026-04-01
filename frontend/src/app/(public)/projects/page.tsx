@@ -48,49 +48,48 @@ export default function ProjectsPage() {
         </div>
 
         {/* Filter & Sort Bar */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12 pb-8 border-b border-stone-100">
-          <div className="flex flex-wrap items-center gap-3">
-             <span className="text-[10px] font-black uppercase tracking-widest text-stone-400 mr-2 hidden sm:block">Danh mục:</span>
-             <div className="flex flex-wrap gap-2">
-                <button 
-                  onClick={() => setSelectedCategory("all")}
-                  className={`px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${
-                    selectedCategory === "all" ? 'bg-stone-900 text-white shadow-lg' : 'bg-stone-50 text-stone-400 hover:bg-stone-100'
-                  }`}
-                >
-                  Tất cả
-                </button>
-                {categories.map(cat => (
-                  <button 
-                    key={cat.id}
-                    onClick={() => setSelectedCategory(cat.id)}
-                    className={`px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${
-                      selectedCategory === cat.id ? 'bg-stone-900 text-white shadow-lg' : 'bg-stone-50 text-stone-400 hover:bg-stone-100'
-                    }`}
-                  >
-                    {cat.name}
-                  </button>
-                ))}
-             </div>
+        <div className="flex flex-col gap-6 mb-12 pb-8 border-b border-stone-100">
+          <div className="flex items-center justify-between">
+            <span className="text-[10px] font-black uppercase tracking-widest text-stone-400">Danh mục & Sắp xếp</span>
+            <div className="flex items-center gap-2 bg-stone-50 py-2 px-3 rounded-xl border border-stone-100 flex-shrink-0 shadow-sm">
+               <svg className="w-4 h-4 text-stone-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" /></svg>
+               <select 
+                 className="bg-transparent text-[11px] font-black text-stone-900 focus:outline-none cursor-pointer uppercase tracking-wider w-full"
+                 onChange={(e) => {
+                   const val = e.target.value;
+                   const sorted = [...projects];
+                   if (val === 'newest') sorted.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+                   if (val === 'oldest') sorted.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+                   setProjects(sorted);
+                 }}
+               >
+                 <option value="newest">Mới nhất</option>
+                 <option value="oldest">Cũ nhất</option>
+                 <option value="name">Tên A-Z</option>
+               </select>
+            </div>
           </div>
 
-          <div className="flex items-center gap-4 bg-stone-50 p-2 rounded-xl border border-stone-100 self-start md:self-auto">
-             <label className="text-[10px] font-black text-stone-400 pl-3 uppercase tracking-widest">Sắp xếp</label>
-             <select 
-               className="bg-transparent text-[11px] font-black text-stone-900 focus:outline-none cursor-pointer pr-4 uppercase tracking-wider"
-               onChange={(e) => {
-                 // Logic for sorting can be added here if needed
-                 const val = e.target.value;
-                 const sorted = [...projects];
-                 if (val === 'newest') sorted.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-                 if (val === 'oldest') sorted.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
-                 setProjects(sorted);
-               }}
-             >
-               <option value="newest">Mới nhất</option>
-               <option value="oldest">Cũ nhất</option>
-               <option value="name">Tên A-Z</option>
-             </select>
+          <div className="flex gap-3 overflow-x-auto pb-4 custom-scrollbar w-full">
+              <button 
+                onClick={() => setSelectedCategory("all")}
+                className={`px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap flex-shrink-0 border border-stone-100 ${
+                  selectedCategory === "all" ? 'bg-stone-900 text-white shadow-lg border-stone-900' : 'bg-stone-50 text-stone-400 hover:bg-stone-100 hover:text-stone-900'
+                }`}
+              >
+                Tất cả
+              </button>
+              {categories.map(cat => (
+                <button 
+                  key={cat.id}
+                  onClick={() => setSelectedCategory(cat.id)}
+                  className={`px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap flex-shrink-0 border border-stone-100 ${
+                    selectedCategory === cat.id ? 'bg-stone-900 text-white shadow-lg border-stone-900' : 'bg-stone-50 text-stone-400 hover:bg-stone-100 hover:text-stone-900'
+                  }`}
+                >
+                  {cat.name}
+                </button>
+              ))}
           </div>
         </div>
 

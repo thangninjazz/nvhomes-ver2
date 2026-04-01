@@ -43,7 +43,7 @@ export default function ProjectDetailPage() {
   return (
     <div className="bg-white min-h-screen pt-24 md:pt-32">
       {/* Sticky Breadcrumb Bar */}
-      <div className="sticky top-[64px] z-40 bg-white/95 backdrop-blur-md border-b border-stone-100 px-4 md:px-8 py-4 shadow-sm">
+      <div className="sticky top-16 z-40 bg-white/95 backdrop-blur-md border-b border-stone-100 px-4 md:px-8 py-4 shadow-sm">
         <div className="container mx-auto">
           <nav className="flex items-center gap-2 text-[10px] md:text-xs text-stone-400 font-bold uppercase tracking-widest overflow-x-auto whitespace-nowrap custom-scrollbar">
               <Link href="/" className="hover:text-stone-900 transition-colors flex items-center gap-1">
@@ -208,6 +208,26 @@ export default function ProjectDetailPage() {
         open={lightboxOpen}
         onOpenChange={setLightboxOpen}
       />
+
+      {/* Shopee-style Mobile Fixed Bottom Action Bar */}
+      <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-stone-100 p-3 sm:hidden shadow-[0_-5px_20px_rgba(0,0,0,0.05)] safe-area-pb">
+        <div className="flex items-center gap-3 h-12">
+          <a 
+            href="tel:0966245396"
+            className="flex flex-col items-center justify-center bg-stone-50 text-stone-900 rounded-xl px-4 h-full border border-stone-100 hover:bg-stone-100 transition-colors"
+          >
+            <svg className="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
+            <span className="text-[9px] font-black uppercase tracking-widest text-stone-500">Gọi điện</span>
+          </a>
+          
+          <Link 
+            href="/contact"
+            className="flex-1 bg-stone-900 text-white rounded-xl h-full font-black uppercase tracking-widest text-[11px] shadow-lg flex items-center justify-center gap-2 active:scale-[0.98] transition-all"
+          >
+            Nhận Bảng Giá
+          </Link>
+        </div>
+      </div>
     </div>
   );
 }
