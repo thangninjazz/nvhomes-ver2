@@ -34,7 +34,7 @@ export default function ProjectsPage() {
     : projects.filter(p => p.categoryId === selectedCategory);
 
   return (
-    <div className="bg-white min-h-screen py-12 md:py-24 mt-10">
+    <div className="bg-white min-h-screen pt-24 md:pt-32 pb-24">
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mb-10 md:mb-20">
           <h1 className="text-sm font-black text-red-500 uppercase tracking-[0.2em] mb-4">Dự án tiêu biểu</h1>

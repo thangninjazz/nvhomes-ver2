@@ -35,7 +35,7 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
   }, [sortOrder, slug]);
 
   return (
-    <div className="container mx-auto px-4 pt-10 md:pt-20 pb-20 lg:px-8">
+    <div className="container mx-auto px-4 pt-24 md:pt-32 pb-20 lg:px-8">
       {/* HEADER GRID */}
       <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 md:mb-12 pb-6 border-b border-stone-200">
         <div>

@@ -103,10 +103,10 @@ export default function ProductDetail({ params }: { params: Promise<{ slug: stri
 
   return (
     <>
-      <div className="bg-white min-h-screen pt-28 pb-20">
+      <div className="bg-white min-h-screen pt-24 md:pt-32 pb-20">
       <div className="container mx-auto px-4 lg:px-8">
         {/* Sticky Breadcrumb Bar */}
-        <div className="sticky top-[64px] md:top-[80px] z-30 bg-white/80 backdrop-blur-md border-b border-stone-100 -mx-4 px-4 mb-8 py-4">
+        <div className="sticky top-[64px] z-40 bg-white/95 backdrop-blur-md border-b border-stone-100 -mx-4 px-4 mb-8 py-4 shadow-sm">
           <nav className="flex items-center gap-2 text-[10px] md:text-xs text-stone-400 font-bold uppercase tracking-widest overflow-x-auto whitespace-nowrap custom-scrollbar">
               <Link href="/" className="hover:text-stone-900 transition-colors flex items-center gap-1">
                 <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
