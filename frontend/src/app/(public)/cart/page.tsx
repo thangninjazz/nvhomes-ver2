@@ -84,10 +84,17 @@ export default function CartPage() {
       return;
     }
 
+    const decodeHtml = (html: string) => {
+      if (typeof document === 'undefined') return html;
+      const txt = document.createElement("textarea");
+      txt.innerHTML = html;
+      return txt.value.replace(/\u00a0/g, ' ').replace(/&nbsp;/g, ' ');
+    };
+
     try {
       setLoading(true);
-      // Tạo chuỗi ghi chú sản phẩm
-      const productNote = items.map(item => `${item.name} (${item.quantity} cái)`).join(", ");
+      // Tạo chuỗi ghi chú sản phẩm với tên đã được giải mã
+      const productNote = items.map(item => `${decodeHtml(item.name)} (${item.quantity} cái)`).join(", ");
       
       await api.post('/customers', {
         name: formData.name,

@@ -120,34 +120,10 @@ export function Navbar() {
 
           {/* Right Actions */}
           <div className="flex items-center gap-2 lg:gap-5 shrink-0">
-            {/* Search Toggle */}
-            <div className="relative">
-              {!isSearchOpen ? (
-                <button 
-                  onClick={() => setIsSearchOpen(true)}
-                  className="p-2 text-stone-700 hover:bg-stone-100 rounded-full transition-colors"
-                >
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-                </button>
-              ) : (
-                <form onSubmit={handleSearch} className="flex items-center bg-stone-100 rounded-full px-4 py-2 animate-in fade-in zoom-in-95 duration-200">
-                  <input 
-                    ref={searchInputRef}
-                    type="text" 
-                    placeholder="Tìm kiếm..."
-                    className="bg-transparent border-none outline-none text-sm font-bold w-40 md:w-64 text-stone-900"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    onBlur={() => !searchQuery && setIsSearchOpen(false)}
-                  />
-                </form>
-              )}
-            </div>
-
-            {/* Shopee-style Cart Icon with Badge */}
+            {/* Shopee-style Cart Icon with Badge - Moved to before Search for visibility */}
             <Link 
               href="/cart" 
-              className={`flex items-center gap-2 px-3 py-2 text-stone-700 hover:bg-stone-100 rounded-2xl transition-all relative group ${isCartBouncing ? 'nav-cart-pop' : ''}`}
+              className={`flex items-center gap-2 px-2 py-2 text-stone-700 hover:bg-stone-100 rounded-2xl transition-all relative group z-[60] ${isCartBouncing ? 'nav-cart-pop' : ''}`}
             >
                <div className="relative">
                   <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -161,6 +137,30 @@ export function Navbar() {
                </div>
                <span className="hidden xl:inline text-[11px] font-black uppercase tracking-widest text-stone-700 group-hover:text-red-600 transition-colors">Giỏ hàng</span>
             </Link>
+
+            {/* Search Toggle */}
+            <div className="relative z-[50]">
+              {!isSearchOpen ? (
+                <button 
+                  onClick={() => setIsSearchOpen(true)}
+                  className="p-2 text-stone-700 hover:bg-stone-100 rounded-full transition-colors"
+                >
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                </button>
+              ) : (
+                <form onSubmit={handleSearch} className="flex items-center bg-stone-100 rounded-full px-4 py-2 animate-in fade-in zoom-in-95 duration-200">
+                  <input 
+                    ref={searchInputRef}
+                    type="text" 
+                    placeholder="Tìm kiếm..."
+                    className="bg-transparent border-none outline-none text-sm font-bold w-32 md:w-64 text-stone-900"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onBlur={() => !searchQuery && setIsSearchOpen(false)}
+                  />
+                </form>
+              )}
+            </div>
 
             <style jsx>{`
               @keyframes nav-cart-pop {
