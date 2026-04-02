@@ -6,8 +6,6 @@ using NVHome.Infrastructure.Data;
 
 namespace NVHome.Infrastructure.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260402041000_AddProductVideoAndImageNotes")]
     public partial class AddProductVideoAndImageNotes : Migration
     {
         /// <inheritdoc />
