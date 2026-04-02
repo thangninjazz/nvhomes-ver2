@@ -91,7 +91,9 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
             }}
           >
             <option value="all">Khám phá sản phẩm</option>
-            {allCategories.filter(c => !c.parentId).map(parent => (
+            {allCategories
+              .filter(c => !c.parentId && (!category?.id || c.id === (category.parentId || category.id)))
+              .map(parent => (
               <optgroup key={parent.id} label={parent.name}>
                 <option value={parent.slug}>➤ {parent.name} (Tất cả)</option>
                 {allCategories.filter(c => c.parentId === parent.id).map(child => (
