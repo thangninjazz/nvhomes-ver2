@@ -46,7 +46,7 @@ builder.Services.AddRateLimiter(options =>
     options.AddFixedWindowLimiter("fixed", opt =>
     {
         opt.Window = TimeSpan.FromMinutes(1);
-        opt.PermitLimit = 100;
+        opt.PermitLimit = 1000;
         opt.QueueLimit = 0;
     });
 
@@ -54,7 +54,7 @@ builder.Services.AddRateLimiter(options =>
     options.AddFixedWindowLimiter("login", opt =>
     {
         opt.Window = TimeSpan.FromMinutes(1);
-        opt.PermitLimit = 5; // Chỉ cho phép 5 lần thử mỗi phút
+        opt.PermitLimit = 10; // Tăng lên 10 lần mỗi phút
         opt.QueueLimit = 0;
     });
 });
