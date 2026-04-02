@@ -8,9 +8,11 @@ interface MultiImageUploadProps {
   value: string[]; // Mảng các URL ảnh
   onChange: (urls: string[]) => void;
   label?: string;
+  notes?: { topLeft: string; topRight: string }[];
+  onChangeNotes?: (notes: { topLeft: string; topRight: string }[]) => void;
 }
 
-export function MultiImageUpload({ value = [], onChange, label }: MultiImageUploadProps) {
+export function MultiImageUpload({ value = [], onChange, label, notes = [], onChangeNotes }: MultiImageUploadProps) {
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -65,13 +67,50 @@ export function MultiImageUpload({ value = [], onChange, label }: MultiImageUplo
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {/* Render Existing Images */}
         {value.map((url, index) => (
-          <div key={index} className="relative group aspect-square rounded-2xl overflow-hidden border border-stone-200 bg-stone-50">
-            <img src={url} alt={`Gallery ${index}`} className="w-full h-full object-cover" />
-            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+          <div key={index} className="relative group aspect-square rounded-2xl border border-stone-200 bg-stone-50">
+            <img src={url} alt={`Gallery ${index}`} className="w-full h-full object-cover rounded-2xl" />
+            
+            {/* Note Inputs (Hiển thị khi hover hoặc focus) */}
+            {onChangeNotes && (
+              <>
+                <input 
+                  type="text" 
+                  placeholder="+ Trái trên"
+                  value={notes[index]?.topLeft || ''}
+                  onChange={(e) => {
+                     const newNotes = [...notes];
+                     if (!newNotes[index]) newNotes[index] = { topLeft: '', topRight: '' };
+                     newNotes[index].topLeft = e.target.value;
+                     onChangeNotes(newNotes);
+                  }}
+                  className="absolute top-2 left-2 w-20 bg-white/90 focus:bg-white text-[10px] font-bold px-2 py-1 rounded shadow-sm border border-stone-200 outline-none focus:ring-1 focus:ring-stone-900 opacity-60 hover:opacity-100 focus:opacity-100 transition-opacity z-10"
+                />
+                <input 
+                  type="text" 
+                  placeholder="+ Phải trên"
+                  value={notes[index]?.topRight || ''}
+                  onChange={(e) => {
+                     const newNotes = [...notes];
+                     if (!newNotes[index]) newNotes[index] = { topLeft: '', topRight: '' };
+                     newNotes[index].topRight = e.target.value;
+                     onChangeNotes(newNotes);
+                  }}
+                  className="absolute top-2 right-2 w-20 bg-white/90 focus:bg-white text-[10px] font-bold text-right px-2 py-1 rounded shadow-sm border border-stone-200 outline-none focus:ring-1 focus:ring-stone-900 opacity-60 hover:opacity-100 focus:opacity-100 transition-opacity z-10"
+                />
+              </>
+            )}
+
+            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-2xl pointer-events-none">
               <button 
                 type="button"
-                onClick={() => removeImage(index)}
-                className="p-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors"
+                onClick={() => {
+                  removeImage(index);
+                  if (onChangeNotes) {
+                    const newNotes = notes.filter((_, i) => i !== index);
+                    onChangeNotes(newNotes);
+                  }
+                }}
+                className="p-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors pointer-events-auto"
               >
                 <X className="w-4 h-4" />
               </button>

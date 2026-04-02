@@ -162,6 +162,12 @@ namespace NVHome.Infrastructure.Migrations
                     b.Property<string>("Images")
                         .HasColumnType("text");
 
+                    b.Property<string>("ImageNotes")
+                        .HasColumnType("text");
+
+                    b.Property<string>("VideoUrl")
+                        .HasColumnType("text");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");

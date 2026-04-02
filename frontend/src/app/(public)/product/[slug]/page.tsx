@@ -51,6 +51,7 @@ export default function ProductDetail({ params }: { params: Promise<{ slug: stri
   }
 
   const images = product.images ? product.images.split(',') : ['/placeholder.jpg'];
+  const imageNotes = product.imageNotes ? (() => { try { return JSON.parse(product.imageNotes); } catch(e){ return []; } })() : [];
 
   const handleAddToCart = () => {
     const cart = JSON.parse(localStorage.getItem('cart') || '[]');
@@ -145,6 +146,18 @@ export default function ProductDetail({ params }: { params: Promise<{ slug: stri
                       alt={product.name} 
                       className="w-full h-full object-contain p-4 transition-transform duration-700 group-hover:scale-105" 
                     />
+                    
+                    {/* Image Notes Overlay */}
+                    {imageNotes[activeImage]?.topLeft && (
+                      <div className="absolute top-4 left-4 bg-stone-900/80 backdrop-blur text-white text-[10px] font-bold px-3 py-1.5 rounded-lg shadow-sm border border-stone-700 z-10 pointers-events-none">
+                        {imageNotes[activeImage].topLeft}
+                      </div>
+                    )}
+                    {imageNotes[activeImage]?.topRight && (
+                      <div className="absolute top-4 right-4 bg-red-600/90 backdrop-blur text-white text-[10px] font-bold px-3 py-1.5 rounded-lg shadow-sm z-10 pointers-events-none">
+                        {imageNotes[activeImage].topRight}
+                      </div>
+                    )}
                     <div className="absolute bottom-6 right-6 bg-white/90 backdrop-blur-md p-3 rounded-2xl shadow-xl opacity-0 group-hover:opacity-100 transition-opacity">
                        <svg className="w-5 h-5 text-stone-900" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" /></svg>
                     </div>
@@ -246,6 +259,22 @@ export default function ProductDetail({ params }: { params: Promise<{ slug: stri
                         </div>
                       ))}
                     </div>
+                  </div>
+                )}
+
+                {/* YouTube Video Section */}
+                {product.videoUrl && (
+                  <div className="mb-16">
+                     <h3 className="text-xl inline-block font-black text-stone-900 uppercase tracking-widest mb-8 border-b-4 border-red-600 pb-2">Video Trải Nghiệm Thực Tế</h3>
+                     <div className="rounded-[2rem] overflow-hidden shadow-sm border border-stone-200 aspect-video w-full bg-stone-900 relative group">
+                       <iframe 
+                         src={product.videoUrl.replace('watch?v=', 'embed/').split('&')[0]} 
+                         title="YouTube video player" 
+                         className="absolute inset-0 w-full h-full"
+                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                         allowFullScreen
+                       ></iframe>
+                     </div>
                   </div>
                 )}
 

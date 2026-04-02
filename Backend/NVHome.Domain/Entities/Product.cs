@@ -21,6 +21,12 @@ public class Product : BaseEntity
     // Hình ảnh (Lưu dưới dạng mảng JSON string cho multiple images)
     public string? Images { get; set; }
     
+    // Ghi chú đính kèm góc trái trên và phải trên của TỪNG hình ảnh (lưu dạng mảng JSON)
+    public string? ImageNotes { get; set; }
+    
+    // Link Video Youtube đính kèm
+    public string? VideoUrl { get; set; }
+    
     // === STRUCTURED DETAILS ===
     public string? Specifications { get; set; } // JSON [{key, value}]
     public string? Features { get; set; }       // JSON [string]

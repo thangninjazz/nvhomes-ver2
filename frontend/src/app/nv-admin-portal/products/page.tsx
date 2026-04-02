@@ -22,6 +22,8 @@ export default function ProductManager() {
   const [formData, setFormData] = useState({
     name: "", slug: "", categoryId: "", originalPrice: 0, discountPrice: 0, 
     description: "", images: [] as string[], 
+    imageNotes: [] as { topLeft: string; topRight: string }[],
+    videoUrl: "",
     specifications: [] as { key: string; value: string }[],
     features: [] as string[],
     hasVariations: false,
@@ -82,7 +84,7 @@ export default function ProductManager() {
     setEditingItem(null);
     setFormData({ 
       name: "", slug: "", categoryId: "", originalPrice: 0, discountPrice: 0, 
-      description: "", images: [], specifications: [], features: [],
+      description: "", images: [], imageNotes: [], videoUrl: "", specifications: [], features: [],
       hasVariations: false, variationsData: "", rating: 5.0, reviewCount: 0, soldCount: 0
     });
     setSelectedParentId("");
@@ -97,6 +99,8 @@ export default function ProductManager() {
       name: item.name, slug: item.slug, categoryId: item.categoryId || "",
       originalPrice: item.originalPrice || 0, discountPrice: item.discountPrice || 0,
       description: item.description || "", images: item.images ? item.images.split(',') : [],
+      imageNotes: item.imageNotes ? JSON.parse(item.imageNotes) : [],
+      videoUrl: item.videoUrl || "",
       specifications: item.specifications || [], features: item.features || [],
       hasVariations: item.hasVariations || false, variationsData: item.variationsData || "",
       rating: item.rating || 5.0, reviewCount: item.reviewCount || 0, soldCount: item.soldCount || 0
@@ -109,7 +113,7 @@ export default function ProductManager() {
     if (!formData.categoryId) return alert("Vui lòng chọn danh mục con.");
     if (!formData.name || !formData.slug) return alert("Vui lòng điền đầy đủ tên và đường dẫn SEO.");
     try {
-      const dataToSend = { ...formData, images: formData.images.join(',') };
+      const dataToSend = { ...formData, images: formData.images.join(','), imageNotes: JSON.stringify(formData.imageNotes) };
       if (editingItem) {
         await api.put(`/products/${editingItem.id}`, dataToSend);
         alert("Cập nhật sản phẩm thành công!");
@@ -340,10 +344,29 @@ export default function ProductManager() {
                    )}
                 </div>
 
-                {/* HÌNH ẢNH */}
-                <div className="bg-white p-8 rounded-[2rem] border border-stone-200 shadow-sm">
-                   <h2 className="text-sm font-black text-stone-900 uppercase tracking-widest mb-6 border-b border-stone-100 pb-4">3. Quản lý Hình Ảnh & Truyền Thông</h2>
-                   <MultiImageUpload label="Lưới Ảnh (Hình đầu tiên là Thumbnail)" value={formData.images} onChange={(urls) => setFormData({ ...formData, images: urls })} />
+                {/* HÌNH ẢNH & TRUYỀN THÔNG */}
+                <div className="bg-white p-8 rounded-[2rem] border border-stone-200 shadow-sm space-y-8">
+                   <div>
+                     <h2 className="text-sm font-black text-stone-900 uppercase tracking-widest mb-6 border-b border-stone-100 pb-4">3. Quản lý Hình Ảnh & Truyền Thông</h2>
+                     <MultiImageUpload 
+                       label="Lưới Ảnh (Hình đầu tiên là Thumbnail. Ghi chú ảnh để hiển thị icon tư vấn trên ảnh)" 
+                       value={formData.images} 
+                       onChange={(urls) => setFormData({ ...formData, images: urls })} 
+                       notes={formData.imageNotes}
+                       onChangeNotes={(newNotes) => setFormData({ ...formData, imageNotes: newNotes })}
+                     />
+                   </div>
+                   
+                   <div>
+                     <label className="block text-[11px] font-black text-stone-400 uppercase tracking-widest mb-3">Video Youtube (Tuỳ chọn)</label>
+                     <input 
+                       type="text" 
+                       placeholder="VD: https://www.youtube.com/watch?v=..." 
+                       className="w-full bg-stone-50 border border-stone-200 px-5 py-3.5 rounded-xl focus:ring-2 focus:ring-stone-900 font-medium text-blue-600" 
+                       value={formData.videoUrl} 
+                       onChange={(e) => setFormData({ ...formData, videoUrl: e.target.value })} 
+                     />
+                   </div>
                 </div>
 
                 {/* NỘI DUNG CHI TIẾT */}
