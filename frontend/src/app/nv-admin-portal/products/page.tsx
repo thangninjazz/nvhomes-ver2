@@ -347,10 +347,31 @@ export default function ProductManager() {
                 </div>
 
                 {/* NỘI DUNG CHI TIẾT */}
-                <div className="bg-white p-8 rounded-[2rem] border border-stone-200 shadow-sm">
-                   <h2 className="text-sm font-black text-stone-900 uppercase tracking-widest mb-6 border-b border-stone-100 pb-4">4. Mô tả sản phẩm (Rich Text)</h2>
-                   <div className="rich-text-container bg-stone-50 rounded-2xl overflow-hidden border border-stone-200">
-                     <ReactQuill theme="snow" value={formData.description} onChange={(val) => setFormData({ ...formData, description: val })} modules={quillModules} className="min-h-[400px] bg-white" />
+                <div className="bg-white p-8 rounded-[2rem] border border-stone-200 shadow-sm flex flex-col">
+                   <div className="mb-6 border-b border-stone-100 pb-4">
+                     <h2 className="text-sm font-black text-stone-900 uppercase tracking-widest mb-2">4. Mô Tả Chi Tiết Sản Phẩm</h2>
+                     <p className="text-[11px] font-medium text-stone-500">Mô tả sản phẩm chi tiết định dạng Rich Text giúp khách hàng hiểu rõ hơn về sản phẩm, từ đó tăng tỷ lệ mua hàng. Công cụ soạn thảo chuyên nghiệp cho phép bạn định dạng văn bản, chèn hình ảnh và liên kết dễ dàng.</p>
+                   </div>
+                   
+                   <div className="rich-text-wrapper border-2 border-stone-100 rounded-2xl overflow-hidden focus-within:border-stone-900 focus-within:ring-4 focus-within:ring-stone-100 transition-all bg-white relative">
+                     <ReactQuill 
+                        // @ts-ignore
+                        ref={quillRef}
+                        theme="snow" 
+                        value={formData.description} 
+                        onChange={(val) => setFormData({ ...formData, description: val })} 
+                        modules={quillModules} 
+                        className="quill-premium"
+                        placeholder="Nhập mô tả chi tiết sản phẩm của bạn tại đây... (Nên bao gồm đặc điểm nổi bật, thông số chi tiết, và hướng dẫn sử dụng)"
+                     />
+                   </div>
+
+                   <div className="mt-5 flex justify-between items-center text-[11px] text-stone-400 font-bold uppercase tracking-widest">
+                     <div className="flex gap-4">
+                       <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-green-500"></span> Hỗ trợ ảnh tối đa 5MB</span>
+                       <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-blue-500"></span> Kéo thả hoặc dán ảnh trực tiếp</span>
+                     </div>
+                     <span>{formData.description.replace(/<[^>]*>?/gm, '').length} ký tự</span>
                    </div>
                 </div>
              </div>
@@ -412,6 +433,49 @@ export default function ProductManager() {
           </div>
         </form>
       )}
+
+      {/* Global styles for Quill Editor for Premium UI */}
+      <style dangerouslySetInnerHTML={{ __html: `
+        .quill-premium .ql-toolbar {
+          border: none !important;
+          border-bottom: 2px solid #f5f5f4 !important;
+          background-color: #fafaf9;
+          padding: 12px 16px !important;
+          position: sticky;
+          top: 0;
+          z-index: 10;
+          font-family: inherit;
+          border-radius: 1rem 1rem 0 0;
+        }
+        .quill-premium .ql-container {
+          border: none !important;
+          font-family: inherit !important;
+          font-size: 15px !important;
+          min-height: 450px !important;
+          border-radius: 0 0 1rem 1rem;
+          background-color: #ffffff;
+        }
+        .quill-premium .ql-editor {
+          padding: 32px 24px;
+          min-height: 450px !important;
+          color: #1c1917;
+          line-height: 1.8;
+        }
+        .quill-premium .ql-editor.ql-blank::before {
+          font-style: normal;
+          color: #a8a29e;
+          font-weight: 500;
+        }
+        .quill-premium .ql-editor p {
+          margin-bottom: 1rem;
+        }
+        .quill-premium .ql-editor img {
+          border-radius: 0.75rem;
+          margin: 1.5rem 0;
+          max-width: 100%;
+          border: 1px solid #f5f5f4;
+        }
+      `}} />
     </div>
   );
 }
