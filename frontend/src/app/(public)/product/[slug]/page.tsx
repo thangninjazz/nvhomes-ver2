@@ -132,56 +132,60 @@ export default function ProductDetail({ params }: { params: Promise<{ slug: stri
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 xl:gap-24">
-            {/* Left: Product Image Gallery (Asymmetric Bento Grid) */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-0.5 lg:gap-1 rounded-2xl overflow-hidden shadow-xl border border-stone-200">
-                {images.slice(0, 8).map((img: string, idx: number) => {
-                    // Logic xác định vị trí grid cho từng ảnh (Desktop only)
-                    let gridClass = "";
-                    if (idx === 0) gridClass = "lg:col-span-3 lg:row-span-3 aspect-square"; // Ô lớn nhất
-                    else gridClass = "aspect-square"; // Ô nhỏ xung quanh
-
-                    const isLastSlot = idx === 7 && images.length > 8;
-
-                    return (
-                        <div 
-                            key={idx}
-                            className={`relative group cursor-pointer overflow-hidden bg-stone-100 ${gridClass} ${isLastSlot ? 'cursor-zoom-in' : ''}`}
-                            onClick={() => {
-                                setLightboxIndex(idx);
-                                setLightboxOpen(true);
-                            }}
-                        >
-                            <img 
-                                src={img} 
-                                alt={`${product.name} ${idx}`} 
-                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
-                            />
-                            
-                            {/* Overlay Image Notes (Hiển thị nhãn trên từng ảnh chi tiết) */}
-                            {imageNotes[idx]?.topLeft && (
-                                <div className="absolute top-2 left-2 bg-stone-900/80 backdrop-blur text-white text-[8px] lg:text-[10px] font-bold px-2 py-1 rounded shadow-sm z-10 pointer-events-none">
-                                    {imageNotes[idx].topLeft}
-                                </div>
-                            )}
-                            {imageNotes[idx]?.topRight && (
-                                <div className="absolute top-2 right-2 bg-red-600/90 backdrop-blur text-white text-[8px] lg:text-[10px] font-bold px-2 py-1 rounded shadow-sm z-10 pointer-events-none">
-                                    {imageNotes[idx].topRight}
-                                </div>
-                            )}
-
-                            {/* +X More Indicator for the 8th slot */}
-                            {isLastSlot && (
-                                <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px] flex flex-col items-center justify-center text-white z-20">
-                                    <span className="text-xl font-black">+{images.length - 7}</span>
-                                    <span className="text-[10px] font-bold uppercase tracking-wider">Ảnh chi tiết</span>
-                                </div>
-                            )}
-
-                            {/* Hover Overlay for all images */}
-                            <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            {/* Left: Product Image Gallery (Classic Shopee Style) */}
+            <div className="flex flex-col gap-3 lg:gap-4">
+                {/* Main Active Image */}
+                <div 
+                    className="aspect-square bg-stone-100 rounded-xl lg:rounded-2xl overflow-hidden shadow-sm border border-stone-200 flex items-center justify-center relative group cursor-zoom-in"
+                    onClick={() => {
+                        setLightboxIndex(activeImage);
+                        setLightboxOpen(true);
+                    }}
+                >
+                    <img 
+                        src={images[activeImage]} 
+                        alt={product.name} 
+                        className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-105" 
+                    />
+                    
+                    {/* Image Notes Overlay - Tương ứng với ảnh đang chọn */}
+                    {imageNotes[activeImage]?.topLeft && (
+                        <div className="absolute top-4 left-4 bg-stone-900/80 backdrop-blur text-white text-[10px] lg:text-[12px] font-bold px-3 py-1.5 rounded-lg shadow-sm border border-stone-700 z-10 pointer-events-none">
+                            {imageNotes[activeImage].topLeft}
                         </div>
-                    );
-                })}
+                    )}
+                    {imageNotes[activeImage]?.topRight && (
+                        <div className="absolute top-4 right-4 bg-red-600/90 backdrop-blur text-white text-[10px] lg:text-[12px] font-bold px-3 py-1.5 rounded-lg shadow-sm z-10 pointer-events-none">
+                            {imageNotes[activeImage].topRight}
+                        </div>
+                    )}
+                    
+                    {/* Zoom Icon Overlay */}
+                    <div className="absolute bottom-6 right-6 bg-white/90 backdrop-blur-md p-3 rounded-2xl shadow-xl opacity-0 group-hover:opacity-100 transition-opacity">
+                        <svg className="w-5 h-5 text-stone-900" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" /></svg>
+                    </div>
+                </div>
+                
+                {/* Thumbnails Row (Shopee Style Grid) */}
+                {images.length > 1 && (
+                    <div className="grid grid-cols-5 gap-2 lg:gap-3">
+                        {images.map((img: string, idx: number) => (
+                            <button 
+                                key={idx} 
+                                onClick={() => setActiveImage(idx)}
+                                onMouseEnter={() => setActiveImage(idx)} // Hiển thị ngay khi di chuột vào (hover) giống Shopee
+                                className={`aspect-square rounded-lg lg:rounded-xl overflow-hidden border-2 transition-all duration-300 relative ${activeImage === idx ? 'border-stone-900 shadow-md ring-2 ring-stone-900/10' : 'border-transparent hover:border-stone-300 bg-stone-50'}`}
+                            >
+                                <img src={img} alt={`Thumbnail ${idx}`} className="w-full h-full object-cover" />
+                                {idx === 4 && images.length > 5 && (
+                                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center text-white text-xs font-bold">
+                                        +{images.length - 4}
+                                    </div>
+                                )}
+                            </button>
+                        ))}
+                    </div>
+                )}
             </div>
 
             {/* Right: Product Details & Action Funnel */}
