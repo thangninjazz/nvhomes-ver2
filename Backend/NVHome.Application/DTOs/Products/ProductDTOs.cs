@@ -9,6 +9,8 @@ public class CreateProductRequest
     public string? Description { get; set; }
     public Guid CategoryId { get; set; }
     public string? Images { get; set; } // Mảng JSON
+    public string? ImageNotes { get; set; }
+    public string? VideoUrl { get; set; }
     public List<ProductSpecificationDTO>? Specifications { get; set; }
     public List<string>? Features { get; set; }
     public string? CustomOptions { get; set; }
@@ -41,6 +43,8 @@ public class ProductResponse
     public string? ParentCategoryName { get; set; }
     public string? ParentCategorySlug { get; set; }
     public string? Images { get; set; }
+    public string? ImageNotes { get; set; }
+    public string? VideoUrl { get; set; }
     public List<ProductSpecificationDTO>? Specifications { get; set; }
     public List<string>? Features { get; set; }
     public string? CustomOptions { get; set; }

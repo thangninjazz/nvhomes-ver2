@@ -87,6 +87,8 @@ public class ProductsController : ControllerBase
             ParentCategoryName = (p.Category != null && p.Category.Parent != null) ? p.Category.Parent.Name : null,
             ParentCategorySlug = (p.Category != null && p.Category.Parent != null) ? p.Category.Parent.Slug : null,
             Images = p.Images,
+            ImageNotes = p.ImageNotes,
+            VideoUrl = p.VideoUrl,
             Specifications = SafeDeserialize<List<ProductSpecificationDTO>>(p.Specifications),
             Features = SafeDeserialize<List<string>>(p.Features),
             CustomOptions = p.CustomOptions,
@@ -127,6 +129,8 @@ public class ProductsController : ControllerBase
             ParentCategoryName = (p.Category != null && p.Category.Parent != null) ? p.Category.Parent.Name : null,
             ParentCategorySlug = (p.Category != null && p.Category.Parent != null) ? p.Category.Parent.Slug : null,
             Images = p.Images,
+            ImageNotes = p.ImageNotes,
+            VideoUrl = p.VideoUrl,
             Specifications = SafeDeserialize<List<ProductSpecificationDTO>>(p.Specifications),
             Features = SafeDeserialize<List<string>>(p.Features),
             CustomOptions = p.CustomOptions, 
@@ -159,6 +163,8 @@ public class ProductsController : ControllerBase
             ParentCategoryName = (p.Category != null && p.Category.Parent != null) ? p.Category.Parent.Name : null,
             ParentCategorySlug = (p.Category != null && p.Category.Parent != null) ? p.Category.Parent.Slug : null,
             Images = p.Images,
+            ImageNotes = p.ImageNotes,
+            VideoUrl = p.VideoUrl,
             Specifications = SafeDeserialize<List<ProductSpecificationDTO>>(p.Specifications),
             Features = SafeDeserialize<List<string>>(p.Features),
             CustomOptions = p.CustomOptions, 
@@ -195,6 +201,8 @@ public class ProductsController : ControllerBase
             Description = System.Net.WebUtility.HtmlDecode(request.Description),
             CategoryId = request.CategoryId,
             Images = request.Images,
+            ImageNotes = request.ImageNotes,
+            VideoUrl = request.VideoUrl,
             Specifications = request.Specifications != null ? JsonSerializer.Serialize(request.Specifications) : null,
             Features = request.Features != null ? JsonSerializer.Serialize(request.Features) : null,
             CustomOptions = request.CustomOptions,
@@ -236,6 +244,7 @@ public class ProductsController : ControllerBase
         product.DiscountPercent = calcDiscount; 
         product.Description = System.Net.WebUtility.HtmlDecode(request.Description);
         product.CategoryId = request.CategoryId; product.Images = request.Images;
+        product.ImageNotes = request.ImageNotes; product.VideoUrl = request.VideoUrl;
         product.Specifications = request.Specifications != null ? JsonSerializer.Serialize(request.Specifications) : null;
         product.Features = request.Features != null ? JsonSerializer.Serialize(request.Features) : null;
         product.CustomOptions = request.CustomOptions; 
