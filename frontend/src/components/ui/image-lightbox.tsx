@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils'
 
 interface ImageLightboxProps {
   images: string[]
+  imageNotes?: { topLeft?: string; topRight?: string }[]
   initialIndex?: number
   open: boolean
   onOpenChange: (open: boolean) => void
@@ -16,6 +17,7 @@ interface ImageLightboxProps {
 
 export function ImageLightbox({
   images,
+  imageNotes = [],
   initialIndex = 0,
   open,
   onOpenChange,
@@ -76,6 +78,18 @@ export function ImageLightbox({
                   className="object-contain"
                   priority
                 />
+
+                {/* Overlay Image Notes in Lightbox */}
+                {imageNotes[index]?.topLeft && (
+                    <div className="absolute top-4 left-4 lg:top-10 lg:left-10 bg-stone-900/80 backdrop-blur text-white text-[12px] lg:text-[14px] font-bold px-4 py-2 rounded-xl shadow-2xl border border-white/10 z-[110] animate-in fade-in slide-in-from-left-4 duration-300">
+                        {imageNotes[index].topLeft}
+                    </div>
+                )}
+                {imageNotes[index]?.topRight && (
+                    <div className="absolute top-4 right-14 lg:top-10 lg:right-24 bg-red-600/90 backdrop-blur text-white text-[12px] lg:text-[14px] font-bold px-4 py-2 rounded-xl shadow-2xl z-[110] animate-in fade-in slide-in-from-right-4 duration-300">
+                        {imageNotes[index].topRight}
+                    </div>
+                )}
               </motion.div>
             </AnimatePresence>
 

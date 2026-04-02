@@ -145,7 +145,7 @@ export default function ProductDetail({ params }: { params: Promise<{ slug: stri
                     <img 
                         src={images[activeImage]} 
                         alt={product.name} 
-                        className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-105" 
+                        className="w-full h-full object-contain rounded-xl lg:rounded-2xl transition-transform duration-700 group-hover:scale-105" 
                     />
                     
                     {/* Image Notes Overlay - Tương ứng với ảnh đang chọn */}
@@ -176,7 +176,7 @@ export default function ProductDetail({ params }: { params: Promise<{ slug: stri
                                 onMouseEnter={() => setActiveImage(idx)} // Hiển thị ngay khi di chuột vào (hover) giống Shopee
                                 className={`aspect-square rounded-lg lg:rounded-xl overflow-hidden border-2 transition-all duration-300 relative ${activeImage === idx ? 'border-stone-900 shadow-md ring-2 ring-stone-900/10' : 'border-transparent hover:border-stone-300 bg-stone-50'}`}
                             >
-                                <img src={img} alt={`Thumbnail ${idx}`} className="w-full h-full object-cover" />
+                                <img src={img} alt={`Thumbnail ${idx}`} className="w-full h-full object-cover rounded-lg lg:rounded-xl" />
                                 {idx === 4 && images.length > 5 && (
                                     <div className="absolute inset-0 bg-black/40 flex items-center justify-center text-white text-xs font-bold">
                                         +{images.length - 4}
@@ -339,6 +339,7 @@ export default function ProductDetail({ params }: { params: Promise<{ slug: stri
 
       <ImageLightbox 
         images={images}
+        imageNotes={imageNotes}
         initialIndex={lightboxIndex}
         open={lightboxOpen}
         onOpenChange={setLightboxOpen}
