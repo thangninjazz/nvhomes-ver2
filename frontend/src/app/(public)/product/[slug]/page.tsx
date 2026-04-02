@@ -136,7 +136,7 @@ export default function ProductDetail({ params }: { params: Promise<{ slug: stri
             <div className="flex flex-col gap-3 lg:gap-4">
                 {/* Main Active Image */}
                 <div 
-                    className="aspect-square bg-stone-100 rounded-xl lg:rounded-2xl overflow-hidden shadow-sm border border-stone-200 flex items-center justify-center relative group cursor-zoom-in"
+                    className="w-full bg-stone-100 rounded-xl lg:rounded-2xl overflow-hidden shadow-sm border border-stone-200 flex items-center justify-center relative group cursor-zoom-in"
                     onClick={() => {
                         setLightboxIndex(activeImage);
                         setLightboxOpen(true);
@@ -145,7 +145,7 @@ export default function ProductDetail({ params }: { params: Promise<{ slug: stri
                     <img 
                         src={images[activeImage]} 
                         alt={product.name} 
-                        className="w-full h-full object-contain rounded-xl lg:rounded-2xl transition-transform duration-700 group-hover:scale-105" 
+                        className="w-full h-auto rounded-xl lg:rounded-2xl transition-transform duration-700 group-hover:scale-105" 
                     />
                     
                     {/* Image Notes Overlay - Tương ứng với ảnh đang chọn */}
