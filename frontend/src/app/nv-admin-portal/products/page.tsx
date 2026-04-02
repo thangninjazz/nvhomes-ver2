@@ -99,7 +99,7 @@ export default function ProductManager() {
       name: item.name, slug: item.slug, categoryId: item.categoryId || "",
       originalPrice: item.originalPrice || 0, discountPrice: item.discountPrice || 0,
       description: item.description || "", images: item.images ? item.images.split(',') : [],
-      imageNotes: item.imageNotes ? JSON.parse(item.imageNotes) : [],
+      imageNotes: (() => { try { return item.imageNotes ? JSON.parse(item.imageNotes) : []; } catch(e) { return []; } })(),
       videoUrl: item.videoUrl || "",
       specifications: item.specifications || [], features: item.features || [],
       hasVariations: item.hasVariations || false, variationsData: item.variationsData || "",

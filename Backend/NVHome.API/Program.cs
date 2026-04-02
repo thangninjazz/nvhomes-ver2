@@ -109,6 +109,11 @@ builder.Services.AddAntiforgery(options =>
 
 var app = builder.Build();
 
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+});
+
 // Cấu hình Http Request Pipeline
 if (app.Environment.IsDevelopment())
 {
@@ -128,11 +133,6 @@ app.Use(async (context, next) =>
     // Loosening CSP to allow API connections and common external resources
     context.Response.Headers.Append("Content-Security-Policy", "default-src 'self' https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google.com https://www.gstatic.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://nvhomes.vn https://www.google.com;");
     await next();
-});
-
-app.UseForwardedHeaders(new ForwardedHeadersOptions
-{
-    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
 });
 
 app.UseCors("ProductionPolicy");
