@@ -13,6 +13,22 @@ export default function ProjectDetailPage() {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
 
+  const decodeHtml = (html: string) => {
+    if (!html) return "";
+    let decoded = html;
+    let prev = "";
+    if (typeof document !== 'undefined') {
+      const txt = document.createElement("textarea");
+      for (let i = 0; i < 3; i++) {
+          txt.innerHTML = decoded;
+          decoded = txt.value;
+          if (decoded === prev) break;
+          prev = decoded;
+      }
+    }
+    return decoded.replace(/\u00a0/g, ' ').replace(/&nbsp;/g, ' ');
+  };
+
   useEffect(() => {
     const fetchProject = async () => {
       try {
@@ -114,7 +130,7 @@ export default function ProjectDetailPage() {
       <div className="container mx-auto px-4 mb-20">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-20">
           <div className="lg:col-span-12 w-full overflow-hidden prose prose-stone prose-xl max-w-none prose-headings:font-black prose-headings:uppercase prose-p:text-stone-600 prose-p:font-medium prose-p:leading-relaxed prose-img:max-w-full prose-img:h-auto prose-img:rounded-xl [&_table]:block [&_table]:overflow-x-auto [&_table]:w-full [&_iframe]:max-w-full">
-             <div dangerouslySetInnerHTML={{ __html: project.content || "" }} style={{ wordWrap: 'break-word', overflowWrap: 'break-word' }} />
+             <div dangerouslySetInnerHTML={{ __html: decodeHtml(project.content || "") }} />
           </div>
         </div>
 
