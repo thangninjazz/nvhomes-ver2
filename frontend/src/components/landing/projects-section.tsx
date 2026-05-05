@@ -108,18 +108,19 @@ export function ProjectsSection() {
           </Link>
         </div>
 
-        {/* Category Filter */}
-        <div className="flex flex-wrap gap-3 mb-12">
+        {/* Category Filter - Premium Redesign */}
+        <div className="flex flex-wrap gap-2 md:gap-3 mb-16">
           {categories.map((cat) => (
             <button
               key={cat}
               onClick={() => setActiveCategory(cat)}
-              className={`px-5 py-2 text-sm transition-all duration-300 ${
+              className={`flex items-center gap-2 px-6 py-3 text-[11px] md:text-xs font-black uppercase tracking-widest transition-all duration-500 rounded-full border ${
                 activeCategory === cat 
-                  ? "bg-primary text-primary-foreground" 
-                  : "bg-background text-muted-foreground hover:text-foreground border border-border"
+                  ? "bg-stone-900 text-white border-stone-900 shadow-xl scale-105" 
+                  : "bg-white/50 backdrop-blur-sm text-stone-500 border-stone-200 hover:border-stone-400 hover:text-stone-900 hover:bg-white"
               }`}
             >
+              {activeCategory === cat && <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />}
               {cat}
             </button>
           ))}
