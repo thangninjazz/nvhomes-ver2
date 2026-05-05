@@ -91,7 +91,7 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
       </div>
 
       {/* FILTER CONTROLS */}
-      <div className="flex flex-col sm:flex-row items-center gap-4 mb-8 bg-stone-50 p-4 rounded-3xl border border-stone-100 shadow-sm relative z-20">
+      <div className="flex flex-col sm:flex-row items-center gap-4 mb-8 bg-transparent p-0 relative z-20">
         
         {/* Category Dropdown */}
         <div className="w-full sm:w-[320px]">
@@ -102,19 +102,19 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
               else router.push(`/category/${val}`);
             }}
           >
-            <SelectTrigger className="w-full h-12 bg-white border-stone-200 rounded-2xl font-bold uppercase tracking-widest text-xs shadow-sm hover:border-stone-400 focus:ring-red-500">
+            <SelectTrigger className="w-full h-14 bg-stone-900 text-white border-stone-900 rounded-full font-black uppercase tracking-[0.15em] text-[11px] md:text-xs shadow-2xl hover:scale-[1.02] transition-all focus:ring-0">
               <SelectValue placeholder="Khám phá sản phẩm" />
             </SelectTrigger>
-            <SelectContent className="rounded-2xl border-stone-100 shadow-xl max-h-[60vh]">
-              <SelectItem value="all" className="font-bold uppercase tracking-widest text-xs py-3 text-red-500">Khám phá sản phẩm</SelectItem>
+            <SelectContent className="rounded-[2rem] border-stone-100 shadow-[0_20px_60px_rgba(0,0,0,0.1)] max-h-[60vh] p-2 bg-white/95 backdrop-blur-xl">
+              <SelectItem value="all" className="font-black uppercase tracking-widest text-xs py-4 px-6 text-red-500 rounded-2xl hover:bg-red-50 focus:bg-red-50 cursor-pointer transition-colors mb-2">Khám phá sản phẩm</SelectItem>
               {allCategories
                 .filter(c => !c.parentId && (!category?.id || c.id === (category.parentId || category.id)))
                 .map(parent => (
-                <SelectGroup key={parent.id}>
-                  <SelectLabel className="font-black uppercase tracking-widest text-xs text-stone-900 bg-stone-50 py-3 border-y border-stone-100">{parent.name}</SelectLabel>
-                  <SelectItem value={parent.slug} className="py-2.5 font-semibold text-xs ml-2 cursor-pointer focus:bg-red-50 focus:text-red-500">➤ {parent.name} (Tất cả)</SelectItem>
+                <SelectGroup key={parent.id} className="mb-2">
+                  <SelectLabel className="font-black uppercase tracking-[0.2em] text-[10px] text-stone-400 bg-stone-50 py-3 px-6 rounded-t-2xl border-b border-stone-100">{parent.name}</SelectLabel>
+                  <SelectItem value={parent.slug} className="py-3 px-6 font-bold text-xs cursor-pointer focus:bg-stone-50 focus:text-stone-900 rounded-xl mt-1">➤ {parent.name} (Tất cả)</SelectItem>
                   {allCategories.filter(c => c.parentId === parent.id).map(child => (
-                     <SelectItem key={child.id} value={child.slug} className="py-2.5 font-medium text-xs ml-4 cursor-pointer text-stone-600 focus:bg-red-50 focus:text-red-500">
+                     <SelectItem key={child.id} value={child.slug} className="py-3 px-6 font-medium text-xs cursor-pointer text-stone-500 focus:bg-stone-50 focus:text-stone-900 rounded-xl ml-4">
                        • {child.name}
                      </SelectItem>
                   ))}
@@ -124,22 +124,20 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
           </Select>
         </div>
 
-        <div className="hidden sm:block w-px h-8 bg-stone-200"></div>
-
         {/* Dynamic Sorting Input */}
         <div className="w-full sm:w-[240px]">
           <Select 
             value={sortOrder}
             onValueChange={setSortOrder}
           >
-            <SelectTrigger className="w-full h-12 bg-white border-stone-200 rounded-2xl font-bold uppercase tracking-widest text-xs shadow-sm hover:border-stone-400 focus:ring-red-500">
+            <SelectTrigger className="w-full h-14 bg-white border-stone-200 text-stone-900 rounded-full font-bold uppercase tracking-[0.15em] text-[11px] md:text-xs shadow-sm hover:border-stone-400 hover:shadow-md transition-all focus:ring-0">
               <SelectValue placeholder="Sắp xếp" />
             </SelectTrigger>
-            <SelectContent className="rounded-2xl border-stone-100 shadow-xl">
-              <SelectItem value="newest" className="py-3 font-semibold text-xs cursor-pointer uppercase tracking-wider focus:bg-red-50 focus:text-red-500">Mới Nhất</SelectItem>
-              <SelectItem value="price_asc" className="py-3 font-semibold text-xs cursor-pointer uppercase tracking-wider focus:bg-red-50 focus:text-red-500">Giá: Thấp Đến Cao</SelectItem>
-              <SelectItem value="price_desc" className="py-3 font-semibold text-xs cursor-pointer uppercase tracking-wider focus:bg-red-50 focus:text-red-500">Giá: Cao Đến Thấp</SelectItem>
-              <SelectItem value="popular" className="py-3 font-semibold text-xs cursor-pointer uppercase tracking-wider focus:bg-red-50 focus:text-red-500">Bán Chạy Nhất</SelectItem>
+            <SelectContent className="rounded-3xl border-stone-100 shadow-[0_20px_60px_rgba(0,0,0,0.1)] p-2">
+              <SelectItem value="newest" className="py-4 px-6 font-bold text-xs cursor-pointer uppercase tracking-widest focus:bg-stone-50 focus:text-stone-900 rounded-xl">Mới Nhất</SelectItem>
+              <SelectItem value="price_asc" className="py-4 px-6 font-bold text-xs cursor-pointer uppercase tracking-widest focus:bg-stone-50 focus:text-stone-900 rounded-xl">Giá: Thấp Đến Cao</SelectItem>
+              <SelectItem value="price_desc" className="py-4 px-6 font-bold text-xs cursor-pointer uppercase tracking-widest focus:bg-stone-50 focus:text-stone-900 rounded-xl">Giá: Cao Đến Thấp</SelectItem>
+              <SelectItem value="popular" className="py-4 px-6 font-bold text-xs cursor-pointer uppercase tracking-widest focus:bg-stone-50 focus:text-stone-900 rounded-xl">Bán Chạy Nhất</SelectItem>
             </SelectContent>
           </Select>
         </div>

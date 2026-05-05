@@ -36,11 +36,11 @@ export function ProjectsSection() {
           .filter((c: any) => c.parentId === null)
           .map((c: any) => c.name);
         
-        const getPriority = (name: string) => {
-          const lower = (name || "").toLowerCase();
+        const getPriority = (text: string) => {
+          const lower = (text || "").toLowerCase();
           if (lower.includes("inox acrylic")) return 1;
-          if (lower.includes("nhựa acrylic")) return 2;
-          if (lower.includes("inox cánh kính")) return 3;
+          if (lower.includes("nhựa acrylic") || lower.includes("nhựa đặc")) return 2;
+          if (lower.includes("inox cánh kính") || lower.includes("cánh kính")) return 3;
           return 99;
         };
 
@@ -65,12 +65,15 @@ export function ProjectsSection() {
             ][idx % 4]}?q=80&w=1200`,
             area: "Cao cấp",
             slug: p.slug,
+            tags: p.tags,
             createdAt: p.createdAt || new Date().toISOString()
           };
         });
 
         mapped.sort((a: any, b: any) => {
-          const pDiff = getPriority(a.category) - getPriority(b.category);
+          const aText = (a.category + " " + a.title + " " + (a.tags || "")).toLowerCase();
+          const bText = (b.category + " " + b.title + " " + (b.tags || "")).toLowerCase();
+          const pDiff = getPriority(aText) - getPriority(bText);
           if (pDiff !== 0) return pDiff;
           return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
         });
