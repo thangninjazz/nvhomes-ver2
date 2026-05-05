@@ -50,7 +50,12 @@ namespace NVHome.Infrastructure.Helpers
         /// </summary>
         public static async Task ConvertToWebP(string inputPath, string outputPath, int maxWidth = 1920, int quality = 75)
         {
-            using (var image = await Image.LoadAsync(inputPath))
+            var decoderOptions = new SixLabors.ImageSharp.Formats.DecoderOptions
+            {
+                SkipMetadata = true
+            };
+
+            using (var image = await Image.LoadAsync(decoderOptions, inputPath))
             {
                 // 1. Resize nếu ảnh quá lớn
                 if (image.Width > maxWidth)

@@ -100,17 +100,19 @@ export function MultiImageUpload({ value = [], onChange, label, notes = [], onCh
               </>
             )}
 
-            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-2xl pointer-events-none">
+            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-2xl pointer-events-none z-20">
               <button 
                 type="button"
-                onClick={() => {
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
                   removeImage(index);
                   if (onChangeNotes) {
                     const newNotes = notes.filter((_, i) => i !== index);
                     onChangeNotes(newNotes);
                   }
                 }}
-                className="p-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors pointer-events-auto"
+                className="p-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors pointer-events-auto relative z-30 cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
