@@ -36,11 +36,12 @@ export function ProjectsSection() {
           .filter((c: any) => c.parentId === null)
           .map((c: any) => c.name);
         
-        const getPriority = (text: string) => {
-          const lower = (text || "").toLowerCase();
-          if (lower.includes("inox acrylic")) return 1;
-          if (lower.includes("nhựa acrylic") || lower.includes("nhựa đặc")) return 2;
-          if (lower.includes("inox cánh kính") || lower.includes("cánh kính")) return 3;
+        const getPriority = (name: string) => {
+          const lower = (name || "").toLowerCase();
+          if (lower === "tủ bếp" || lower.includes("tủ bếp")) return 10;
+          if (lower.includes("inox acrylic")) return 11;
+          if (lower.includes("nhựa acrylic")) return 12;
+          if (lower.includes("inox cánh kính")) return 13;
           return 99;
         };
 

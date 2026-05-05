@@ -28,14 +28,14 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
     const fetchData = async () => {
       try {
         setLoading(true);
-        // Fetch all categories first
         const allCatsRes = await api.get(`/categories?type=Product`);
         if (allCatsRes.data && Array.isArray(allCatsRes.data)) {
            const getPriority = (name: string) => {
              const lower = (name || "").toLowerCase();
-             if (lower.includes("inox acrylic")) return 1;
-             if (lower.includes("nhựa acrylic")) return 2;
-             if (lower.includes("inox cánh kính")) return 3;
+             if (lower === "tủ bếp" || lower.includes("tủ bếp")) return 10;
+             if (lower.includes("inox acrylic")) return 11;
+             if (lower.includes("nhựa acrylic")) return 12;
+             if (lower.includes("inox cánh kính")) return 13;
              return 99;
            };
            const sortedCats = allCatsRes.data.sort((a: any, b: any) => getPriority(a.name) - getPriority(b.name));

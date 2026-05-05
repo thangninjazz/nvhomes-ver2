@@ -113,8 +113,8 @@ export default function ProjectDetailPage() {
       {/* Content & Video Section */}
       <div className="container mx-auto px-4 mb-20">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-20">
-          <div className="lg:col-span-12 w-full max-w-[100vw] overflow-x-auto overflow-y-hidden break-normal whitespace-pre-wrap prose prose-stone prose-xl max-w-none prose-headings:font-black prose-headings:uppercase prose-p:text-stone-600 prose-p:font-medium prose-p:leading-relaxed prose-img:max-w-full prose-img:h-auto prose-img:rounded-xl">
-             <div dangerouslySetInnerHTML={{ __html: project.content || "" }} />
+          <div className="lg:col-span-12 w-full overflow-hidden prose prose-stone prose-xl max-w-none prose-headings:font-black prose-headings:uppercase prose-p:text-stone-600 prose-p:font-medium prose-p:leading-relaxed prose-img:max-w-full prose-img:h-auto prose-img:rounded-xl [&_table]:block [&_table]:overflow-x-auto [&_table]:w-full [&_iframe]:max-w-full">
+             <div dangerouslySetInnerHTML={{ __html: project.content || "" }} style={{ wordWrap: 'break-word', overflowWrap: 'break-word' }} />
           </div>
         </div>
 
