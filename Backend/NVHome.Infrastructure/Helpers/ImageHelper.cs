@@ -62,25 +62,21 @@ namespace NVHome.Infrastructure.Helpers
                     }));
                 }
 
-                // 2. Thêm Watermark (Centered: Phục vụ tận tâm / nvhomes.vn - 0966.245.396)
+                // 2. Thêm Watermark
                 // Font size lớn hơn khi đặt ở giữa (khoảng 3.5% chiều rộng)
                 var font = GetWatermarkFont(image.Width);
                 float fontSize = Math.Max(20, image.Width * 0.035f);
                 font = font.Family.CreateFont(fontSize, FontStyle.Bold);
                 
-                string line1 = "Phục vụ tận tâm";
-                string line2 = "nvhomes.vn - 0966.245.396";
+                string watermarkText = "nvhomes.vn-0966245396";
                 
                 // Tính toán vị trí trung tâm (ước tính)
-                float text1Width = line1.Length * fontSize * 0.55f;
-                float text2Width = line2.Length * fontSize * 0.55f;
+                float textWidth = watermarkText.Length * fontSize * 0.55f;
                 
-                var pos1 = new PointF(image.Width / 2f - text1Width / 2f, image.Height / 2f - fontSize);
-                var pos2 = new PointF(image.Width / 2f - text2Width / 2f, image.Height / 2f + fontSize * 0.2f);
+                var pos = new PointF(image.Width / 2f - textWidth / 2f, image.Height / 2f - fontSize / 2f);
 
                 image.Mutate(x => {
-                    x.DrawText(line1, font, Color.White.WithAlpha(0.15f), pos1);
-                    x.DrawText(line2, font, Color.White.WithAlpha(0.15f), pos2);
+                    x.DrawText(watermarkText, font, Color.White.WithAlpha(0.15f), pos);
                 });
 
                 // 3. Lưu ảnh dưới định dạng WebP

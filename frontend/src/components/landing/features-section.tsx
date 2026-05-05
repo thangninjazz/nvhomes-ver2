@@ -2,12 +2,6 @@ import { TreePine, Factory, Pencil, Shield, Clock, Sparkles } from "lucide-react
 
 const features = [
   {
-    icon: TreePine,
-    title: "Vật Liệu Chuẩn An Cường",
-    description: "Cam kết 100% sử dụng ván gỗ công nghiệp An Cường cao cấp, đảm bảo độ bền và an toàn sức khỏe cho cả gia đình.",
-    highlight: "Cam kết đền 200% nếu phát hiện gỗ giả"
-  },
-  {
     icon: Factory,
     title: "Xưởng Sản Xuất Trực Tiếp",
     description: "Sở hữu xưởng quy mô lớn tại Thanh Đa - Phúc Thọ, giúp bạn tiết kiệm tới 30% chi phí do không qua trung gian.",
@@ -44,7 +38,7 @@ export function FeaturesSection() {
         </div>
 
         {/* Features Grid */}
-        <div className="grid md:grid-cols-3 gap-8 lg:gap-12 mb-24">
+        <div className="grid md:grid-cols-2 max-w-5xl mx-auto gap-8 lg:gap-12 mb-24">
           {features.map((feature, index) => (
             <div 
               key={index} 
