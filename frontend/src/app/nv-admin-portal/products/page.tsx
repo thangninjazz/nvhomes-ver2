@@ -351,9 +351,9 @@ export default function ProductManager() {
                      <MultiImageUpload 
                        label="Lưới Ảnh (Hình đầu tiên là Thumbnail. Ghi chú ảnh để hiển thị icon tư vấn trên ảnh)" 
                        value={formData.images} 
-                       onChange={(urls) => setFormData({ ...formData, images: urls })} 
+                       onChange={(urls) => setFormData(prev => ({ ...prev, images: urls }))} 
                        notes={formData.imageNotes}
-                       onChangeNotes={(newNotes) => setFormData({ ...formData, imageNotes: newNotes })}
+                       onChangeNotes={(newNotes) => setFormData(prev => ({ ...prev, imageNotes: newNotes }))}
                      />
                    </div>
                    
