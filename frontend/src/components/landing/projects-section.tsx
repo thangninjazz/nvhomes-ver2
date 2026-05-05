@@ -36,13 +36,21 @@ export function ProjectsSection() {
           .filter((c: any) => c.parentId === null)
           .map((c: any) => c.name);
         
-        const allCategories = ["Tất cả", ...dbCategories];
+        const getPriority = (name: string) => {
+          const lower = (name || "").toLowerCase();
+          if (lower.includes("inox acrylic")) return 1;
+          if (lower.includes("nhựa acrylic")) return 2;
+          if (lower.includes("inox cánh kính")) return 3;
+          return 99;
+        };
+
+        const sortedCategories = dbCategories.sort((a: string, b: string) => getPriority(a) - getPriority(b));
+        const allCategories = ["Tất cả", ...sortedCategories];
         setCategories(allCategories);
 
         const mapped = projectsRes.data.map((p: any, idx: number) => {
-          const firstTag = p.tags?.split(',')[0]?.trim() || "Kiến trúc";
-          // Normalize category: check if it exists in the fetched list (case-insensitive)
-          const matchedCategory = allCategories.find(c => c.toLowerCase() === firstTag.toLowerCase()) || "Kiến trúc";
+          const actualCategory = p.categoryName || (p.tags?.split(',')[0]?.trim()) || "Khác";
+          const matchedCategory = allCategories.find(c => c.toLowerCase() === actualCategory.toLowerCase()) || actualCategory;
           
           return {
             id: p.id,
@@ -50,15 +58,23 @@ export function ProjectsSection() {
             category: matchedCategory,
             location: "Việt Nam",
             image: p.thumbnail || `https://images.unsplash.com/photo-${[
-              "1618221195710-dd6b41faaea6", // Luxury Living room
-              "1618219944342-824e40a13c05", // Modern Kitchen
-              "1615874959474-d609969a20ed", // Minimalist Bedroom
-              "1600607687920-4e2a09cf159d"  // Chic Office
+              "1618221195710-dd6b41faaea6", 
+              "1618219944342-824e40a13c05", 
+              "1615874959474-d609969a20ed", 
+              "1600607687920-4e2a09cf159d"  
             ][idx % 4]}?q=80&w=1200`,
             area: "Cao cấp",
-            slug: p.slug
+            slug: p.slug,
+            createdAt: p.createdAt || new Date().toISOString()
           };
-        })
+        });
+
+        mapped.sort((a: any, b: any) => {
+          const pDiff = getPriority(a.category) - getPriority(b.category);
+          if (pDiff !== 0) return pDiff;
+          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+        });
+
         setProjects(mapped)
       } catch (error) {
         console.error("Error fetching data:", error)
