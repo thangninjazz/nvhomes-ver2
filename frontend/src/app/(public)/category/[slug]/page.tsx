@@ -4,6 +4,15 @@ import { useEffect, useState, use } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { api } from '@/services/api';
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export default function CategoryPage({ params }: { params: Promise<{ slug: string }> }) {
   const router = useRouter();
@@ -22,7 +31,15 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
         // Fetch all categories first
         const allCatsRes = await api.get(`/categories?type=Product`);
         if (allCatsRes.data && Array.isArray(allCatsRes.data)) {
-           setAllCategories(allCatsRes.data);
+           const getPriority = (name: string) => {
+             const lower = (name || "").toLowerCase();
+             if (lower.includes("inox acrylic")) return 1;
+             if (lower.includes("nhựa acrylic")) return 2;
+             if (lower.includes("inox cánh kính")) return 3;
+             return 99;
+           };
+           const sortedCats = allCatsRes.data.sort((a: any, b: any) => getPriority(a.name) - getPriority(b.name));
+           setAllCategories(sortedCats);
         }
 
         if (slug !== 'all') {
@@ -74,51 +91,57 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
       </div>
 
       {/* FILTER CONTROLS */}
-      <div className="flex flex-col sm:flex-row items-center gap-4 mb-8 bg-stone-50 p-4 rounded-2xl border border-stone-100 shadow-sm">
+      <div className="flex flex-col sm:flex-row items-center gap-4 mb-8 bg-stone-50 p-4 rounded-3xl border border-stone-100 shadow-sm relative z-20">
         
         {/* Category Dropdown */}
-        <div className="flex items-center gap-3 w-full sm:w-auto flex-1">
-          <svg className="w-4 h-4 text-stone-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h7" /></svg>
-          <select 
-            className="w-full bg-transparent text-xs font-black text-stone-900 focus:outline-none cursor-pointer uppercase tracking-widest border-none p-0 focus:ring-0"
+        <div className="w-full sm:w-[320px]">
+          <Select 
             value={slug}
-            onChange={(e) => {
-              if (e.target.value === 'all') {
-                router.push('/category/all');
-              } else {
-                router.push(`/category/${e.target.value}`);
-              }
+            onValueChange={(val) => {
+              if (val === 'all') router.push('/category/all');
+              else router.push(`/category/${val}`);
             }}
           >
-            <option value="all">Khám phá sản phẩm</option>
-            {allCategories
-              .filter(c => !c.parentId && (!category?.id || c.id === (category.parentId || category.id)))
-              .map(parent => (
-              <optgroup key={parent.id} label={parent.name}>
-                <option value={parent.slug}>➤ {parent.name} (Tất cả)</option>
-                {allCategories.filter(c => c.parentId === parent.id).map(child => (
-                   <option key={child.id} value={child.slug}>&nbsp;&nbsp;&nbsp;• {child.name}</option>
-                ))}
-              </optgroup>
-            ))}
-          </select>
+            <SelectTrigger className="w-full h-12 bg-white border-stone-200 rounded-2xl font-bold uppercase tracking-widest text-xs shadow-sm hover:border-stone-400 focus:ring-red-500">
+              <SelectValue placeholder="Khám phá sản phẩm" />
+            </SelectTrigger>
+            <SelectContent className="rounded-2xl border-stone-100 shadow-xl max-h-[60vh]">
+              <SelectItem value="all" className="font-bold uppercase tracking-widest text-xs py-3 text-red-500">Khám phá sản phẩm</SelectItem>
+              {allCategories
+                .filter(c => !c.parentId && (!category?.id || c.id === (category.parentId || category.id)))
+                .map(parent => (
+                <SelectGroup key={parent.id}>
+                  <SelectLabel className="font-black uppercase tracking-widest text-xs text-stone-900 bg-stone-50 py-3 border-y border-stone-100">{parent.name}</SelectLabel>
+                  <SelectItem value={parent.slug} className="py-2.5 font-semibold text-xs ml-2 cursor-pointer focus:bg-red-50 focus:text-red-500">➤ {parent.name} (Tất cả)</SelectItem>
+                  {allCategories.filter(c => c.parentId === parent.id).map(child => (
+                     <SelectItem key={child.id} value={child.slug} className="py-2.5 font-medium text-xs ml-4 cursor-pointer text-stone-600 focus:bg-red-50 focus:text-red-500">
+                       • {child.name}
+                     </SelectItem>
+                  ))}
+                </SelectGroup>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
-        <div className="hidden sm:block w-px h-6 bg-stone-200"></div>
+        <div className="hidden sm:block w-px h-8 bg-stone-200"></div>
 
         {/* Dynamic Sorting Input */}
-        <div className="flex items-center gap-3 w-full sm:w-auto">
-          <svg className="w-4 h-4 text-stone-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" /></svg>
-          <select 
-            className="w-full bg-transparent text-xs font-black text-stone-900 focus:outline-none cursor-pointer uppercase tracking-widest border-none p-0 focus:ring-0"
+        <div className="w-full sm:w-[240px]">
+          <Select 
             value={sortOrder}
-            onChange={(e) => setSortOrder(e.target.value)}
+            onValueChange={setSortOrder}
           >
-            <option value="newest">Mới Nhất</option>
-            <option value="price_asc">Giá: Thấp Đến Cao</option>
-            <option value="price_desc">Giá: Cao Đến Thấp</option>
-            <option value="popular">Bán Chạy Nhất</option>
-          </select>
+            <SelectTrigger className="w-full h-12 bg-white border-stone-200 rounded-2xl font-bold uppercase tracking-widest text-xs shadow-sm hover:border-stone-400 focus:ring-red-500">
+              <SelectValue placeholder="Sắp xếp" />
+            </SelectTrigger>
+            <SelectContent className="rounded-2xl border-stone-100 shadow-xl">
+              <SelectItem value="newest" className="py-3 font-semibold text-xs cursor-pointer uppercase tracking-wider focus:bg-red-50 focus:text-red-500">Mới Nhất</SelectItem>
+              <SelectItem value="price_asc" className="py-3 font-semibold text-xs cursor-pointer uppercase tracking-wider focus:bg-red-50 focus:text-red-500">Giá: Thấp Đến Cao</SelectItem>
+              <SelectItem value="price_desc" className="py-3 font-semibold text-xs cursor-pointer uppercase tracking-wider focus:bg-red-50 focus:text-red-500">Giá: Cao Đến Thấp</SelectItem>
+              <SelectItem value="popular" className="py-3 font-semibold text-xs cursor-pointer uppercase tracking-wider focus:bg-red-50 focus:text-red-500">Bán Chạy Nhất</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
       </div>
 
